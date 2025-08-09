@@ -1,103 +1,80 @@
 import Image from "next/image";
+import Link from "next/link";
 
 export default function Home() {
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+    <div className="container mx-auto px-4">
+      {/* Hero Section - Added dark: styles for text */}
+      <section className="hero-section relative h-[60vh] flex items-center justify-center text-center text-white dark:text-gray-200 overflow-hidden">
+        <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: 'url("https://via.placeholder.com/1920x1080?text=Interior+Design+Hero")' }}>
+          <div className="absolute inset-0 bg-black opacity-50"></div> {/* Overlay */}
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+        <div className="relative z-10">
+          <h1 className="text-4xl md:text-5xl font-bold mb-4 animate-fadeInUp">Diseño de Interiores que Inspira</h1>
+          <p className="text-xl md:text-2xl mb-8 animate-fadeInUp delay-200">Transformamos tus espacios en lugares únicos y funcionales.</p>
+          <div className="flex justify-center space-x-4">
+            {/* Placeholder Images - Consider using actual Image components with proper aspect ratios */}
+            <img src="https://via.placeholder.com/300x200?text=Hero+Image+1" alt="Imagen de Diseño Interior 1" className="w-1/4 rounded-lg shadow-lg transform transition duration-500 hover:scale-105"/>
+            <img src="https://via.placeholder.com/300x200?text=Hero+Image+2" alt="Imagen de Diseño Interior 2" className="w-1/4 rounded-lg shadow-lg transform transition duration-500 hover:scale-105"/>
+            <img src="https://via.placeholder.com/300x200?text=Hero+Image+3" alt="Imagen de Diseño Interior 3" className="w-1/4 rounded-lg shadow-lg transform transition duration-500 hover:scale-105"/>
+          </div>
+        </div>
+      </section>
+
+      {/* Project Previews */}
+      <section className="py-12 dark:bg-gray-900 dark:text-white">
+        <h2 className="text-3xl font-bold text-center mb-8 ">Nuestros Proyectos Destacados</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {/* Placeholder Project Card 1 */}
+          <div className="project-card border dark:border-gray-700 rounded-lg overflow-hidden shadow-lg dark:shadow-xl transform transition duration-300 hover:scale-105 hover:shadow-xl cursor-pointer dark:bg-gray-800">
+            <img src="https://via.placeholder.com/400x300?text=Proyecto+1" alt="Imagen del Proyecto 1" className="w-full h-48 object-cover"/>
+            <div className="p-4">
+              <h3 className="text-xl font-semibold mb-2 dark:text-white">Nombre del Proyecto 1</h3>
+ <p className="text-gray-600 dark:text-gray-300">Explora cómo transformamos este espacio con soluciones de diseño innovadoras y personalizadas.</p>
+            </div>
+          </div>
+          {/* Placeholder Project Card 2 */}
+          <div className="project-card border dark:border-gray-700 rounded-lg overflow-hidden shadow-lg dark:shadow-xl transform transition duration-300 hover:scale-105 hover:shadow-xl cursor-pointer dark:bg-gray-800">
+            <img src="https://via.placeholder.com/400x300?text=Proyecto+2" alt="Imagen del Proyecto 2" className="w-full h-48 object-cover"/>
+            <div className="p-4">
+              <h3 className="text-xl font-semibold mb-2 dark:text-white">Nombre del Proyecto 2</h3>
+ <p className="text-gray-600 dark:text-gray-300">Un vistazo a nuestro trabajo en este proyecto que combina estética y funcionalidad a la perfección.</p>
+            </div>
+          </div>
+          {/* Placeholder Project Card 3 */}
+          <div className="project-card border rounded-lg overflow-hidden shadow-lg transform transition duration-300 hover:scale-105 hover:shadow-xl cursor-pointer">
+ <img src="https://via.placeholder.com/400x300?text=Proyecto+3" alt="Imagen del Proyecto 3" className="w-full h-48 object-cover"/>
+           <div className="p-4">
+              <h3 className="text-xl font-semibold mb-2">Nombre del Proyecto 3</h3>
+ <p className="text-gray-600 dark:text-gray-300">Descubre los detalles de este proyecto y cómo abordamos cada desafío de diseño.</p>
+            </div>
+          </div>
+        </div>
+        <div className="text-center mt-8">
+          <Link href="/portfolio" className="text-blue-600 dark:text-blue-400 hover:underline text-xl">Ver Portfolio Completo</Link>
+        </div>
+      </section>
+
+      {/* Call to Action for About Us */}
+      <section className="py-12 text-center dark:bg-gray-900 dark:text-white">
+        <h2 className="text-3xl font-bold mb-6 ">Conoce a Nuestro Equipo</h2>
+        <p className="text-xl mb-8 ">Somos un equipo de apasionados por el diseño y comprometidos con la excelencia en cada proyecto.</p>
+        <Link href="/about" className="text-blue-600 dark:text-blue-400 hover:underline text-xl">Sobre Nosotros</Link>
+      </section>
+
+      {/* Call to Action for Contact */}
+      <section className="py-12 text-center bg-gray-100 dark:bg-gray-800 dark:text-white">
+        <h2 className="text-3xl font-bold mb-6 ">Comencemos Tu Proyecto</h2>
+        <p className="text-xl mb-8 ">Contáctanos para una consulta o para suscribirte a nuestro boletín.</p>
+        <Link href="/contact" className="bg-blue-600 text-white px-6 py-3 rounded-full text-lg hover:bg-blue-700">Contáctanos</Link>
+      </section>
+
+      {/* Call to Action for Services */}
+      <section className="py-12 text-center bg-gray-100">
+        <h2 className="text-3xl font-bold mb-6">Descubre Nuestros Servicios</h2>
+        <p className="text-xl mb-8">Ofrecemos soluciones completas para tus proyectos de diseño de interiores.</p>
+        <Link href="/services" className="bg-blue-600 text-white px-6 py-3 rounded-full text-lg hover:bg-blue-700">Explorar Servicios</Link>
+      </section>
     </div>
   );
 }

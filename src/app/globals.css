@@ -19,8 +19,45 @@
   }
 }
 
+/* Define a color palette */
+:root {
+  --primary-color: #A5B4FC; /* Light blue */
+  --secondary-color: #6366F1; /* Indigo */
+}
+
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans);
+}
+
+body.dark, :root.dark body {
+  background: #121212;
+  color: #e0e0e0; /* Light text */
+}
+
+.form-select:not([multiple]) {
+  position: relative;
+  /* Remove default browser appearance */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+.form-select:not([multiple])::after {
+  content: '';
+  position: absolute !important;
+  top: 50% !important;
+  right: 10px !important;
+  transform: translateY(-50%) rotate(45deg) !important;
+  width: 8px !important;
+  height: 8px !important;
+  border: 2px solid #888 !important; /* Adjust color as needed */
+  border-top: 0;
+  border-left: 0;
+  pointer-events: none !important; /* Allow clicks to pass through to the select */
+}
+
+.form-select:not([multiple]) {
+  padding-right: 30px; /* Adjust padding to make space for the pseudo-element arrow */
 }
