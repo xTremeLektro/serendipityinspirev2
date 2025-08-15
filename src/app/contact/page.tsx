@@ -44,77 +44,76 @@ const ContactPage = () => {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8 space-y-8 dark:bg-gray-900 dark:text-gray-100">
+    <div className="container mx-auto px-4 py-8 space-y-8 bg-white text-gray-800 dark:bg-gray-900 dark:text-gray-100">
       <h1 className="text-3xl font-bold mb-6">Contacto</h1>
  
       <section className="mb-8">
- <h2 className="text-2xl font-semibold mb-4">Consulta General / Suscripción</h2>
+ <h2 className="text-2xl font-semibold mb-4 text-gray-800 dark:text-white">Consulta General / Suscripción</h2>
  <p className="mb-4 text-gray-700">
           Utilice este formulario para consultas generales, comentarios o para suscribirse a nuestras noticias y actualizaciones. Nos encantará saber de usted.
  </p>
         {/* Basic contact form placeholder */}
  <div className="contact-form-container bg-gray-100 p-6 rounded-lg shadow-md dark:bg-gray-800 dark:border dark:border-gray-700 dark:shadow-lg">
  <form onSubmit={handleBasicSubmit}>
-            <div className="mb-4">
-              <label htmlFor="name" className="block text-gray-700 font-bold mb-2 dark:text-gray-300">Nombre:</label>
- <input type="text" id="name" name="name" className="form-input appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600 dark:focus:ring-blue-600 dark:focus:border-blue-600" />
+            <div className="mb-4 text-gray-700 dark:text-gray-300">
+              <label htmlFor="name" className="block text-gray-700 dark:text-gray-300 font-bold mb-2">Nombre:</label>
+ <input type="text" id="name" name="name" className="form-input appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600 dark:focus:ring-blue-600 dark:focus:border-blue-600" />
             </div>
-            <div className="mb-4">
-              <label htmlFor="email" className="block text-gray-700 font-bold mb-2 dark:text-gray-300">Email:</label>
- <input type="email" id="email" name="email" className="form-input appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600 dark:focus:ring-blue-600 dark:focus:border-blue-600" />
+            <div className="mb-4 text-gray-700 dark:text-gray-300">
+              <label htmlFor="email" className="block text-gray-700 dark:text-gray-300 font-bold mb-2">Email:</label>
+ <input type="email" id="email" name="email" className="form-input appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600 dark:focus:ring-blue-600 dark:focus:border-blue-600" />
             </div>
-            <div className="mb-4">
-              <label htmlFor="message" className="block text-gray-700 font-bold mb-2 dark:text-gray-300">Mensaje / Interés:</label>
- <textarea id="message" name="message" className="form-textarea appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600 dark:focus:ring-blue-600 dark:focus:border-blue-600"></textarea>
+            <div className="mb-4 text-gray-700 dark:text-gray-300">
+              <label htmlFor="message" className="block text-gray-700 dark:text-gray-300 font-bold mb-2">Mensaje / Interés:</label>
+ <textarea id="message" name="message" className="form-textarea appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600 dark:focus:ring-blue-600 dark:focus:border-blue-600"></textarea>
             </div>
             <input type="hidden" name="formType" value="basic" /> {/* Add hidden input to differentiate forms */}
-            <div className="flex items-center justify-end">
- <button type="submit" className="form-button bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline dark:bg-blue-600 dark:hover:bg-blue-800">Enviar</button>
+            <div className="flex items-center justify-end text-gray-700 dark:text-gray-300">
+ <button type="submit" className="form-button bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Enviar</button>
  </div>
           </form>
         </div>
       </section>
- 
       <section>
  <h2 className="text-2xl font-semibold mb-4">Solicitar Presupuesto</h2>
- <p className="mb-4 text-gray-700">
+ <p className="mb-4 text-gray-700 dark:text-gray-300">
           Si tiene un proyecto en mente y desea solicitar un presupuesto detallado, por favor complete el siguiente formulario con la mayor cantidad de información posible.
  </p>
         {/* Detailed quote request form placeholder */}
  <div className="contact-form-container bg-gray-100 p-6 rounded-lg shadow-md dark:bg-gray-800 dark:border dark:border-gray-700 dark:shadow-lg">
  <form onSubmit={handleQuoteSubmit} encType="multipart/form-data"> {/* Add encType for file uploads */}
- <div className="mb-4">
+ <div className="mb-4 text-gray-700 dark:text-gray-300">
               <label htmlFor="quote-name" className="block text-gray-700 font-bold mb-2 dark:text-gray-300">Nombre:</label>
- <input type="text" id="quote-name" name="nombreCompleto" className="form-input appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600 dark:focus:ring-blue-600 dark:focus:border-blue-600" required /> {/* Added required */}
+ <input type="text" id="quote-name" name="nombreCompleto" className="form-input appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600 dark:focus:ring-blue-600 dark:focus:border-blue-600" required /> {/* Added required */}
             </div>
-            <div className="mb-4">
+            <div className="mb-4 text-gray-700 dark:text-gray-300">
               <label htmlFor="quote-email" className="block text-gray-700 font-bold mb-2 dark:text-gray-300">Email:</label>
- <input type="email" id="quote-email" name="correoElectronico" className="form-input appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600 dark:focus:ring-blue-600 dark:focus:border-blue-600" required /> {/* Added required */}
+ <input type="email" id="quote-email" name="correoElectronico" className="form-input appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600 dark:focus:ring-blue-600 dark:focus:border-blue-600" required /> {/* Added required */}
             </div>
-            <div className="mb-4">
+            <div className="mb-4 text-gray-700 dark:text-gray-300">
               <label htmlFor="quote-phone" className="block text-gray-700 font-bold mb-2 dark:text-gray-300">Teléfono:</label>
- <input type="tel" id="quote-phone" name="telefono" className="form-input appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600 dark:focus:ring-blue-600 dark:focus:border-blue-600" />
+ <input type="tel" id="quote-phone" name="telefono" className="form-input appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600 dark:focus:ring-blue-600 dark:focus:border-blue-600" />
             </div>
-            <div className="mb-4">
+            <div className="mb-4 text-gray-700 dark:text-gray-300">
               <label htmlFor="quote-address" className="block text-gray-700 font-bold mb-2 dark:text-gray-300">Dirección:</label>
- <input type="text" id="quote-address" name="direccion" className="form-input appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600 dark:focus:ring-blue-600 dark:focus:border-blue-600" required /> {/* Added required */}
+ <input type="text" id="quote-address" name="direccion" className="form-input appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600 dark:focus:ring-blue-600 dark:focus:border-blue-600" required /> {/* Added required */}
             </div>
             {/* Combined City and Postal Code */}
-            <div className="mb-4 flex flex-wrap -mx-2">
- <div className="w-full md:w-1/2 px-2 mb-4 md:mb-0"> {/* City */}
+            <div className="mb-4 flex flex-wrap -mx-2 text-gray-700 dark:text-gray-300">
+ <div className="w-full md:w-1/2 px-2 mb-4 md:mb-0 text-gray-700 dark:text-gray-300"> {/* City */}
                 <label htmlFor="quote-city" className="block text-gray-700 font-bold mb-2 dark:text-gray-300">Ciudad:</label>
- <input type="text" id="quote-city" name="ciudad" className="form-input appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600 dark:focus:ring-blue-600 dark:focus:border-blue-600" required /> {/* Added required */}
+ <input type="text" id="quote-city" name="ciudad" className="form-input appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600 dark:focus:ring-blue-600 dark:focus:border-blue-600" required /> {/* Added required */}
               </div>
- <div className="w-full md:w-1/2 px-2"> {/* Postal Code */}
+ <div className="w-full md:w-1/2 px-2 text-gray-700 dark:text-gray-300"> {/* Postal Code */}
                 <label htmlFor="quote-postal" className="block text-gray-700 font-bold mb-2 dark:text-gray-300">Código postal:</label>
- <input type="text" id="quote-postal" name="codigoPostal" className="form-input appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600 dark:focus:ring-blue-600 dark:focus:border-blue-600" required /> {/* Added required */}
+ <input type="text" id="quote-postal" name="codigoPostal" className="form-input appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600 dark:focus:ring-blue-600 dark:focus:border-blue-600" required /> {/* Added required */}
               </div>
             </div>
-            <div className="mb-4">
+            <div className="mb-4 text-gray-700 dark:text-gray-300">
               <label htmlFor="project-type" className="block text-gray-700 font-bold mb-2 dark:text-gray-300">Tipo de Proyecto:</label>
               {/* Using select for Type of Project */}
-              <select id="project-type" name="tipoDeProyecto" className="form-select appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600 dark:focus:ring-blue-600 dark:focus:border-blue-600">
-                <option value="">Seleccione un tipo de proyecto</option>
+              <select id="project-type" name="tipoDeProyecto" className="form-select appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600 dark:focus:ring-blue-600 dark:focus:border-blue-600">
+                <option value="" className="bg-white text-gray-700 dark:bg-gray-800 dark:text-gray-200">Seleccione un tipo de proyecto</option>
                 <option value="residencial">Residencial</option>
                 <option value="comercial">Comercial</option>
                 <option value="remodelacion">Remodelación</option>
@@ -122,26 +121,26 @@ const ContactPage = () => {
                 <option value="otro">Otro</option>
               </select>
             </div>
-            <div className="mb-4">
+            <div className="mb-4 text-gray-700 dark:text-gray-300">
  <label className="block text-gray-700 font-bold mb-2 dark:text-gray-300">Espacios a intervenir (Seleccione uno o más):</label>
  
               {/* Container for Espacio a intervenir */}
-              <div>
+              <div className="text-gray-700 dark:text-gray-300">
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-2"> {/* Use grid for checkbox layout */}
                   {['Hall de Entrada', 'Living', 'Comedor', 'Living-Comedor', 'Dormitorio Ppal', 'Dormitorio Secundario', 'Sala de Estar', 'Baño', 'Logia', 'Walk-in Closet', 'Escritorio', 'Terraza'].map(space => (
                     <div key={space} className="flex items-center">
-                      <input type="checkbox" id={`space-${space.replace(/\s+/g, '-').toLowerCase()}`} name="espaciosAAbordar" value={space} className="form-checkbox h-5 w-5 text-blue-600 rounded border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:checked:bg-blue-600 dark:checked:border-transparent" />
+                      <input type="checkbox" id={`space-${space.replace(/\s+/g, '-').toLowerCase()}`} name="espaciosAAbordar" value={space} className="form-checkbox h-5 w-5 text-blue-600 rounded border-gray-300 focus:ring-blue-500 focus:border-blue-500 bg-white dark:border-gray-600 dark:bg-gray-700 dark:checked:bg-blue-600 dark:checked:border-transparent" />
                       <label htmlFor={`space-${space.replace(/\s+/g, '-').toLowerCase()}`} className="ml-2 text-gray-700 dark:text-gray-300">{space}</label>
                     </div>
                   ))}
                 </div>
               </div>
             </div>
-            <div className="mb-4">
+            <div className="mb-4 text-gray-700 dark:text-gray-300">
  <label htmlFor="estimated-budget" className="block text-gray-700 font-bold mb-2 dark:text-gray-300">Presupuesto estimado:</label>
               {/* Using select for Estimated Budget */}
               <select id="estimated-budget" name="presupuestoEstimado" className="form-select appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600 dark:focus:ring-blue-600 dark:focus:border-blue-600">
-                <option value="">Seleccione un rango de presupuesto</option>
+                <option value="" className="bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200">Seleccione un rango de presupuesto</option>
                 <option value="bajo">Bajo</option>
                 <option value="medio">Medio</option>
                 <option value="alto">Alto</option>
@@ -149,29 +148,28 @@ const ContactPage = () => {
                 <option value="a-discutir">A discutir</option>
               </select>
             </div>
-            <div className="mb-4">
+            <div className="mb-4 text-gray-700 dark:text-gray-300">
  <label htmlFor="how-found-us" className="block text-gray-700 font-bold mb-2 dark:text-gray-300">Cómo nos encontró?:</label>
               {/* Using text input for How did you find us? */}
-              <input type="text" id="how-found-us" name="comoNosEncontro" className="form-input appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600 dark:focus:ring-blue-600 dark:focus:border-blue-600" />
+              <input type="text" id="how-found-us" name="comoNosEncontro" className="form-input appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600 dark:focus:ring-blue-600 dark:focus:border-blue-600" />
             </div>
-            <div className="mb-4">
+            <div className="mb-4 text-gray-700 dark:text-gray-300">
  <label htmlFor="project-details" className="block text-gray-700 font-bold mb-2 dark:text-gray-300">Detalles del Proyecto:</label>
-              <textarea id="project-details" name="descripcionDelProyecto" className="form-textarea appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600 dark:focus:ring-blue-600 dark:focus:border-blue-600" rows={4}></textarea> {/* Added rows for better initial size */}
+              <textarea id="project-details" name="descripcionDelProyecto" className="form-textarea appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600 dark:focus:ring-blue-600 dark:focus:border-blue-600" rows={4}></textarea> {/* Added rows for better initial size */}
             </div>
-            <div className="mb-4">
+            <div className="mb-4 text-gray-700 dark:text-gray-300">
  <label htmlFor="attachments" className="block text-gray-700 font-bold mb-2 dark:text-gray-300">Archivos adjuntos:</label>
               {/* File input for attachments */}
-              <input type="file" id="attachments" name="archivosAdjuntos" className="form-input appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600 dark:focus:ring-blue-600 dark:focus:border-blue-600" multiple /> {/* Added multiple for selecting multiple files */}
+              <input type="file" id="attachments" name="archivosAdjuntos" className="form-input appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600 dark:focus:ring-blue-600 dark:focus:border-blue-600" multiple /> {/* Added multiple for selecting multiple files */}
             </div>
  <input type="hidden" name="formType" value="quote" /> {/* Add hidden input to differentiate forms */}
             <div className="flex items-center justify-end">
- <button type="submit" className="form-button bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline dark:bg-blue-600 dark:hover:bg-blue-800">Solicitar Presupuesto</button>
+ <button type="submit" className="form-button bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Solicitar Presupuesto</button>
  </div>
           </form>
         </div>
       </section>
     </div>
-  );
 };
 
 

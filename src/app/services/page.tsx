@@ -3,10 +3,10 @@ import React from 'react';
 const ServicesPage: React.FC = () => {
   // Content based on http://127.0.0.1:5500/main/index.html and http://127.0.0.1:5500/main/dise%C3%B1o-interior-integral.html
   return (
-    <div>
+ <div className="bg-white dark:bg-black text-gray-800 dark:text-gray-200">
     <div className="container mx-auto px-4 py-8 services-container service-card">
-      <h1 className="text-4xl font-bold text-center mb-12 service-title dark:text-white">Nuestros Servicios</h1>
-      <section className="mb-16 service-section">
+      <h1 className="text-4xl font-bold text-center mb-12 service-title">Nuestros Servicios</h1>
+      <section className="mb-16 service-section bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
         <h2 className="text-3xl font-semibold mb-6 service-subtitle service-card">Diseño Interior Integral</h2>
         <div className="flex flex-col md:flex-row items-center service-content">
           <div className="md:w-1/2 md:pr-8 mb-6 md:mb-0 flex justify-center service-image-container">
@@ -14,17 +14,16 @@ const ServicesPage: React.FC = () => {
           </div>
           <div className="md:w-1/2 service-description">
             <p className="text-lg text-gray-700 mb-4 service-paragraph dark:text-gray-300">
-              Nos encargamos de transformar tus espacios desde la concepción hasta la materialización.
-              Nuestro servicio de diseño interior integral abarca todas las etapas del proyecto para
-              garantizar un resultado coherente, funcional y estéticamente atractivo que refleje tu
+              Nos encargamos de transformar tus espacios desde la concepción hasta la materialización.Nuestro servicio de diseño interior integral abarca todas las etapas del proyecto para garantizar un resultado coherente, funcional y estéticamente atractivo que refleje tu
               personalidad y cumpla con tus necesidades.
             </p>
             <h3 className="text-2xl font-semibold mb-4 service-list-title">¿Qué incluye?</h3>
             <ul className="list-disc list-inside text-gray-700 service-list">
               <li className="dark:text-gray-300">Análisis de necesidades y estudio del espacio.</li>
-              <li>Desarrollo de concepto e ideas preliminares.</li>
+              <li className="dark:text-gray-300">Desarrollo de concepto e ideas preliminares.</li>
               <li>Planos de distribución y zonificación.</li>
               <li>Selección de materiales, acabados y mobiliario.</li>
+              <li className="dark:text-gray-300">Selección de materiales, acabados y mobiliario.</li>
               <li>Diseño de iluminación y detalles técnicos.</li>
               <li className="service-list-item">Gestión y supervisión del proyecto.</li>
               <li>Entrega y asesoramiento final.</li>
@@ -33,7 +32,7 @@ const ServicesPage: React.FC = () => {
         </div>
       </section>
 
-      <section className="mb-16 service-section">
+      <section className="mb-16 service-section bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
         <h2 className="text-3xl font-semibold mb-6 service-subtitle service-card">Consultoría de Diseño</h2>
         <div className="flex flex-col md:flex-row-reverse items-center service-content">
           <div className="md:w-1/2 md:pl-8 mb-6 md:mb-0 flex justify-center service-image-container">
@@ -41,8 +40,7 @@ const ServicesPage: React.FC = () => {
           </div>
           <div className="md:w-1/2">
             <p className="text-lg text-gray-700 mb-4 dark:text-gray-300">
-              Si buscas orientación profesional para tu proyecto de diseño, nuestra consultoría es la opción ideal.
-              Te brindamos asesoramiento experto en áreas específicas, ayudándote a tomar decisiones informadas
+              Si buscas orientación profesional para tu proyecto de diseño, nuestra consultoría es la opción ideal.Te brindamos asesoramiento experto en áreas específicas, ayudándote a tomar decisiones informadas
               y a resolver dudas sobre distribución, color, mobiliario, materiales o cualquier otro aspecto
               de tu espacio.
             </p>
@@ -58,7 +56,7 @@ const ServicesPage: React.FC = () => {
         </div>
       </section>
 
-      <section className="service-section">
+      <section className="service-section bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
         <h2 className="text-3xl font-semibold mb-6 service-subtitle service-card">Diseño de Mobiliario a Medida</h2>
         <div className="flex flex-col md:flex-row items-center service-content">
           <div className="md:w-1/2 md:pr-8 mb-6 md:mb-0 flex justify-center service-image-container">
@@ -66,8 +64,7 @@ const ServicesPage: React.FC = () => {
           </div>
           <div className="md:w-1/2">
             <p className="text-lg text-gray-700 mb-4 dark:text-gray-300">
-              Creamos piezas de mobiliario únicas y funcionales, diseñadas específicamente para tu espacio
-              y tus necesidades. Desde armarios empotrados hasta muebles singulares, nuestro servicio de
+              Creamos piezas de mobiliario únicas y funcionales, diseñadas específicamente para tu espacio y tus necesidades. Desde armarios empotrados hasta muebles singulares, nuestro servicio de
               diseño a medida garantiza soluciones personalizadas que maximizan el aprovechamiento del
               espacio y reflejan tu estilo.
             </p>

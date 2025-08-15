@@ -42,20 +42,23 @@ const PortfolioPage = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-8 text-center text-gray-800 dark:text-white">Nuestro Portafolio</h1>
+      <h1 className="text-3xl font-bold mb-8 text-center text-gray-800 dark:text-gray-100">Nuestro Portafolio</h1>
 
       <div className="portfolio-grid">
-        {projects.map((project) => (
-          <div key={project.id} className="project-preview bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-md dark:shadow-lg">
-            {/* Placeholder for project image */}{" "}
+ {projects.map((project) => (
+ <div
+ key={project.id}
+ className="project-preview bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-md dark:shadow-lg p-6 rounded-lg transition duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-xl"
+ >
+            {/* Placeholder for project image */}
             <div className="w-full h-48 bg-gray-300 dark:bg-gray-700 rounded-md mb-4 flex items-center justify-center text-gray-600 dark:text-gray-300">
-             <img
+ <img
                 src={project.imageUrl}
                 alt={project.imageAlt}
-                className="project-image"
+ className="project-image w-full h-full object-cover rounded-md"
               />
             </div>
-            <p className="text-gray-700 dark:text-gray-300 mb-4">{project.description}</p>
+ <p className="text-gray-700 dark:text-gray-300 mb-4 dark:text-gray-200">{project.description}</p>
             <Link href={`/portfolio/${project.id}`} className="text-blue-600 hover:underline block mt-4">
               Ver Detalles
             </Link>
