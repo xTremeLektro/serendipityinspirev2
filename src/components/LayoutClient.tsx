@@ -72,9 +72,6 @@ const LayoutClient: React.FC<LayoutClientProps> = ({ children }) => {
 
       <main className="flex-grow">{children}</main>
 
-      <footer className="bg-gray-800 dark:bg-gray-900 text-white p-4 text-center">
-        <p>&copy; 2023 Interior Design. Todos los derechos reservados.</p>
-      </footer>
     </div>
   );
 };

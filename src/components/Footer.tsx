@@ -61,9 +61,10 @@ const Footer: React.FC = () => {
         </div>
 
         {/* Footer Bottom */}
-        <div className="border-t border-gray-700 mt-8 pt-8 text-center dark:border-gray-600">
-          <p>&copy; {new Date().getFullYear()} Your Company. All rights reserved.</p>
+        <div className="bg-gray-800 dark:bg-gray-900 text-white p-4 text-center">
+          <p>&copy; 2025 Serendipity Interior Design. Todos los derechos reservados.</p>
         </div>
+
       </div>
     </footer>
   );
