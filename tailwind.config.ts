@@ -15,7 +15,6 @@ const config: Config = {
       },
     },
   },
-  darkMode: 'class', // Enabled dark mode with class strategy
   plugins: [],
 }
 export default config
