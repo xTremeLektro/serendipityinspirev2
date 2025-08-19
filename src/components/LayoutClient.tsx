@@ -5,6 +5,17 @@ import { useState } from "react";
 import SandwichMenu from "../components/SandwichMenu";
 import Link from "next/link"; // Assuming you'll need Link within this component for navigation
 import { usePathname } from "next/navigation";
+import { Mulish } from 'next/font/google';
+
+// The path should be relative to the `public` directory.
+import Image from 'next/image';
+const logoImage = '/images/photo-output.PNG';
+
+// Initialize the font, specifying subsets and other options.
+const mulish = Mulish({
+  subsets: ['latin'],
+  display: 'swap', // This is the default and ensures text is visible while the font loads
+});
 
 interface LayoutClientProps {
   children: React.ReactNode;
@@ -19,8 +30,8 @@ const LayoutClient: React.FC<LayoutClientProps> = ({ children }) => {
   };
 
   return (
- <div className="min-h-screen flex flex-col">
-      <header className="bg-gray-100 text-gray-800 p-4 flex justify-between items-center">
+ <div className={`min-h-screen flex flex-col ${mulish.className}`}>
+      <header className="bg-white text-gray-800 shadow-md p-4 flex justify-between items-center">
         <nav id="nav" className={`relative flex items-center ${isMenuOpen ? 'active' : ''}`}>
           <button className="icon" onClick={toggleMenu}>
             <SandwichMenu />
@@ -33,6 +44,13 @@ const LayoutClient: React.FC<LayoutClientProps> = ({ children }) => {
             <li><Link href="/contact" className={pathname === '/contact' ? 'font-bold' : ''}>Contacto</Link></li>
           </ul>
         </nav>
+          <Image
+            src={logoImage}
+            alt="Imagen Logo Serendipity"
+            width={160}
+            height={40}
+            className="h-10 w-auto"
+          />
       </header>
 
       <main className="flex-grow">{children}</main>
