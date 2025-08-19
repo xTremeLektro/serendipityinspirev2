@@ -51,15 +51,15 @@ const ContactPage = () => {
 
   return (
     <div className="container mx-auto px-4 py-8 space-y-8 bg-white text-gray-800">
-      <div className='bg-black text-white'>
+      <div className='bg-black text-white rounded-lg'>
         <br />
         <h1 className={`text-4xl md:text-5xl font-bold text-center ${eduNSW.className}`}>Contacto</h1>
         <br />
       </div>
 
       <section className="mb-8">
-        <h2 className={`text-2xl font-semibold mb-4 text-gray-800 ${eduNSW.className}`}>Consulta General / Suscripción</h2>
-        <p className={`mb-4 text-gray-700 ${eduNSW.className}`}>
+        <h2 className={`text-3xl font-semibold mb-4 text-black ${eduNSW.className}`}>Consulta General / Suscripción</h2>
+        <p className={`mb-4 text-gray-800 ${eduNSW.className}`}>
           Utilice este formulario para consultas generales, comentarios o para suscribirse a nuestras noticias y actualizaciones. Nos encantará saber de usted.
         </p>
         {/* Basic contact form placeholder */}
@@ -85,8 +85,8 @@ const ContactPage = () => {
         </div>
       </section>
       <section>
-        <h2 className={`text-2xl font-semibold mb-4 ${eduNSW.className}`}>Solicitar Presupuesto</h2>
-        <p className={`mb-4 text-gray-700 ${eduNSW.className}`}>
+        <h2 className={`text-3xl font-semibold mb-4 text-black ${eduNSW.className}`}>Solicitar Presupuesto</h2>
+        <p className={`mb-4 text-gray-800 ${eduNSW.className}`}>
           Si tiene un proyecto en mente y desea solicitar un presupuesto detallado, por favor complete el siguiente formulario con la mayor cantidad de información posible.
         </p>
 

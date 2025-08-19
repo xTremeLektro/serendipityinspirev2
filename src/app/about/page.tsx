@@ -10,7 +10,7 @@ const eduNSW = Edu_NSW_ACT_Cursive({
 const AboutUsPage: React.FC = () => {
   return (
     <div className="bg-white container mx-auto px-4 py-8">
-      <div className='bg-black text-white'>
+      <div className='bg-black text-white rounded-lg'>
         <br />
         <h1 className={`text-4xl md:text-5xl font-bold text-center ${eduNSW.className}`}>Sobre Nosotros</h1>
         <br />
@@ -18,14 +18,17 @@ const AboutUsPage: React.FC = () => {
       
       <br />
       
-      <section className="company-intro mb-16 p-8 bg-gray-400 rounded-lg shadow-sm">
-        <h2 className={`text-3xl md:text-4xl font-semibold mb-6 text-black ${eduNSW.className}`}>Nuestra Empresa</h2>
-        <p className="text-lg leading-relaxed text-black">
-          En Serendipity Inspire ©, nos apasiona transformar espacios y crear ambientes que inspiren y funcionen a la perfección para quienes los habitan.
-          Creemos que el diseño interior va más allá de la estética; se trata de mejorar la calidad de vida y reflejar la esencia de cada persona o marca.
-          Con gran experiencia en el sector, ofrecemos soluciones de diseño interior innovadoras y personalizadas para hogares y negocios.
-          Nuestro enfoque se basa en la escucha activa, la creatividad y la atención al detalle para convertir tus sueños en realidad.
-        </p>
+      <section className="bg-white text-black">
+        <h2 className={`text-3xl font-semibold mb-6 service-subtitle service-card ${eduNSW.className}`}>Nuestra Empresa</h2>
+        <section className="company-intro mb-8 p-8 bg-gray-400 rounded-lg shadow-sm">
+          
+          <p className="text-lg leading-relaxed text-black">
+            En Serendipity Inspire ©, nos apasiona transformar espacios y crear ambientes que inspiren y funcionen a la perfección para quienes los habitan.
+            Creemos que el diseño interior va más allá de la estética; se trata de mejorar la calidad de vida y reflejar la esencia de cada persona o marca.
+            Con gran experiencia en el sector, ofrecemos soluciones de diseño interior innovadoras y personalizadas para hogares y negocios.
+            Nuestro enfoque se basa en la escucha activa, la creatividad y la atención al detalle para convertir tus sueños en realidad.
+          </p>
+        </section>
       </section>
 
       <section className="bg-white text-black">

@@ -12,7 +12,7 @@ const ServicesPage: React.FC = () => {
   return (
  <div className="bg-white text-black">
     <div className="container mx-auto px-4 py-8 services-container service-card">
-      <div className='bg-black text-white'>
+      <div className='bg-black text-white rounded-lg'>
         <br />
         <h1 className={`text-4xl md:text-5xl font-bold text-center ${eduNSW.className}`}>Nuestros Servicios</h1>
         <br />
