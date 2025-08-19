@@ -5,11 +5,13 @@ import { Edu_NSW_ACT_Cursive } from 'next/font/google';
 // Initialize the font for the Hero Section.
 const eduNSW = Edu_NSW_ACT_Cursive({
   weight: ['400', '700'], // You can specify the weights you need
+  fallback: ['system-ui', 'sans-serif'],
 });
 
 const AboutUsPage: React.FC = () => {
   return (
-    <div className="bg-white container mx-auto px-4 py-8">
+    <div className="bg-white text-black">
+    <div className="container mx-auto px-4 py-8">
       <div className='bg-black text-white rounded-lg'>
         <br />
         <h1 className={`text-4xl md:text-5xl font-bold text-center ${eduNSW.className}`}>Sobre Nosotros</h1>
@@ -64,6 +66,7 @@ const AboutUsPage: React.FC = () => {
           {/* Add more team member placeholders as needed */}
         </div>
       </section>
+    </div>
     </div>
   );
 };

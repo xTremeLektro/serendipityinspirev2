@@ -6,6 +6,7 @@ import { Edu_NSW_ACT_Cursive } from 'next/font/google';
 // Initialize the font for the Hero Section.
 const eduNSW = Edu_NSW_ACT_Cursive({
   weight: ['400', '700'], // You can specify the weights you need
+  fallback: ['system-ui', 'sans-serif'],
 });
 
 const ContactPage = () => {
@@ -50,7 +51,8 @@ const ContactPage = () => {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8 space-y-8 bg-white text-gray-800">
+    <div className="bg-white text-black">
+    <div className="container mx-auto px-4 py-8 space-y-8">
       <div className='bg-black text-white rounded-lg'>
         <br />
         <h1 className={`text-4xl md:text-5xl font-bold text-center ${eduNSW.className}`}>Contacto</h1>
@@ -180,6 +182,7 @@ const ContactPage = () => {
           </form>
         </div>
       </section>
+    </div>
     </div>
   );
 };

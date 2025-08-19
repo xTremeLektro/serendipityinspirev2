@@ -6,14 +6,15 @@ import { Edu_NSW_ACT_Cursive } from 'next/font/google';
 // Initialize the font for the Hero Section.
 const eduNSW = Edu_NSW_ACT_Cursive({
   weight: ['400', '700'], // You can specify the weights you need
+  fallback: ['system-ui', 'sans-serif'],
 });
 
 export default function Home() {
   return (
-    <div className="mx-auto">
+    <div className="container mx-auto bg-black text-white">
       {/* Hero Section */}
       <section className="flex items-center justify-center text-center">
-        <div className={`relative ${eduNSW.className}`}>
+        <div className={`rounded-lg relative ${eduNSW.className}`}>
           <br />
           <h1 className="text-4xl md:text-5xl font-bold mb-4 animate-fadeInUp">Diseño de Interiores que Inspira</h1>
           <p className="text-xl md:text-2xl animate-fadeInUp delay-200">Transformamos tus espacios en lugares únicos y funcionales.</p>
@@ -26,7 +27,7 @@ export default function Home() {
 
       {/* Project Previews */}
       <section className="flex items-center justify-center text-center">
-        <div className={`relative ${eduNSW.className}`}>
+        <div className={`rounded-lg relative ${eduNSW.className}`}>
           <br />
            <p className="text-xl md:text-2xl font-bold animate-fadeInUp delay-200">Nuestros Proyectos Destacados</p>
           <br />
@@ -81,7 +82,7 @@ export default function Home() {
           </div>
         </div>
         <div className="text-center mt-8">
-          <Link href="/portfolio" className="text-blue-600 hover:underline text-lg">Ver Portfolio Completo</Link>
+          <Link href="/portfolio" className="bg-blue-600 text-white px-6 py-3 rounded-full text-lg hover:bg-blue-700">Ver Portfolio Completo</Link>
         </div>
       </section>
 
