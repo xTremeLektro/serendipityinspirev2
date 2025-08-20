@@ -20,7 +20,7 @@
 
 body {
   background-color: var(--background);
-  color: var(--foreground);
+  color: var(--background);
 }
 
 .form-select:not([multiple]) {
@@ -50,7 +50,7 @@ body {
 }
 
 nav {
-  background-color: #fff;
+  background-color: #111827;
   padding: 0 15px;
   width: 60px;
   height: 30px;
@@ -94,12 +94,12 @@ nav.active ul li {
 
 nav ul a {
   position: relative;
-  color: #000;
+  color: #FFF;
   text-decoration: none;
 }
 
 .icon {
-  background-color: #fff;
+  background-color: #111827;
   border: 0;
   cursor: pointer;
   padding: 0;
@@ -126,7 +126,7 @@ nav ul a {
   background-repeat: no-repeat;
   height: 80vh;
   border-radius: 50px;
-  color: #fff;
+  color: #FFF;
   cursor: pointer;
   flex: 0.5;
   margin: 10px;

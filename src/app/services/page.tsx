@@ -18,6 +18,7 @@ const ServicesPage: React.FC = () => {
         <h1 className={`text-4xl md:text-5xl font-bold text-center ${eduNSW.className}`}>Nuestros Servicios</h1>
         <br />
       </div>
+      <br />
       <section className="mb-16 service-section bg-white p-6 rounded-lg shadow-md">
         <h2 className={`text-3xl font-semibold mb-6 service-subtitle service-card ${eduNSW.className}`}>Diseño Interior Integral</h2>
         <div className="flex flex-col md:flex-row items-center service-content">

@@ -31,7 +31,7 @@ const LayoutClient: React.FC<LayoutClientProps> = ({ children }) => {
 
   return (
  <div className={`min-h-screen flex flex-col ${mulish.className}`}>
-      <header className="bg-white text-gray-800 shadow-md p-4 flex justify-between items-center">
+      <header className="bg-gray-900 text-white shadow-md p-4 flex justify-between items-center">
         <nav id="nav" className={`relative flex items-center ${isMenuOpen ? 'active' : ''}`}>
           <button className="icon" onClick={toggleMenu}>
             <SandwichMenu />
