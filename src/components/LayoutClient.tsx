@@ -42,6 +42,7 @@ const LayoutClient: React.FC<LayoutClientProps> = ({ children }) => {
             <li><Link href="/services" className={pathname === '/services' ? 'font-bold' : ''}>Servicios</Link></li>
             <li><Link href="/about" className={pathname === '/about' ? 'font-bold' : ''}>Sobre Nosotros</Link></li>
             <li><Link href="/contact" className={pathname === '/contact' ? 'font-bold' : ''}>Contacto</Link></li>
+            <li><Link href="/admin/login" className={pathname === '/admin/login' ? 'font-bold' : ''}>Admin</Link></li>
           </ul>
         </nav>
           <Image

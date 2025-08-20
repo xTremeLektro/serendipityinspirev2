@@ -17,27 +17,24 @@ export default function Home() {
       </div>
       <div className="container mx-auto bg-black text-white rounded-lg">
         {/* Hero Section */}
-        <section className="flex items-center justify-center text-center rounded-lg">
-          <div className={`relative ${eduNSW.className}`}>
-            <br />
-            <h1 className="text-4xl md:text-5xl font-bold mb-4 animate-fadeInUp">Diseño de Interiores que Inspira</h1>
-            <p className="text-xl md:text-2xl animate-fadeInUp delay-200">Transformamos tus espacios en lugares únicos y funcionales.</p>
-            <br />
-          </div>
-        </section>
+        <div className="rounded-lg bg-black text-white">
+          <br />
+          <h1 className={`text-4xl md:text-5xl font-bold mb-4 text-center ${eduNSW.className}`}>Diseño de Interiores que Inspira</h1>
+          <p className={`text-xl md:text-2xl text-center ${eduNSW.className}`}>Transformamos tus espacios en lugares únicos y funcionales.</p>
+          <br />
+        </div>
 
         {/* Expanding Cards Section */}
         <ExpandingCards />
 
         {/* Project Previews */}
-        <section className="flex items-center justify-center text-center">
-          <div className={`rounded-lg relative ${eduNSW.className}`}>
+        <section className="py-12 bg-white text-gray-800">
+          <div className="rounded-lg bg-black text-white">
             <br />
-            <p className="text-xl md:text-2xl font-bold animate-fadeInUp delay-200">Nuestros Proyectos Destacados</p>
+            <p className={`text-xl md:text-2xl font-bold text-center ${eduNSW.className}`}>Nuestros Proyectos Destacados</p>
             <br />
           </div>
-        </section>
-        <section className="py-12 bg-white text-gray-800">
+          <br />
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {/* Placeholder Project Card 1 */}
             <div className="project-card border border-gray-200 rounded-lg overflow-hidden shadow-lg transform transition duration-300 hover:scale-105 hover:shadow-xl cursor-pointer bg-white">

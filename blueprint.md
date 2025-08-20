@@ -28,6 +28,7 @@
 - [ ] Implement main navigation links.
 - [ ] Ensure proper routing between pages.
 - [ ] Make the sandwich menu icon always visible and control the display of the navigation menu on all screen sizes.
+- [x] Add admin login link to header.
 
 ## 5. Header Animation
 - [x] Implement animated header navigation based on provided example (HTML/CSS/JS). Use React state to toggle an 'active' class for CSS transitions.
@@ -64,3 +65,12 @@
 - [ ] Review and refine UI/UX.
 - [ ] Address any bugs or issues.
 - [ ] Make final adjustments based on feedback.
+
+## 13. Authentication and Database Integration
+- [x] Install `next-auth` and `@supabase/supabase-js` dependencies.
+- [x] Create `.env.local` file for environment variables (NextAuth.js secret, GitHub/Google OAuth credentials, Supabase URL/Anon Key).
+- [x] Configure NextAuth.js API route (`src/app/api/auth/[...nextauth]/route.ts`) with GitHub and Google providers.
+- [x] Create Supabase client utility (`src/lib/supabase.ts`).
+- [x] Add "Admin" login link to the header (`src/components/LayoutClient.tsx`).
+- [x] Create Admin Login Page (`src/app/admin/login/page.tsx`) with GitHub and Google sign-in buttons.
+- [x] Create Protected Admin Dashboard Page (`src/app/admin/dashboard/page.tsx`) that redirects unauthenticated users.

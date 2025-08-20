@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 // Data for the cards. You can easily update the titles and image paths here.
 // Make sure your images are in the `public/images/` directory.
@@ -29,6 +29,13 @@ const cardData = [
 
 const ExpandingCards: React.FC = () => {
   const [activeIndex, setActiveIndex] = useState(0); // First panel is active by default
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setActiveIndex((activeIndex + 1) % cardData.length);
+    }, 3000);
+    return () => clearTimeout(timer);
+  }, [activeIndex]);
 
   const handlePanelClick = (index: number) => {
     setActiveIndex(index);
