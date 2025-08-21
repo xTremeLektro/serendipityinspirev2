@@ -2,6 +2,7 @@
 
 import { FormEvent } from 'react';
 import { Edu_NSW_ACT_Cursive } from 'next/font/google';
+import { supabase } from '@/lib/supabase';
 
 // Initialize the font for the Hero Section.
 const eduNSW = Edu_NSW_ACT_Cursive({
@@ -15,18 +16,22 @@ const ContactPage = () => {
     const formData = new FormData(event.currentTarget);
     const data = Object.fromEntries(formData.entries());
 
-    const response = await fetch('/api/contact/basic', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    });
+    try {
+      const { error } = await supabase.from('contact_inquiries').insert([{
+        name: data.name.toString(),
+        email: data.email.toString(),
+        message: data.message.toString(),
+      }]);
 
-    if (response.ok) {
-      alert('¡Gracias por tu mensaje! Nos pondremos en contacto pronto.');
-    } else {
-      alert('Hubo un error al enviar tu mensaje. Por favor, inténtalo de nuevo.');
+      if (error) {
+        console.error("Error inserting data:", error);
+        alert('Hubo un error al enviar tu mensaje. Por favor, inténtalo de nuevo.');
+      } else {
+        alert('¡Gracias por tu mensaje! Nos pondremos en contacto pronto.');
+      }
+    } catch (error) {
+      console.error("An unexpected error occurred:", error);
+      alert('Hubo un error inesperado al enviar tu mensaje. Por favor, inténtalo de nuevo.');
     }
   };
 
@@ -35,18 +40,24 @@ const ContactPage = () => {
     const formData = new FormData(event.currentTarget);
     const data = Object.fromEntries(formData.entries());
 
-    const response = await fetch('/api/contact/quote', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    });
+    try {
+      const { error } = await supabase.from('quote_requests').insert([{
+        name: data.nombreCompleto.toString(),
+        email: data.correoElectronico.toString(),
+        phone: data.telefono.toString(),
+        service: data.tipoDeProyecto.toString(),
+        details: data.descripcionDelProyecto.toString(),
+      }]);
 
-    if (response.ok) {
-      alert('¡Gracias por tu solicitud de presupuesto! Nos pondremos en contacto pronto.');
-    } else {
-      alert('Hubo un error al enviar tu solicitud. Por favor, inténtalo de nuevo.');
+      if (error) {
+        console.error("Error inserting data:", error);
+        alert('Hubo un error al enviar tu solicitud. Por favor, inténtalo de nuevo.');
+      } else {
+        alert('¡Gracias por tu solicitud de presupuesto! Nos pondremos en contacto pronto.');
+      }
+    } catch (error) {
+      console.error("An unexpected error occurred:", error);
+      alert('Hubo un error inesperado al enviar tu solicitud. Por favor, inténtalo de nuevo.');
     }
   };
 
