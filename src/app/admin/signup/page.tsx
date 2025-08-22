@@ -3,23 +3,16 @@
 import { useState } from 'react';
 import { createClient } from '@/lib/supabase';
 import { useRouter } from 'next/navigation';
-import { Edu_NSW_ACT_Cursive } from 'next/font/google';
 
-// Initialize the font for the Hero Section.
-const eduNSW = Edu_NSW_ACT_Cursive({
-  weight: ['400', '700'], // You can specify the weights you need
-  fallback: ['system-ui', 'sans-serif'],
-});
-
-export default function AdminLoginPage() {
+export default function AdminSignupPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const router = useRouter();
   const supabase = createClient();
 
-  const handleSignIn = async (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSignUp = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const { error } = await supabase.auth.signInWithPassword({
+    const { error } = await supabase.auth.signUp({
       email,
       password,
     });
@@ -27,15 +20,16 @@ export default function AdminLoginPage() {
     if (error) {
       alert(error.message);
     } else {
-      router.push('/admin/dashboard');
+      alert('Please check your email to confirm your sign-up.');
+      router.push('/admin/login');
     }
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
-        <h1 className={`text-2xl font-bold mb-6 text-gray-800 text-center ${eduNSW.className}`}>Admin Login</h1>
-        <form onSubmit={handleSignIn}>
+        <h1 className="text-2xl font-bold mb-6 text-gray-800 text-center">Admin Sign Up</h1>
+        <form onSubmit={handleSignUp}>
           <div className="mb-4">
             <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">
               Email
@@ -69,14 +63,8 @@ export default function AdminLoginPage() {
               className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
               type="submit"
             >
-              Sign In
-            </button>
-            <a
-              href="/admin/signup"
-              className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-            >
               Sign Up
-            </a>
+            </button>
           </div>
         </form>
       </div>

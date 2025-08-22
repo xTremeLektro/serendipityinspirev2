@@ -2,7 +2,7 @@
 
 import { FormEvent } from 'react';
 import { Edu_NSW_ACT_Cursive } from 'next/font/google';
-import { supabase } from '@/lib/supabase';
+import { createClient } from '@/lib/supabase';
 
 // Initialize the font for the Hero Section.
 const eduNSW = Edu_NSW_ACT_Cursive({
@@ -11,9 +11,11 @@ const eduNSW = Edu_NSW_ACT_Cursive({
 });
 
 const ContactPage = () => {
+  const supabase = createClient();
   const handleBasicSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const formData = new FormData(event.currentTarget);
+    const form = event.currentTarget;
+    const formData = new FormData(form);
     const data = Object.fromEntries(formData.entries());
 
     try {
@@ -28,6 +30,7 @@ const ContactPage = () => {
         alert('Hubo un error al enviar tu mensaje. Por favor, inténtalo de nuevo.');
       } else {
         alert('¡Gracias por tu mensaje! Nos pondremos en contacto pronto.');
+        form.reset(); // Reset the form fields
       }
     } catch (error) {
       console.error("An unexpected error occurred:", error);
@@ -37,16 +40,49 @@ const ContactPage = () => {
 
   const handleQuoteSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const formData = new FormData(event.currentTarget);
+    const form = event.currentTarget;
+    const formData = new FormData(form);
     const data = Object.fromEntries(formData.entries());
+    const attachments = formData.getAll('archivosAdjuntos') as File[];
+
+    // Handle checkboxes, which might not appear in formData if unchecked
+    const espaciosAAbordar = formData.getAll('espaciosAAbordar');
+    const attachmentPaths: string[] = [];
+
+    for (const attachment of attachments) {
+      if (attachment.size > 0) {
+        const { data: fileData, error: fileError } = await supabase.storage
+          .from('attachments')
+          .upload(`public/${attachment.name}`, attachment);
+
+        if (fileError) {
+          console.error('Error uploading file:', fileError);
+          alert('Hubo un error al subir un archivo. Por favor, inténtalo de nuevo.');
+          return;
+        }
+
+        const { data: publicUrlData } = supabase.storage
+          .from('attachments')
+          .getPublicUrl(fileData.path);
+
+        attachmentPaths.push(publicUrlData.publicUrl);
+      }
+    }
 
     try {
       const { error } = await supabase.from('quote_requests').insert([{
-        name: data.nombreCompleto.toString(),
+        full_name: data.nombreCompleto.toString(),
         email: data.correoElectronico.toString(),
         phone: data.telefono.toString(),
-        service: data.tipoDeProyecto.toString(),
-        details: data.descripcionDelProyecto.toString(),
+        address: data.direccion.toString(),
+        city: data.ciudad.toString(),
+        postal_code: data.codigoPostal.toString(),
+        project_type: data.tipoDeProyecto.toString(),
+        spaces_to_address: espaciosAAbordar,
+        estimated_budget: data.presupuestoEstimado.toString(),
+        how_found_us: data.comoNosEncontro.toString(),
+        project_details: data.descripcionDelProyecto.toString(),
+        attachments: attachmentPaths,
       }]);
 
       if (error) {
@@ -54,6 +90,7 @@ const ContactPage = () => {
         alert('Hubo un error al enviar tu solicitud. Por favor, inténtalo de nuevo.');
       } else {
         alert('¡Gracias por tu solicitud de presupuesto! Nos pondremos en contacto pronto.');
+        form.reset(); // Reset the form fields
       }
     } catch (error) {
       console.error("An unexpected error occurred:", error);

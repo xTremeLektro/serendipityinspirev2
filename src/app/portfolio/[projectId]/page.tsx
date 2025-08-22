@@ -10,6 +10,7 @@ const eduNSW = Edu_NSW_ACT_Cursive({
   weight: ['400', '700'], // You can specify the weights you need
   fallback: ['system-ui', 'sans-serif'],
 });
+
 interface ProjectDetailPageProps {
   params: {
     projectId: string;
