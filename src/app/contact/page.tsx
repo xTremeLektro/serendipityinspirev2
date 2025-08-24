@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent } from 'react';
+import { FormEvent, useState } from 'react';
 import { Edu_NSW_ACT_Cursive } from 'next/font/google';
 import { createClient } from '@/lib/supabase';
 
@@ -11,6 +11,21 @@ const eduNSW = Edu_NSW_ACT_Cursive({
 
 const ContactPage = () => {
   const supabase = createClient();
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files) {
+      const newFiles = Array.from(event.target.files);
+      setSelectedFiles((prevFiles) => [...prevFiles, ...newFiles]);
+    }
+  };
+
+  const handleRemoveFile = (fileToRemove: File) => {
+    setSelectedFiles((prevFiles) =>
+      prevFiles.filter((file) => file !== fileToRemove)
+    );
+  };
+
   const handleBasicSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const form = event.currentTarget;
@@ -42,13 +57,14 @@ const ContactPage = () => {
     const form = event.currentTarget;
     const formData = new FormData(form);
     const data = Object.fromEntries(formData.entries());
-    const attachments = formData.getAll('archivosAdjuntos') as File[];
+    // Use selectedFiles state instead of directly reading from formData for attachments
+    const attachmentsToUpload = selectedFiles;
 
     // Handle checkboxes, which might not appear in formData if unchecked
     const espaciosAAbordar = formData.getAll('espaciosAAbordar');
     const attachmentPaths: string[] = [];
 
-    for (const attachment of attachments) {
+    for (const attachment of attachmentsToUpload) {
       if (attachment.size > 0) {
         const { data: fileData, error: fileError } = await supabase.storage
           .from('attachments')
@@ -90,6 +106,7 @@ const ContactPage = () => {
       } else {
         alert('¡Gracias por tu solicitud de presupuesto! Nos pondremos en contacto pronto.');
         form.reset(); // Reset the form fields
+        setSelectedFiles([]); // Clear selected files after successful submission
       }
     } catch (error) {
       console.error("An unexpected error occurred:", error);
@@ -220,7 +237,28 @@ const ContactPage = () => {
             <div className="mb-4 text-gray-700">
               <label htmlFor="attachments" className="block text-gray-700 font-bold mb-2">Archivos adjuntos:</label>
               {/* File input for attachments */}
-              <input type="file" id="attachments" name="archivosAdjuntos" className="form-input appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-blue-500 focus:border-blue-500 bg-white" multiple /> {/* Added multiple for selecting multiple files */}
+              <input
+                type="file"
+                id="attachments"
+                name="archivosAdjuntos"
+                className="form-input appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-blue-500 focus:border-blue-500 bg-white"
+                multiple
+                onChange={handleFileChange}
+              />
+              <div className="mt-2">
+                {selectedFiles.map((file, index) => (
+                  <div key={index} className="flex items-center justify-between bg-gray-200 p-2 rounded-md mb-1">
+                    <span className="text-sm text-gray-700">{file.name}</span>
+                    <button
+                      type="button"
+                      onClick={() => handleRemoveFile(file)}
+                      className="ml-2 text-red-500 hover:text-red-700 text-sm font-bold"
+                    >
+                      X
+                    </button>
+                  </div>
+                ))}
+              </div>
             </div>
             <input type="hidden" name="formType" value="quote" /> {/* Add hidden input to differentiate forms */}
             <div className="flex items-center justify-end">
