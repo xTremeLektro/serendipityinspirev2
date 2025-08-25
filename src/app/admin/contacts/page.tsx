@@ -154,20 +154,18 @@ export default function AdminContactsPage() {
               <br />
 
               {/* Pagination */}
-              {/* This div acts as the full-width container for the nav element */}
-              <div className="mx-4 sm:-mx-6">
+              <div className="mt-4">
                 <nav
-                  // className="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6"
-                  className="flex items-center justify-between border-t border-gray-200"
+                  className="flex items-center justify-between border-t border-gray-200 px-4 sm:px-0"
                   aria-label="Pagination"
                 >
-                  {/* <div className="flex-1 flex items-center"> */}
-                    <p className="text-sm text-gray-700 p-2 rounded-md bg-gray-100">
-                      Página <span className="font-medium">{page}</span> de <span className="font-medium">{totalPages}</span>
-                    </p>
-                  {/* </div> */}
-                  {/* <div> */}
-                    <div className="flex justify-end space-x-3">
+                  <div className="flex-1 flex justify-between">
+                    <div>
+                      <p className="text-sm text-gray-700">
+                        Página <span className="font-medium">{page}</span> de <span className="font-medium">{totalPages}</span>
+                      </p>
+                    </div>
+                    <div className="flex space-x-3">
                       <button
                         onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
                         disabled={page === 1}
@@ -183,7 +181,7 @@ export default function AdminContactsPage() {
                         Siguiente
                       </button>
                     </div>
-                  {/* </div> */}
+                  </div>
                 </nav>
               </div>
             </div>

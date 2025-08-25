@@ -2,6 +2,7 @@
 
 import { createClient } from '@/lib/supabase/server'
 import { revalidatePath } from 'next/cache'
+import { PostgrestError } from '@supabase/supabase-js'
 
 interface CarouselItem {
   id: string
@@ -13,7 +14,7 @@ interface CarouselItem {
 
 export async function fetchCarouselItems(): Promise<{
   data: CarouselItem[] | null
-  error: any
+  error: PostgrestError | null
 }> {
   const supabase = await createClient()
   const { data, error } = await supabase
@@ -33,7 +34,7 @@ export async function updateCarouselItem(
   updates: { short_desc?: string | null; picture?: string | null }
 ): Promise<{
   success: boolean
-  error: any
+  error: PostgrestError | null
 }> {
   const supabase = await createClient()
   const { error } = await supabase
@@ -54,7 +55,7 @@ export async function uploadImageAndGetUrl(
   oldImageUrl?: string | null
 ): Promise<{
   publicUrl: string | null
-  error: any
+  error: Error | null
 }> {
   const supabase = await createClient()
   const fileName = `carrousel/${Date.now()}-${file.name}`
@@ -96,7 +97,7 @@ export async function swapCarouselItemOrder(
   ord2: number
 ): Promise<{
   success: boolean
-  error: any
+  error: PostgrestError | null
 }> {
   const supabase = await createClient()
 

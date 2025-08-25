@@ -1,6 +1,7 @@
 import AdminHeader from '@/components/AdminHeader';
-import { getFaqTypes, addFaqType, getFaqs, addFaq } from './actions';
+import { getFaqTypes, addFaqType, getFaqs, addFaq, deleteFaq, deleteFaqType } from './actions';
 import { Edu_NSW_ACT_Cursive } from 'next/font/google';
+import { FaTrash } from 'react-icons/fa';
 
 // Initialize the font for the Hero Section.
 const eduNSW = Edu_NSW_ACT_Cursive({
@@ -51,6 +52,7 @@ export default async function AdminFAQPage() {
                     <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Question</th>
                     <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Answer</th>
                     <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
+                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
@@ -59,6 +61,14 @@ export default async function AdminFAQPage() {
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{faq.question}</td>
                       <td className="px-6 py-4 whitespace-normal text-sm text-gray-500 max-w-xs">{faq.answer}</td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{faq.faq_type_list.faq_type}</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                        <form action={deleteFaq} className="inline-block">
+                          <input type="hidden" name="id" value={faq.id} />
+                          <button type="submit" className="text-red-600 hover:text-red-900">
+                            <FaTrash />
+                          </button>
+                        </form>
+                      </td>
                     </tr>
                   ))}
                 </tbody>
@@ -86,7 +96,15 @@ export default async function AdminFAQPage() {
               <h3 className={`text-lg font-medium text-gray-900 ${eduNSW.className}`}>Existing FAQ Types</h3>
               <ul className="mt-4 space-y-2">
                 {faqTypes.map((type) => (
-                  <li key={type.id} className="p-2 bg-gray-200 rounded-md text-gray-900">{type.faq_type}</li>
+                  <li key={type.id} className="p-2 bg-gray-200 rounded-md text-gray-900 flex justify-between items-center">
+                    {type.faq_type}
+                    <form action={deleteFaqType} className="inline-block">
+                      <input type="hidden" name="id" value={type.id} />
+                      <button type="submit" className="text-red-600 hover:text-red-900">
+                        <FaTrash />
+                      </button>
+                    </form>
+                  </li>
                 ))}
               </ul>
             </div>

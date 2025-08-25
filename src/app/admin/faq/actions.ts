@@ -24,6 +24,17 @@ export async function addFaqType(formData: FormData) {
   revalidatePath('/admin/faq')
 }
 
+export async function deleteFaqType(formData: FormData) {
+    const supabase = await createClient()
+    const id = formData.get('id') as string
+    const { error } = await supabase.from('faq_type_list').delete().match({ id })
+    if (error) {
+        console.error('Error deleting FAQ type:', error)
+        return { error: error.message }
+    }
+    revalidatePath('/admin/faq')
+}
+
 export async function getFaqs() {
   const supabase = await createClient()
   const { data, error } = await supabase.from('faq_list').select(`
@@ -51,4 +62,15 @@ export async function addFaq(formData: FormData) {
   }
 
   revalidatePath('/admin/faq')
+}
+
+export async function deleteFaq(formData: FormData) {
+    const supabase = await createClient()
+    const id = formData.get('id') as string
+    const { error } = await supabase.from('faq_list').delete().match({ id })
+    if (error) {
+        console.error('Error deleting FAQ:', error)
+        return { error: error.message }
+    }
+    revalidatePath('/admin/faq')
 }

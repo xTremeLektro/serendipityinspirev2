@@ -14,9 +14,6 @@ This document outlines the project structure, features, and design of the Serend
 *   **Database Integration:**
     *   Contact form submissions are saved to a Supabase database.
     *   Quote request submissions are saved to a Supabase database.
-
-### Current Plan
-
 *   **Admin Dashboard:**
     *   The blog placeholder has been moved to a new third line.
     *   A new admin section for Frequently Asked Questions (FAQ) configuration has been added.
@@ -28,6 +25,17 @@ This document outlines the project structure, features, and design of the Serend
         *   Blog Posts (Future)
         *   FAQ (Future)
     *   The dashboard will have a modern, card-based design with icons for each section.
+*   **CRUD Functionality:**
+    *   **FAQ Management:**
+        *   Admins can create, read, and delete FAQs.
+        *   Admins can create, read, and delete FAQ types.
+    *   **Services Management:**
+        *   Admins can create, read, update, and delete services.
+        *   Admins can associate services with a FAQ type.
+        *   Admins can upload and delete pictures for each service.
+
+### Current Plan
+
 *   **Admin Sub-pages:**
     *   Create placeholder pages for each content management section:
         *   `/admin/carousel`
