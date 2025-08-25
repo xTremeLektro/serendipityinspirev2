@@ -18,13 +18,15 @@ This document outlines the project structure, features, and design of the Serend
 ### Current Plan
 
 *   **Admin Dashboard:**
-    *   Create a central dashboard for content management.
-    *   The dashboard will provide navigation to manage:
+    *   The blog placeholder has been moved to a new third line.
+    *   A new admin section for Frequently Asked Questions (FAQ) configuration has been added.
+    *   The dashboard provides navigation to manage:
         *   Picture Carousel
         *   Projects (Proyectos)
         *   Services (Servicios)
-        *   Blog Posts (Future)
         *   Contact Form Submissions
+        *   Blog Posts (Future)
+        *   FAQ (Future)
     *   The dashboard will have a modern, card-based design with icons for each section.
 *   **Admin Sub-pages:**
     *   Create placeholder pages for each content management section:
@@ -33,3 +35,4 @@ This document outlines the project structure, features, and design of the Serend
         *   `/admin/services`
         *   `/admin/blog`
         *   `/admin/contacts`
+        *   `/admin/faq`
