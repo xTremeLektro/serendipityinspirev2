@@ -126,11 +126,14 @@ export async function addServicePic(
     return { error: errorMessage, success: false };
   }
 
+  const arrayBuffer = await photo.arrayBuffer();
+
   // 1. Upload image to storage
   const fileName = `services/${service_id}/${Date.now()}-${photo.name}`
   const { data: uploadData, error: uploadError } = await supabase.storage
     .from('attachments')
-    .upload(fileName, photo, {
+    .upload(fileName, arrayBuffer, {
+      contentType: photo.type,
       cacheControl: '3600',
       upsert: false,
     });
