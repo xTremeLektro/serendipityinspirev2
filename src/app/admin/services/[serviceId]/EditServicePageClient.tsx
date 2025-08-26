@@ -6,6 +6,12 @@ import { useState, useEffect, useRef, useActionState } from 'react';
 import { useFormStatus } from 'react-dom';
 import { FaTrash } from 'react-icons/fa';
 import Image from 'next/image';
+import { Edu_NSW_ACT_Cursive } from 'next/font/google';
+
+// Initialize the font for the Hero Section.
+const eduNSW = Edu_NSW_ACT_Cursive({
+  weight: ['400', '700'], // You can specify the weights you need
+});
 
 interface Service {
   id: number;
@@ -78,25 +84,25 @@ export default function EditServicePageClient({ service, faqTypes, servicePics }
 
   return (
     <div className="min-h-screen bg-gray-100">
-      <AdminHeader title={`Edit Service: ${service.service_name}`} backUrl="/admin/services" backText="Return to Services" />
+      <AdminHeader title={`Edit Service: ${service.service_name}`} backUrl="/admin/services" backText="Regresar a Servicios" />
       <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
         <div className="px-4 py-6 sm:px-0 space-y-8">
           <div className="bg-white p-8 rounded-lg shadow-md w-full">
-            <h2 className="text-2xl font-bold mb-4 text-gray-900">Edit Service Details</h2>
+            <h2 className={`text-2xl font-bold mb-4 text-gray-900 ${eduNSW.className}`}>Detalles del Servicio</h2>
             <form action={updateService}>
               <input type="hidden" name="id" value={service.id} />
               <div className="mb-4">
-                <label htmlFor="service_name" className="block text-sm font-medium text-gray-700">Service Name</label>
+                <label htmlFor="service_name" className="block text-sm font-medium text-gray-700">Nombre del Servicio</label>
                 <input type="text" name="service_name" id="service_name" defaultValue={service.service_name} className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-gray-900" required />
               </div>
               <div className="mb-4">
-                <label htmlFor="service_desc" className="block text-sm font-medium text-gray-700">Service Description</label>
+                <label htmlFor="service_desc" className="block text-sm font-medium text-gray-700">Descripción del Servicio</label>
                 <textarea name="service_desc" id="service_desc" defaultValue={service.service_desc} rows={10} className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-gray-900" required></textarea>
               </div>
               <div className="mb-4">
-                <label htmlFor="fac_type_id" className="block text-sm font-medium text-gray-700">FAQ Type</label>
+                <label htmlFor="fac_type_id" className="block text-sm font-medium text-gray-700">Tipo de FAQ</label>
                 <select name="fac_type_id" id="fac_type_id" defaultValue={service.fac_type_id || ''} className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md border text-gray-900">
-                  <option value="">Select a type</option>
+                  <option value="">Seleccionar un tipo</option>
                   {faqTypes.map((type) => (
                     <option key={type.id} value={type.id}>{type.faq_type}</option>
                   ))}
@@ -107,17 +113,17 @@ export default function EditServicePageClient({ service, faqTypes, servicePics }
           </div>
 
           <div className="bg-white p-8 rounded-lg shadow-md w-full">
-            <h2 className="text-2xl font-bold mb-4 text-gray-900">Manage Service Pictures</h2>
+            <h2 className={`text-2xl font-bold mb-4 text-gray-900 ${eduNSW.className}`}>Administrar Imágenes del Servicio</h2>
             <div className="mb-8">
-              <h3 className="text-xl font-bold mb-2 text-gray-900">Add New Picture</h3>
+              <h3 className={`text-xl font-bold mb-2 text-gray-900 ${eduNSW.className}`}>Agregar Nueva Imagen</h3>
               <form action={addPicFormAction}>
                 <input type="hidden" name="service_id" value={service.id} />
                 <div className="mb-4">
-                  <label htmlFor="photo" className="block text-sm font-medium text-gray-700">Photo</label>
+                  <label htmlFor="photo" className="block text-sm font-medium text-gray-700">Foto</label>
                   <input type="file" name="photo" id="photo" ref={photoInputRef} className="mt-1 block w-full text-sm text-gray-900 border border-gray-300 rounded-md cursor-pointer bg-gray-50 focus:outline-none" required />
                 </div>
                 <div className="mb-4">
-                  <label htmlFor="caption" className="block text-sm font-medium text-gray-700">Caption</label>
+                  <label htmlFor="caption" className="block text-sm font-medium text-gray-700">Descripción</label>
                   <input type="text" name="caption" id="caption" value={caption} onChange={(e) => setCaption(e.target.value)} className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-gray-900" />
                 </div>
                 {addPicState.error && <p className="text-red-500 text-sm mb-4">{addPicState.error}</p>}
@@ -126,7 +132,7 @@ export default function EditServicePageClient({ service, faqTypes, servicePics }
             </div>
 
             <div>
-              <h3 className="text-xl font-bold mb-2 text-gray-900">Existing Pictures</h3>
+              <h3 className={`text-xl font-bold mb-2 text-gray-900 ${eduNSW.className}`}>Imágenes Existentes</h3>
               <div className="flex flex-col gap-4">
                 {servicePics.map((pic) => (
                   <div key={pic.id} className="bg-gray-50 p-4 rounded-lg shadow flex items-center justify-between space-x-4 w-full">
@@ -153,7 +159,7 @@ export default function EditServicePageClient({ service, faqTypes, servicePics }
                         Orden:
                         <input type="number" name="ord" defaultValue={pic.ord} className="ml-1 w-16 px-2 py-1 border border-gray-300 rounded-md text-sm text-gray-900" />
                       </label>
-                      <button type="submit" className="text-blue-600 hover:text-blue-900 text-sm flex-shrink-0">Update</button>
+                      <button type="submit" className="text-blue-600 hover:text-blue-900 text-sm flex-shrink-0">Actualizar</button>
                     </form>
                     <form action={deleteServicePic} className="flex-shrink-0">
                       <input type="hidden" name="id" value={pic.id} />

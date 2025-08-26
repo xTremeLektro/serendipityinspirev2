@@ -8,7 +8,7 @@ const eduNSW = Edu_NSW_ACT_Cursive({
 
 export default function AdminHeader({ title, backUrl, backText }: { title: string, backUrl?: string, backText?: string }) {
   const returnUrl = backUrl || "/admin/dashboard";
-  const returnText = backText || "Return to Dashboard";
+  const returnText = backText || "Regresar al Dashboard";
 
   return (
     <header className="bg-white shadow">

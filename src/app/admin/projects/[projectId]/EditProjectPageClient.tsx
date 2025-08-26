@@ -6,6 +6,12 @@ import { useState, useEffect, useRef, useActionState } from 'react';
 import { useFormStatus } from 'react-dom';
 import { FaTrash } from 'react-icons/fa';
 import Image from 'next/image';
+import { Edu_NSW_ACT_Cursive } from 'next/font/google';
+
+// Initialize the font for the Hero Section.
+const eduNSW = Edu_NSW_ACT_Cursive({
+  weight: ['400', '700'], // You can specify the weights you need
+});
 
 interface Project {
   id: string;
@@ -77,45 +83,45 @@ export default function EditProjectPageClient({ project, projectPics }: EditProj
 
   return (
     <div className="min-h-screen bg-gray-100">
-      <AdminHeader title={`Edit Project: ${project.project_name}`} backUrl="/admin/projects" backText="Return to Projects" />
+      <AdminHeader title={`Editar Proyecto: ${project.project_name}`} backUrl="/admin/projects" backText="Regresar a Proyectos" />
       <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
         <div className="px-4 py-6 sm:px-0 space-y-8">
           <div className="bg-white p-8 rounded-lg shadow-md w-full">
-            <h2 className="text-2xl font-bold mb-4 text-gray-900">Edit Project Details</h2>
+            <h2 className={`text-2xl font-bold mb-4 text-gray-900 ${eduNSW.className}`}>Detalles del Proyecto</h2>
             <form action={updateProject}>
               <input type="hidden" name="id" value={project.id} />
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="mb-4">
-                  <label htmlFor="project_name" className="block text-sm font-medium text-gray-700">Project Name</label>
+                  <label htmlFor="project_name" className="block text-sm font-medium text-gray-700">Nombre del Proyecto</label>
                   <input type="text" name="project_name" id="project_name" defaultValue={project.project_name} className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-gray-900" required />
                 </div>
                 <div className="mb-4">
-                  <label htmlFor="location" className="block text-sm font-medium text-gray-700">Location</label>
+                  <label htmlFor="location" className="block text-sm font-medium text-gray-700">Ubicación</label>
                   <input type="text" name="location" id="location" defaultValue={project.location || ''} className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-gray-900" />
                 </div>
                 <div className="mb-4">
-                  <label htmlFor="end_date" className="block text-sm font-medium text-gray-700">End Date</label>
+                  <label htmlFor="end_date" className="block text-sm font-medium text-gray-700">Fecha de Finalización</label>
                   <input type="date" name="end_date" id="end_date" defaultValue={project.end_date || ''} className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-gray-900" />
                 </div>
                 <div className="mb-4">
-                  <label htmlFor="property_type" className="block text-sm font-medium text-gray-700">Property Type</label>
+                  <label htmlFor="property_type" className="block text-sm font-medium text-gray-700">Tipo de Propiedad</label>
                   <input type="text" name="property_type" id="property_type" defaultValue={project.property_type || ''} className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-gray-900" />
                 </div>
                 <div className="mb-4">
-                  <label htmlFor="style" className="block text-sm font-medium text-gray-700">Style</label>
+                  <label htmlFor="style" className="block text-sm font-medium text-gray-700">Estilo</label>
                   <input type="text" name="style" id="style" defaultValue={project.style || ''} className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-gray-900" />
                 </div>
                 <div className="mb-4">
-                  <label htmlFor="scope" className="block text-sm font-medium text-gray-700">Scope</label>
+                  <label htmlFor="scope" className="block text-sm font-medium text-gray-700">Alcance</label>
                   <input type="text" name="scope" id="scope" defaultValue={project.scope || ''} className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-gray-900" />
                 </div>
               </div>
               <div className="mb-4">
-                <label htmlFor="short_description" className="block text-sm font-medium text-gray-700">Short Description</label>
+                <label htmlFor="short_description" className="block text-sm font-medium text-gray-700">Descripción Corta</label>
                 <textarea name="short_description" id="short_description" defaultValue={project.short_description || ''} rows={3} className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-gray-900"></textarea>
               </div>
               <div className="mb-4">
-                <label htmlFor="detailed_description" className="block text-sm font-medium text-gray-700">Detailed Description</label>
+                <label htmlFor="detailed_description" className="block text-sm font-medium text-gray-700">Descripción Detallada</label>
                 <textarea name="detailed_description" id="detailed_description" defaultValue={project.detailed_description || ''} rows={6} className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-gray-900"></textarea>
               </div>
               <button type="submit" className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Update Project</button>
@@ -123,17 +129,17 @@ export default function EditProjectPageClient({ project, projectPics }: EditProj
           </div>
 
           <div className="bg-white p-8 rounded-lg shadow-md w-full">
-            <h2 className="text-2xl font-bold mb-4 text-gray-900">Manage Project Pictures</h2>
+            <h2 className={`text-2xl font-bold mb-4 text-gray-900 ${eduNSW.className}`}>Administrar Imágenes del Proyecto</h2>
             <div className="mb-8">
-              <h3 className="text-xl font-bold mb-2 text-gray-900">Add New Picture</h3>
+              <h3 className={`text-xl font-bold mb-2 text-gray-900 ${eduNSW.className}`}>Agregar Nueva Imagen</h3>
               <form action={addPicFormAction}>
                 <input type="hidden" name="project_id" value={project.id} />
                 <div className="mb-4">
-                  <label htmlFor="photo" className="block text-sm font-medium text-gray-700">Photo</label>
+                  <label htmlFor="photo" className="block text-sm font-medium text-gray-700">Foto</label>
                   <input type="file" name="photo" id="photo" ref={photoInputRef} className="mt-1 block w-full text-sm text-gray-900 border border-gray-300 rounded-md cursor-pointer bg-gray-50 focus:outline-none" required />
                 </div>
                 <div className="mb-4">
-                  <label htmlFor="caption" className="block text-sm font-medium text-gray-700">Caption</label>
+                  <label htmlFor="caption" className="block text-sm font-medium text-gray-700">Descripción</label>
                   <input type="text" name="caption" id="caption" value={caption} onChange={(e) => setCaption(e.target.value)} className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-gray-900" />
                 </div>
                 {addPicState.error && <p className="text-red-500 text-sm mb-4">{addPicState.error}</p>}
@@ -142,7 +148,7 @@ export default function EditProjectPageClient({ project, projectPics }: EditProj
             </div>
 
             <div>
-              <h3 className="text-xl font-bold mb-2 text-gray-900">Existing Pictures</h3>
+              <h3 className={`text-xl font-bold mb-2 text-gray-900 ${eduNSW.className}`}>Imágenes Existentes</h3>
               <div className="flex flex-col gap-4">
                 {projectPics.map((pic) => (
                   <div key={pic.id} className="bg-gray-50 p-4 rounded-lg shadow flex items-center justify-between space-x-4 w-full">
@@ -169,7 +175,7 @@ export default function EditProjectPageClient({ project, projectPics }: EditProj
                         Orden:
                         <input type="number" name="ord" defaultValue={pic.ord} className="ml-1 w-16 px-2 py-1 border border-gray-300 rounded-md text-sm text-gray-900" />
                       </label>
-                      <button type="submit" className="text-blue-600 hover:text-blue-900 text-sm flex-shrink-0">Update</button>
+                      <button type="submit" className="text-blue-600 hover:text-blue-900 text-sm flex-shrink-0">Actualizar</button>
                     </form>
                     <form action={deleteProjectPic} className="flex-shrink-0">
                       <input type="hidden" name="id" value={pic.id} />
@@ -209,7 +215,7 @@ export default function EditProjectPageClient({ project, projectPics }: EditProj
               />
             ) : (
               <div className="w-full h-full bg-gray-200 flex items-center justify-center text-gray-500">
-                Image Not Available
+                Imagen No Disponible
               </div>
             )}
           </div>

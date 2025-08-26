@@ -8,8 +8,8 @@ const eduNSW = Edu_NSW_ACT_Cursive({
   weight: ['400', '700'], // You can specify the weights you need
   style: ['normal'], // 👈 Add this line to specify the style
   display: 'swap', // Also recommended for better performance
-  variable: '--font-edu-nsw-act-cursive',
-  fallback: ['cursive', 'sans-serif'], // Add your fallback fonts here
+//  variable: '--font-edu-nsw-act-cursive',
+  adjustFontFallback: false,
 });
 
 export default function Home() {
