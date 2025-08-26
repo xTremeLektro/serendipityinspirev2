@@ -8,6 +8,9 @@ This document outlines the project structure, features, and design of the Serend
 
 ### Implemented
 
+*   **Home Page:**
+    *   The "Nuestros Proyectos Destacados" section now displays the first three projects from the Supabase database where the `is_home` property is true.
+    *   Each project card displays the project's name, location, short description, and the head picture of the project.
 *   **Authentication:**
     *   OAuth login with Google.
     *   Admin dashboard with a logout button.

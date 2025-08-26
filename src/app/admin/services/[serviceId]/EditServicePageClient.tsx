@@ -84,7 +84,7 @@ export default function EditServicePageClient({ service, faqTypes, servicePics }
 
   return (
     <div className="min-h-screen bg-gray-100">
-      <AdminHeader title={`Edit Service: ${service.service_name}`} backUrl="/admin/services" backText="Regresar a Servicios" />
+      <AdminHeader title={`Editar Servicio: ${service.service_name}`} backUrl="/admin/services" backText="Regresar a Servicios" />
       <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
         <div className="px-4 py-6 sm:px-0 space-y-8">
           <div className="bg-white p-8 rounded-lg shadow-md w-full">
