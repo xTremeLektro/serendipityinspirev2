@@ -8,6 +8,7 @@ const logoImage = '/images/photo-output.PNG';
 
 const eduNSW = Edu_NSW_ACT_Cursive({
   weight: ['400', '700'], // You can specify the weights you need
+  fallback: ['cursive'],
 });
 
 const Footer: React.FC = () => {

@@ -10,6 +10,7 @@ const eduNSW = Edu_NSW_ACT_Cursive({
   display: 'swap', // Also recommended for better performance
 //  variable: '--font-edu-nsw-act-cursive',
   adjustFontFallback: false,
+  fallback: ['cursive'],
 });
 
 import { getHomeProjects } from "@/lib/projects";
