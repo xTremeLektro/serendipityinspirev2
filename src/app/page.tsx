@@ -44,21 +44,23 @@ export default async function Home() {
           <br />
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {projects.map((project) => (
-              <div key={project.id} className="project-card border border-gray-200 rounded-lg overflow-hidden shadow-lg transform transition duration-300 hover:scale-105 hover:shadow-xl cursor-pointer bg-white">
-                <Image
-                  src={project.project_pics[0]?.photo_url || "/images/0000 - Public Serendipity Site v2/carrousel1.jpg"}
-                  alt={`Imagen del Proyecto ${project.project_name}`}
-                  width={400}
-                  height={300}
-                  className="w-full h-48 object-cover"
-                  style={{ objectFit: "cover" }}
-                />
-                <div className="p-4">
-                  <h3 className="text-xl font-semibold mb-2">{project.project_name}</h3>
-                  <p className="text-gray-600">{project.location}</p>
-                  <p className="text-gray-600">{project.short_description}</p>
+              <Link href={`/portfolio/${project.id}`} key={project.id}>
+                <div className="project-card border border-gray-200 rounded-lg overflow-hidden shadow-lg transform transition duration-300 hover:scale-105 hover:shadow-xl cursor-pointer bg-white h-full">
+                  <Image
+                    src={project.project_pics[0]?.photo_url || "/images/0000 - Public Serendipity Site v2/carrousel1.jpg"}
+                    alt={`Imagen del Proyecto ${project.project_name}`}
+                    width={400}
+                    height={300}
+                    className="w-full h-48 object-cover"
+                    style={{ objectFit: "cover" }}
+                  />
+                  <div className="p-4">
+                    <h3 className="text-xl font-semibold mb-2">{project.project_name}</h3>
+                    <p className="text-gray-600">{project.location}</p>
+                    <p className="text-gray-600">{project.short_description}</p>
+                  </div>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
           <div className="text-center mt-8">
