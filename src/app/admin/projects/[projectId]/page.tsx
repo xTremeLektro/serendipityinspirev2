@@ -9,7 +9,7 @@ interface PageProps {
 }
 
 export default async function Page({ params }: PageProps) {
-  const { projectId } = params;
+  const { projectId } = await params;
   const project = await getProject(projectId);
   const projectPics = await getProjectPics(projectId);
 

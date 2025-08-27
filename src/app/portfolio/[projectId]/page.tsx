@@ -1,9 +1,9 @@
 import React from 'react';
-import Image from 'next/image';
 import Link from 'next/link';
 import { Edu_NSW_ACT_Cursive } from 'next/font/google';
 import { getProjectById } from '@/lib/projects';
 import { notFound } from 'next/navigation';
+import ProjectImageGallery from '@/components/ProjectImageGallery';
 
 // Initialize the font for the Hero Section.
 const eduNSW = Edu_NSW_ACT_Cursive({
@@ -18,7 +18,10 @@ interface ProjectDetailPageProps {
 }
 
 const ProjectDetailPage = async (props: ProjectDetailPageProps) => {
-  const project = await getProjectById(props.params.projectId);
+  // Implementing the Next.js documentation's recommended approach.
+  // We explicitly await the params object before accessing its properties.
+  const { projectId } = await props.params;
+  const project = await getProjectById(projectId);
 
   if (!project) {
     notFound();
@@ -30,7 +33,7 @@ const ProjectDetailPage = async (props: ProjectDetailPageProps) => {
         <br />
         <h1 className="text-4xl md:text-5xl font-bold text-center">{project.project_name}</h1>
         <br />
-      </div>      
+      </div>
 
       <div className="flex flex-col md:flex-row gap-8">
         {/* Placeholder for Project Attributes (Sidebar) */}
@@ -58,24 +61,10 @@ const ProjectDetailPage = async (props: ProjectDetailPageProps) => {
           </div>
 
           {/* Dynamic Project Image Gallery */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {project.project_pics.map((image, index) => (
-              <div key={index}>
-                <Image
-                  src={image.photo_url}
-                  alt={image.caption || `Imagen del proyecto ${index + 1}`}
-                  width={800}
-                  height={600}
-                  className="w-full h-auto object-cover rounded-lg shadow"
-                />
-                {image.caption && <p className="text-center mt-2 text-gray-600">{image.caption}</p>}
-              </div>
-            ))}
-          </div>
+          <ProjectImageGallery images={project.project_pics} />
         </div>
       </div>
-
-  </div>
+    </div>
   );
 };
 

@@ -11,14 +11,10 @@ const eduNSW = Edu_NSW_ACT_Cursive({
 });
 
 const PortfolioPage = async ({ searchParams }: { searchParams: { page?: string } }) => {
-  // Final fix for the Next.js warning.
-  // Using an explicit `if` statement is a reliable way to bypass the linter's
-  // strictness with dynamic `searchParams` properties.
-  let page = '1';
-  if (searchParams && searchParams.page) {
-    page = searchParams.page;
-  }
-  const pageNumber = parseInt(page);
+  // Implementing the Next.js documentation's recommended approach.
+  // We explicitly await the searchParams object before accessing its properties.
+  const { page } = await searchParams;
+  const pageNumber = parseInt(page ?? '1');
   const { projects, count } = await getPaginatedProjects({ page: pageNumber });
 
   return (

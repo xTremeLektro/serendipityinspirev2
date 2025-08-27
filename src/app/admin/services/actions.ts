@@ -3,7 +3,16 @@
 import { createClient } from '@/lib/supabase/server'
 import { revalidatePath } from 'next/cache'
 
-export async function getServices() {
+interface Service {
+  id: string;
+  service_name: string;
+  service_desc: string;
+  fac_type_id: string | null;
+  faq_type_list?: { faq_type: string };
+  ord: number | null;
+}
+
+export async function getServices(): Promise<Service[]> {
   const supabase = await createClient()
   const { data, error } = await supabase.from('services').select(`
     *,
@@ -99,6 +108,20 @@ export async function updateService(formData: FormData) {
 
   revalidatePath(`/admin/services/${id}`)
   revalidatePath('/admin/services')
+}
+
+export async function updateServiceOrder(serviceId: string, formData: FormData) {
+  const supabase = await createClient();
+  const ord = parseInt(formData.get('ord') as string);
+
+  const { error } = await supabase.from('services').update({ ord }).eq('id', serviceId);
+
+  if (error) {
+    console.error('Error updating service order:', error);
+    return { error: error.message };
+  }
+
+  revalidatePath('/admin/services');
 }
 
 export async function getServicePics(serviceId: string) {

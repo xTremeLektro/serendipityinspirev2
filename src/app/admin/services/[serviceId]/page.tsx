@@ -2,8 +2,8 @@ import { getService, getFaqTypes, getServicePics } from '../actions';
 import EditServicePageClient from './EditServicePageClient';
 import AdminHeader from '@/components/AdminHeader';
 
-export default async function Page({ params }) {
-  const { serviceId } = params;
+export default async function Page({ params }: { params: { serviceId: string } }) {
+  const { serviceId } = await params;
   const service = await getService(serviceId);
   const faqTypes = await getFaqTypes();
   const servicePics = await getServicePics(serviceId);

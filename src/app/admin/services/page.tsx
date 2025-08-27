@@ -1,5 +1,6 @@
 import AdminHeader from '@/components/AdminHeader';
 import { getServices, addService, deleteService, getFaqTypes } from './actions';
+import ServiceOrderUpdater from './ServiceOrderUpdater';
 import { FaTrash } from 'react-icons/fa';
 import { Edu_NSW_ACT_Cursive } from 'next/font/google';
 
@@ -51,6 +52,7 @@ export default async function AdminServicesPage() {
                     <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nombre del Servicio</th>
                     <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Descripción</th>
                     <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tipo de FAQ</th>
+                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Orden</th>
                     <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Acciones</th>
                   </tr>
                 </thead>
@@ -60,6 +62,9 @@ export default async function AdminServicesPage() {
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{service.service_name}</td>
                       <td className="px-6 py-4 whitespace-normal text-sm text-gray-500 max-w-xs">{service.service_desc}</td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{service.faq_type_list?.faq_type || 'N/A'}</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                        <ServiceOrderUpdater serviceId={service.id} initialOrder={service.ord} />
+                      </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                         <a href={`/admin/services/${service.id}`} className="text-indigo-600 hover:text-indigo-900 mr-4">Editar</a>
                         <form action={deleteService} className="inline-block">
@@ -80,3 +85,4 @@ export default async function AdminServicesPage() {
     </div>
   );
 }
+
