@@ -1,14 +1,26 @@
 import AdminHeader from '@/components/AdminHeader';
 import { getServices, addService, deleteService, getFaqTypes } from './actions';
-import ServiceOrderUpdater from './ServiceOrderUpdater';
-import { FaTrash } from 'react-icons/fa';
+import { FaTrash, FaEdit } from 'react-icons/fa';
 import { Edu_NSW_ACT_Cursive } from 'next/font/google';
+import Link from 'next/link';
+import { marked } from 'marked';
+import { FC } from 'react';
+import ServiceForm from './ServiceForm'; // Import the new form component
+import ClientOnly from '@/components/ClientOnly'; // Import ClientOnly
 
 // Initialize the font for the Hero Section.
 const eduNSW = Edu_NSW_ACT_Cursive({
   weight: ['400', '700'], // You can specify the weights you need
   fallback: ['cursive'],
 });
+
+const MarkdownRenderer: FC<{ content: string | null }> = ({ content }) => {
+  if (!content) return null;
+  // Handle both literal \n strings and actual newline characters.
+  const normalizedContent = content.replace(/(\n|\n)+/g, '\n\n');
+  const parsedHtml = marked.parse(normalizedContent);
+  return <div dangerouslySetInnerHTML={{ __html: parsedHtml as string }} className="prose max-w-none" />;
+};
 
 export default async function AdminServicesPage() {
   const services = await getServices();
@@ -21,26 +33,9 @@ export default async function AdminServicesPage() {
         <div className="px-4 py-6 sm:px-0">
           <div className="bg-white p-8 rounded-lg shadow-md w-full mb-8">
             <h2 className={`text-2xl font-bold mb-4 text-gray-900 ${eduNSW.className}`}>Agregar Nuevo Servicio</h2>
-            <form action={addService}>
-              <div className="mb-4">
-                <label htmlFor="service_name" className="block text-sm font-medium text-gray-700">Nombre del Servicio</label>
-                <input type="text" name="service_name" id="service_name" className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-gray-900" required />
-              </div>
-              <div className="mb-4">
-                <label htmlFor="service_desc" className="block text-sm font-medium text-gray-700">Descripción del Servicio</label>
-                <textarea name="service_desc" id="service_desc" rows={4} className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-gray-900" required></textarea>
-              </div>
-              <div className="mb-4">
-                <label htmlFor="fac_type_id" className="block text-sm font-medium text-gray-700">Tipo de FAQ</label>
-                <select name="fac_type_id" id="fac_type_id" className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md border text-gray-900">
-                  <option value="">Seleccionar un tipo</option>
-                  {faqTypes.map((type) => (
-                    <option key={type.id} value={type.id} className="text-gray-900">{type.faq_type}</option>
-                  ))}
-                </select>
-              </div>
-              <button type="submit" className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Add Service</button>
-            </form>
+            <ClientOnly>
+              <ServiceForm faqTypes={faqTypes} action={addService} />
+            </ClientOnly>
           </div>
 
           <div className="bg-white p-8 rounded-lg shadow-md w-full">
@@ -60,19 +55,25 @@ export default async function AdminServicesPage() {
                   {services.map((service) => (
                     <tr key={service.id}>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{service.service_name}</td>
-                      <td className="px-6 py-4 whitespace-normal text-sm text-gray-500 max-w-xs">{service.service_desc}</td>
+                      <td className="px-6 py-4 whitespace-normal text-sm text-gray-500 max-w-md">
+                        <MarkdownRenderer content={service.service_desc} />
+                      </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{service.faq_type_list?.faq_type || 'N/A'}</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                        <ServiceOrderUpdater serviceId={service.id} initialOrder={service.ord} />
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                        {service.ord}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                        <a href={`/admin/services/${service.id}`} className="text-indigo-600 hover:text-indigo-900 mr-4">Editar</a>
-                        <form action={deleteService} className="inline-block">
-                          <input type="hidden" name="id" value={service.id} />
-                          <button type="submit" className="text-red-600 hover:text-red-900">
-                            <FaTrash />
-                          </button>
-                        </form>
+                        <div className="flex items-center space-x-4">
+                          <Link href={`/admin/services/${service.id}`} className="text-indigo-600 hover:text-indigo-900">
+                            <FaEdit />
+                          </Link>
+                          <form action={deleteService} className="inline-block">
+                            <input type="hidden" name="id" value={service.id} />
+                            <button type="submit" className="text-red-600 hover:text-red-900">
+                              <FaTrash />
+                            </button>
+                          </form>
+                        </div>
                       </td>
                     </tr>
                   ))}

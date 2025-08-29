@@ -40,7 +40,7 @@ export async function getFaqs() {
   const { data, error } = await supabase.from('faq_list').select(`
     *,
     faq_type_list (faq_type)
-  `)
+  `).order('ord')
   if (error) {
     console.error('Error fetching FAQs:', error)
     return []
@@ -73,4 +73,59 @@ export async function deleteFaq(formData: FormData) {
         return { error: error.message }
     }
     revalidatePath('/admin/faq')
+}
+
+export async function getFaq(id: string) {
+  const supabase = await createClient()
+  const { data, error } = await supabase.from('faq_list').select(`
+    *,
+    faq_type_list (faq_type)
+  `).eq('id', id).single()
+  if (error) {
+    console.error('Error fetching FAQ:', error)
+    return null
+  }
+  return data
+}
+
+export async function updateFaq(formData: FormData) {
+  const supabase = await createClient()
+  const id = formData.get('id') as string
+  const question = formData.get('question') as string
+  const answer = formData.get('answer') as string
+  const type = formData.get('type') as string
+  const ord = parseInt(formData.get('ord') as string)
+
+  const faqData: { question: string; answer: string; type: string; ord?: number } = {
+    question,
+    answer,
+    type,
+  };
+
+  if (!isNaN(ord)) {
+    faqData.ord = ord;
+  }
+
+  const { error } = await supabase.from('faq_list').update(faqData).eq('id', id)
+
+  if (error) {
+    console.error('Error updating FAQ:', error)
+    return { error: error.message }
+  }
+
+  revalidatePath('/admin/faq')
+}
+
+export async function updateFaqOrder(faqId: string, formData: FormData) {
+  const supabase = await createClient();
+  const ord = parseInt(formData.get('ord') as string);
+
+  const { error } = await supabase.from('faq_list').update({ ord }).eq('id', faqId);
+
+  if (error) {
+    console.error('Error updating faq order:', error);
+    return { error: error.message };
+  }
+
+  revalidatePath('/admin/faq');
 }

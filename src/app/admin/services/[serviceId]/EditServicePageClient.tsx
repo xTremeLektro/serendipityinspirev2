@@ -7,6 +7,8 @@ import { useFormStatus } from 'react-dom';
 import { FaTrash } from 'react-icons/fa';
 import Image from 'next/image';
 import { Edu_NSW_ACT_Cursive } from 'next/font/google';
+import ServiceForm from '../ServiceForm';
+import ClientOnly from '@/components/ClientOnly';
 
 // Initialize the font for the Hero Section.
 const eduNSW = Edu_NSW_ACT_Cursive({
@@ -90,27 +92,13 @@ export default function EditServicePageClient({ service, faqTypes, servicePics }
         <div className="px-4 py-6 sm:px-0 space-y-8">
           <div className="bg-white p-8 rounded-lg shadow-md w-full">
             <h2 className={`text-2xl font-bold mb-4 text-gray-900 ${eduNSW.className}`}>Detalles del Servicio</h2>
-            <form action={updateService}>
-              <input type="hidden" name="id" value={service.id} />
-              <div className="mb-4">
-                <label htmlFor="service_name" className="block text-sm font-medium text-gray-700">Nombre del Servicio</label>
-                <input type="text" name="service_name" id="service_name" defaultValue={service.service_name} className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-gray-900" required />
-              </div>
-              <div className="mb-4">
-                <label htmlFor="service_desc" className="block text-sm font-medium text-gray-700">Descripción del Servicio</label>
-                <textarea name="service_desc" id="service_desc" defaultValue={service.service_desc} rows={10} className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-gray-900" required></textarea>
-              </div>
-              <div className="mb-4">
-                <label htmlFor="fac_type_id" className="block text-sm font-medium text-gray-700">Tipo de FAQ</label>
-                <select name="fac_type_id" id="fac_type_id" defaultValue={service.fac_type_id || ''} className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md border text-gray-900">
-                  <option value="">Seleccionar un tipo</option>
-                  {faqTypes.map((type) => (
-                    <option key={type.id} value={type.id}>{type.faq_type}</option>
-                  ))}
-                </select>
-              </div>
-              <button type="submit" className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Update Service</button>
-            </form>
+            <ClientOnly>
+              <ServiceForm 
+                faqTypes={faqTypes} 
+                action={updateService} 
+                initialData={service} 
+              />
+            </ClientOnly>
           </div>
 
           <div className="bg-white p-8 rounded-lg shadow-md w-full">
