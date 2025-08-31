@@ -1,10 +1,12 @@
 'use client';
 
-import { useState, FC, Fragment } from 'react';
+import { useState, FC, Fragment, useMemo, useEffect } from 'react';
 import { FaTrash, FaEdit } from 'react-icons/fa';
-import { marked } from 'marked';
 import { deleteFaq } from './actions';
-import EditFaqModal from './EditFaqModal'; // Import the modal component
+import EditFaqModal from './EditFaqModal';
+import { generateHTML } from '@tiptap/html';
+import { JSONContent } from '@tiptap/react';
+import { getTiptapExtensions } from '@/lib/tiptap';
 
 type FaqType = {
   id: string;
@@ -14,7 +16,7 @@ type FaqType = {
 type Faq = {
   id: string;
   question: string;
-  answer: string;
+  answer: JSONContent;
   type: string;
   ord: number | null;
   faq_type_list: {
@@ -27,18 +29,41 @@ interface FaqListClientProps {
   faqTypes: FaqType[];
 }
 
-const MarkdownRenderer: FC<{ content: string }> = ({ content }) => {
-  // Handle both literal \n strings and actual newline characters.
-  const normalizedContent = content.replace(/(\r\n|\r|\n)/g, '\n');
-  const contentWithBreaks = normalizedContent.replace(/\n\n/g, '<br/><br/>'); // Ensure two new lines are treated as a paragraph break.
-  const parsedHtml = marked.parse(contentWithBreaks);
+const TiptapRenderer: FC<{ content: JSONContent | string | null }> = ({ content }) => {
+  const output = useMemo(() => {
+    if (!content) {
+      return '';
+    }
 
-  return <div dangerouslySetInnerHTML={{ __html: parsedHtml as string }} className="prose max-w-none" />;
+    let tiptapContent = content;
+
+    if (typeof tiptapContent === 'string') {
+      try {
+        tiptapContent = JSON.parse(tiptapContent);
+      } catch (error) {
+        return tiptapContent;
+      }
+    }
+
+    if (typeof tiptapContent === 'object' && tiptapContent?.type === 'doc') {
+      return generateHTML(tiptapContent, getTiptapExtensions());
+    }
+
+    if (typeof content === 'string') return content;
+    return JSON.stringify(content);
+
+  }, [content]);
+
+  return <div dangerouslySetInnerHTML={{ __html: output }} className="prose prose-sm max-w-none [&_p:empty]:after:content-['\00a0']" />;
 };
 
 const FaqListClient: FC<FaqListClientProps> = ({ initialFaqs, faqTypes }) => {
-  const [faqs] = useState<Faq[]>(initialFaqs);
+  const [faqs, setFaqs] = useState<Faq[]>(initialFaqs);
   const [editingFaq, setEditingFaq] = useState<Faq | null>(null);
+
+  useEffect(() => {
+    setFaqs(initialFaqs);
+  }, [initialFaqs]);
 
   const handleEdit = (faq: Faq) => {
     setEditingFaq(faq);
@@ -65,7 +90,7 @@ const FaqListClient: FC<FaqListClientProps> = ({ initialFaqs, faqTypes }) => {
             <tr key={faq.id}>
               <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 max-w-xs truncate">{faq.question}</td>
               <td className="px-6 py-4 whitespace-normal text-sm text-gray-500">
-                <MarkdownRenderer content={faq.answer} />
+                <TiptapRenderer content={faq.answer} />
               </td>
               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{faq.faq_type_list.faq_type}</td>
               <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
@@ -94,3 +119,4 @@ const FaqListClient: FC<FaqListClientProps> = ({ initialFaqs, faqTypes }) => {
 };
 
 export default FaqListClient;
+

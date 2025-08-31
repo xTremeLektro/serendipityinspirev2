@@ -3,10 +3,46 @@ import { getServices, addService, deleteService, getFaqTypes } from './actions';
 import { FaTrash, FaEdit } from 'react-icons/fa';
 import { Edu_NSW_ACT_Cursive } from 'next/font/google';
 import Link from 'next/link';
-import { marked } from 'marked';
-import { FC } from 'react';
+import { FC, useMemo } from 'react';
 import ServiceForm from './ServiceForm'; // Import the new form component
 import ClientOnly from '@/components/ClientOnly'; // Import ClientOnly
+import { generateHTML } from '@tiptap/html';
+import { JSONContent } from '@tiptap/react';
+import { getTiptapExtensions } from '@/lib/tiptap';
+
+// Initialize the font for the Hero Section.
+// (Removed duplicate declaration of eduNSW)
+
+const TiptapRenderer: FC<{ content: JSONContent | string | null }> = ({ content }) => {
+  const output = useMemo(() => {
+    if (!content) {
+      return '';
+    }
+
+    let tiptapContent = content;
+
+    if (typeof tiptapContent === 'string') {
+      try {
+        tiptapContent = JSON.parse(tiptapContent);
+      } catch {
+        return tiptapContent;
+      }
+    }
+
+    if (typeof tiptapContent === 'object' && tiptapContent?.type === 'doc') {
+      return generateHTML(tiptapContent, getTiptapExtensions());
+    }
+
+    if (typeof content === 'string') return content;
+    return JSON.stringify(content);
+
+  }, [content]);
+
+  return <div dangerouslySetInnerHTML={{ __html: output }} className="prose prose-sm max-w-none [&_p:empty]:after:content-['\00a0']" />;
+};
+
+// (Removed duplicate AdminServicesPage function implementation)
+
 
 // Initialize the font for the Hero Section.
 const eduNSW = Edu_NSW_ACT_Cursive({
@@ -14,13 +50,7 @@ const eduNSW = Edu_NSW_ACT_Cursive({
   fallback: ['cursive'],
 });
 
-const MarkdownRenderer: FC<{ content: string | null }> = ({ content }) => {
-  if (!content) return null;
-  // Handle both literal \n strings and actual newline characters.
-  const normalizedContent = content.replace(/(\n|\n)+/g, '\n\n');
-  const parsedHtml = marked.parse(normalizedContent);
-  return <div dangerouslySetInnerHTML={{ __html: parsedHtml as string }} className="prose max-w-none" />;
-};
+// Removed duplicate TiptapRenderer definition
 
 export default async function AdminServicesPage() {
   const services = await getServices();
@@ -56,7 +86,7 @@ export default async function AdminServicesPage() {
                     <tr key={service.id}>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{service.service_name}</td>
                       <td className="px-6 py-4 whitespace-normal text-sm text-gray-500 max-w-md">
-                        <MarkdownRenderer content={service.service_desc} />
+                        <TiptapRenderer content={service.service_desc} />
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{service.faq_type_list?.faq_type || 'N/A'}</td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">

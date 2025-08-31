@@ -1,11 +1,9 @@
 'use client';
 
-import { FC, useEffect, useState } from 'react';
-import { useEditor, EditorContent } from '@tiptap/react';
-import StarterKit from '@tiptap/starter-kit';
-import TurndownService from 'turndown';
-import { marked } from 'marked';
-import { FaBold, FaItalic, FaListUl, FaListOl } from 'react-icons/fa';
+import { FC, useEffect, useState, useMemo, useCallback } from 'react';
+import { useEditor, EditorContent, JSONContent } from '@tiptap/react';
+import { FaBold, FaItalic, FaListUl, FaListOl, FaLink, FaUnderline } from 'react-icons/fa';
+import { getTiptapExtensions } from '@/lib/tiptap';
 
 // Define the types for the props
 type FaqType = {
@@ -16,7 +14,7 @@ type FaqType = {
 type Service = {
   id: string;
   service_name: string;
-  service_desc: string;
+  service_desc: JSONContent;
   fac_type_id: string | null;
   ord: number | null;
 };
@@ -27,29 +25,71 @@ interface ServiceFormProps {
   initialData?: Service;
 }
 
+function parseContent(content: JSONContent | string | null): JSONContent {
+  if (!content) {
+    return { type: 'doc', content: [{ type: 'paragraph' }] };
+  }
+  if (typeof content === 'string') {
+    try {
+      const parsed = JSON.parse(content);
+      if (parsed.type === 'doc') {
+        return parsed;
+      }
+    } catch {
+      // Not JSON, treat as plain text
+    }
+    return {
+      type: 'doc', 
+      content: [{ type: 'paragraph', content: [{ type: 'text', text: content }] }],
+    };
+  }
+  if (typeof content === 'object' && content.type === 'doc') {
+    return content;
+  }
+  return { type: 'doc', content: [{ type: 'paragraph' }] }; // fallback for unknown
+}
+
 const ServiceForm: FC<ServiceFormProps> = ({ faqTypes, action, initialData }) => {
-  const [description, setDescription] = useState(initialData?.service_desc || '');
   const [isClient, setIsClient] = useState(false);
 
+  const initialContent = useMemo(() => parseContent(initialData?.service_desc ?? null), [initialData?.service_desc]);
+  const [description, setDescription] = useState(JSON.stringify(initialContent));
+
   const editor = useEditor({
-    extensions: [StarterKit],
-    content: '',
+    extensions: getTiptapExtensions(),
+    content: initialContent,
     onUpdate: ({ editor }) => {
-      const html = editor.getHTML();
-      const turndownService = new TurndownService();
-      setDescription(turndownService.turndown(html));
+      setDescription(JSON.stringify(editor.getJSON()));
     },
     immediatelyRender: false,
   });
 
+  const setLink = useCallback(() => {
+    if (!editor) return;
+    const previousUrl = editor.getAttributes('link').href;
+    const url = window.prompt('URL', previousUrl);
+
+    if (url === null) {
+        return;
+    }
+
+    if (url === '') {
+        editor.chain().focus().extendMarkRange('link').unsetLink().run();
+        return;
+    }
+
+    editor.chain().focus().extendMarkRange('link').setLink({ href: url }).run();
+  }, [editor]);
+
   useEffect(() => {
     setIsClient(true);
-    if (editor && initialData?.service_desc) {
-      const normalizedContent = initialData.service_desc.replace(/(\n|\n)+/g, '\n\n');
-      const htmlAnswer = marked.parse(normalizedContent) as string;
-      editor.commands.setContent(htmlAnswer);
+  }, []);
+
+  useEffect(() => {
+    if (editor && initialContent) {
+      editor.commands.setContent(initialContent);
     }
-  }, [initialData, editor]);
+  }, [initialContent, editor]);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -75,28 +115,25 @@ const ServiceForm: FC<ServiceFormProps> = ({ faqTypes, action, initialData }) =>
         />
       </div>
       <div className="mb-4">
-        <label htmlFor="service_desc" className="block text-sm font-medium text-gray-700">Descripción del Servicio</label>
-        {isClient && editor ? (
-          <>
-            <div className="mb-2 p-2 border border-gray-300 rounded-md bg-gray-50 flex flex-wrap gap-2">
-              <button type="button" onClick={() => editor.chain().focus().toggleBold().run()} disabled={!editor.can().chain().focus().toggleBold().run()} className={`p-2 rounded-md ${editor.isActive('bold') ? 'bg-indigo-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}><FaBold /></button>
-              <button type="button" onClick={() => editor.chain().focus().toggleItalic().run()} disabled={!editor.can().chain().focus().toggleItalic().run()} className={`p-2 rounded-md ${editor.isActive('italic') ? 'bg-indigo-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}><FaItalic /></button>
-              <button type="button" onClick={() => editor.chain().focus().toggleBulletList().run()} disabled={!editor.can().chain().focus().toggleBulletList().run()} className={`p-2 rounded-md ${editor.isActive('bulletList') ? 'bg-indigo-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}><FaListUl /></button>
-              <button type="button" onClick={() => editor.chain().focus().toggleOrderedList().run()} disabled={!editor.can().chain().focus().toggleOrderedList().run()} className={`p-2 rounded-md ${editor.isActive('orderedList') ? 'bg-indigo-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}><FaListOl /></button>
-            </div>
-            <EditorContent editor={editor} className="min-h-[200px] p-2 bg-white border border-gray-300 rounded-md overflow-y-auto" />
-          </>
-        ) : (
-          <textarea 
-            name="service_desc" 
-            id="service_desc" 
-            rows={4} 
-            defaultValue={initialData?.service_desc}
-            className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-gray-900" 
-            required
-          ></textarea>
-        )}
-      </div>
+            <label htmlFor="description" className="block text-sm font-medium text-gray-700">Description</label>
+            <textarea
+              id="description"
+              name="description"
+              rows={4}
+              defaultValue={initialData?.description || ''}
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+            ></textarea>
+          </div>
+          <div className="mb-4">
+            <label htmlFor="ord" className="block text-sm font-medium text-gray-700">Order</label>
+            <input
+              type="number"
+              id="ord"
+              name="ord"
+              defaultValue={initialData?.ord || 0}
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+            />
+          </div>
       <div className="mb-4">
         <label htmlFor="fac_type_id" className="block text-sm font-medium text-gray-700">Tipo de FAQ</label>
         <select 
@@ -119,3 +156,5 @@ const ServiceForm: FC<ServiceFormProps> = ({ faqTypes, action, initialData }) =>
 };
 
 export default ServiceForm;
+
+

@@ -1,8 +1,11 @@
-"use client";
+'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { FaPlus, FaMinus } from 'react-icons/fa';
 import { Edu_NSW_ACT_Cursive } from 'next/font/google';
+import { generateHTML } from '@tiptap/html';
+import { JSONContent } from '@tiptap/react';
+import { getTiptapExtensions } from '@/lib/tiptap';
 
 // Initialize the font for the Hero Section.
 const eduNSW = Edu_NSW_ACT_Cursive({
@@ -13,12 +16,40 @@ const eduNSW = Edu_NSW_ACT_Cursive({
 interface FAQ {
   id: string;
   question: string;
-  answer: string;
+  answer: JSONContent;
 }
 
 interface FAQSectionProps {
   faqs: FAQ[];
 }
+
+const TiptapRenderer: React.FC<{ content: JSONContent | string | null }> = ({ content }) => {
+  const output = useMemo(() => {
+    if (!content) {
+      return '';
+    }
+
+    let tiptapContent = content;
+
+    if (typeof tiptapContent === 'string') {
+      try {
+        tiptapContent = JSON.parse(tiptapContent);
+      } catch (error) {
+        return tiptapContent;
+      }
+    }
+
+    if (typeof tiptapContent === 'object' && tiptapContent?.type === 'doc') {
+      return generateHTML(tiptapContent, getTiptapExtensions());
+    }
+
+    if (typeof content === 'string') return content;
+    return JSON.stringify(content);
+
+  }, [content]);
+
+  return <div dangerouslySetInnerHTML={{ __html: output }} className="prose prose-sm max-w-none [&_p:empty]:after:content-['\00a0']" />;
+};
 
 const FAQSection: React.FC<FAQSectionProps> = ({ faqs }) => {
   const [openFAQId, setOpenFAQId] = useState<string | null>(null);
@@ -49,7 +80,9 @@ const FAQSection: React.FC<FAQSectionProps> = ({ faqs }) => {
               )}
             </button>
             {openFAQId === faq.id && (
-              <p className="mt-4 text-lg text-gray-700">{faq.answer}</p>
+              <div className="mt-4 text-lg text-gray-700">
+                <TiptapRenderer content={faq.answer} />
+              </div>
             )}
           </div>
         ))}

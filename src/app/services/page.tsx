@@ -1,15 +1,46 @@
-import React from 'react';
+import React, { FC, useMemo } from 'react';
 import Image from "next/image";
 import { Edu_NSW_ACT_Cursive } from 'next/font/google';
 import { getServicesWithHeadPics } from '@/lib/services';
 import { getGeneralFAQs } from '@/lib/faq';
 import FAQSection from '@/components/FAQSection';
+import { generateHTML } from '@tiptap/html';
+import { JSONContent } from '@tiptap/react';
+import { getTiptapExtensions } from '@/lib/tiptap';
 
 // Initialize the font for the Hero Section.
 const eduNSW = Edu_NSW_ACT_Cursive({
   weight: ['400', '700'], // You can specify the weights you need
   fallback: ['cursive'],
 });
+
+const TiptapRenderer: FC<{ content: JSONContent | string | null }> = ({ content }) => {
+  const output = useMemo(() => {
+    if (!content) {
+      return '';
+    }
+
+    let tiptapContent = content;
+
+    if (typeof tiptapContent === 'string') {
+      try {
+        tiptapContent = JSON.parse(tiptapContent);
+      } catch (error) {
+        return tiptapContent;
+      }
+    }
+
+    if (typeof tiptapContent === 'object' && tiptapContent?.type === 'doc') {
+      return generateHTML(tiptapContent, getTiptapExtensions());
+    }
+
+    if (typeof content === 'string') return content;
+    return JSON.stringify(content);
+
+  }, [content]);
+
+  return <div dangerouslySetInnerHTML={{ __html: output }} className="prose prose-lg max-w-none [&_p:empty]:after:content-['\00a0']" />;
+};
 
 const ServicesPage: React.FC = async () => {
   const services = await getServicesWithHeadPics();
@@ -41,9 +72,7 @@ const ServicesPage: React.FC = async () => {
               )}
             </div>
             <div className="md:w-1/2 service-description">
-              <p className="text-lg text-gray-700 mb-4 service-paragraph">
-                {service.service_desc}
-              </p>
+              <TiptapRenderer content={service.service_desc} />
             </div>
           </div>
         </section>

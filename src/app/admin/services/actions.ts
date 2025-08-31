@@ -2,11 +2,12 @@
 
 import { createClient } from '@/lib/supabase/server'
 import { revalidatePath } from 'next/cache'
+import { JSONContent } from '@tiptap/react';
 
 interface Service {
   id: string;
   service_name: string;
-  service_desc: string;
+  service_desc: JSONContent;
   fac_type_id: string | null;
   faq_type_list?: { faq_type: string };
   ord: number | null;
@@ -87,10 +88,12 @@ export async function updateService(formData: FormData) {
   const service_name = formData.get('service_name') as string
   const service_desc = formData.get('service_desc') as string
   const fac_type_id = formData.get('fac_type_id') as string
+  const ord = parseInt(formData.get('ord') as string) || 0 // Get ord and convert to number, default to 0 if invalid
 
-  const serviceData: { service_name: string; service_desc: string; fac_type_id?: string | null } = {
+  const serviceData: { service_name: string; service_desc: string; fac_type_id?: string | null; ord: number } = {
     service_name,
     service_desc,
+    ord, // Include ord in the serviceData
   };
 
   if (fac_type_id) {

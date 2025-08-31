@@ -1,9 +1,10 @@
 import { createClient } from './supabase/server';
+import { JSONContent } from '@tiptap/react';
 
 interface FAQ {
   id: string;
   question: string;
-  answer: string;
+  answer: JSONContent;
   type: string; // This will be the faq_type_list ID
 }
 

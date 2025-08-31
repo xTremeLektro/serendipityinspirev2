@@ -9,6 +9,7 @@ import Image from 'next/image';
 import { Edu_NSW_ACT_Cursive } from 'next/font/google';
 import ServiceForm from '../ServiceForm';
 import ClientOnly from '@/components/ClientOnly';
+import { JSONContent } from '@tiptap/react';
 
 // Initialize the font for the Hero Section.
 const eduNSW = Edu_NSW_ACT_Cursive({
@@ -17,19 +18,20 @@ const eduNSW = Edu_NSW_ACT_Cursive({
 });
 
 interface Service {
-  id: number;
+  id: string;
   service_name: string;
-  service_desc: string;
-  fac_type_id?: number;
+  service_desc: JSONContent;
+  fac_type_id?: string;
+  ord?: number | null;
 }
 
 interface FaqType {
-  id: number;
+  id: string;
   faq_type: string;
 }
 
 interface ServicePic {
-  id: number;
+  id: string;
   photo_url?: string;
   caption?: string;
   is_home?: boolean;
@@ -42,6 +44,7 @@ interface EditServicePageClientProps {
   faqTypes: FaqType[];
   servicePics: ServicePic[];
 }
+
 
 export default function EditServicePageClient({ service, faqTypes, servicePics }: EditServicePageClientProps) {
   const [showModal, setShowModal] = useState(false);

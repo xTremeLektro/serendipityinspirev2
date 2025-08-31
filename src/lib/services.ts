@@ -1,9 +1,10 @@
 import { createClient } from './supabase/server';
+import { JSONContent } from '@tiptap/react';
 
 interface Service {
   id: string;
   service_name: string;
-  service_desc: string;
+  service_desc: JSONContent;
   ord: number | null;
 }
 

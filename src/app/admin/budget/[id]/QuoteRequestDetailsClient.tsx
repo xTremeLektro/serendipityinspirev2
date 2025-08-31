@@ -9,6 +9,7 @@ import { Edu_NSW_ACT_Cursive } from 'next/font/google';
 const eduNSW = Edu_NSW_ACT_Cursive({
   weight: ['400', '700'], // You can specify the weights you need
   fallback: ['cursive'],
+  subsets: ['latin', 'latin-ext'],
 });
 
 interface QuoteRequest {
