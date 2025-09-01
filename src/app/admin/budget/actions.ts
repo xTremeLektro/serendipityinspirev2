@@ -14,7 +14,7 @@ export async function deleteQuoteRequest(formData: FormData) {
     return;
   }
 
-  const supabase = createSupabaseServerClient();
+  const supabase = await createSupabaseServerClient();
 
   await supabase.from('quote_requests').delete().eq('id', numericId);
 
@@ -22,7 +22,7 @@ export async function deleteQuoteRequest(formData: FormData) {
 }
 
 export async function getQuoteRequests(): Promise<{ data: QuoteRequest[] | null; error: string | null }> {
-  const supabase = createSupabaseServerClient();
+  const supabase = await createSupabaseServerClient();
   const { data, error } = await supabase.from('quote_requests').select('*').order('created_at', { ascending: false });
 
   if (error) {
@@ -41,7 +41,7 @@ export async function updateQuoteRequestStatus(formData: FormData) {
     return { error: 'ID and status are required.' };
   }
 
-  const supabase = createSupabaseServerClient();
+  const supabase = await createSupabaseServerClient();
   const { data, error } = await supabase
     .from('quote_requests')
     .update({ status: status })

@@ -3,7 +3,7 @@ import QuoteRequestsClient from './QuoteRequestsClient';
 import { createSupabaseServerClient } from '@/lib/supabase/utils';
 
 export default async function AdminBudgetPage() {
-  const supabase = createSupabaseServerClient();
+  const supabase = await createSupabaseServerClient();
   const { data: quoteRequests, error } = await supabase
     .from('quote_requests')
     .select('*')

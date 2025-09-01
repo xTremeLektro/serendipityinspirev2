@@ -115,25 +115,31 @@ const ServiceForm: FC<ServiceFormProps> = ({ faqTypes, action, initialData }) =>
         />
       </div>
       <div className="mb-4">
-            <label htmlFor="description" className="block text-sm font-medium text-gray-700">Description</label>
-            <textarea
-              id="description"
-              name="description"
-              rows={4}
-              defaultValue={initialData?.description || ''}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-            ></textarea>
-          </div>
-          <div className="mb-4">
-            <label htmlFor="ord" className="block text-sm font-medium text-gray-700">Order</label>
-            <input
-              type="number"
-              id="ord"
-              name="ord"
-              defaultValue={initialData?.ord || 0}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-            />
-          </div>
+        <label htmlFor="service_desc" className="block text-sm font-medium text-gray-700">Descripción del Servicio</label>
+        {isClient && editor && (
+          <>
+            <div className="mb-2 p-2 border border-gray-300 rounded-md bg-gray-50 flex flex-wrap gap-2">
+              <button type="button" onClick={() => editor.chain().focus().toggleBold().run()} disabled={!editor.can().chain().focus().toggleBold().run()} className={`p-2 rounded-md ${editor.isActive('bold') ? 'bg-indigo-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}><FaBold /></button>
+              <button type="button" onClick={() => editor.chain().focus().toggleItalic().run()} disabled={!editor.can().chain().focus().toggleItalic().run()} className={`p-2 rounded-md ${editor.isActive('italic') ? 'bg-indigo-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}><FaItalic /></button>
+              <button type="button" onClick={() => editor.chain().focus().toggleUnderline().run()} disabled={!editor.can().chain().focus().toggleUnderline().run()} className={`p-2 rounded-md ${editor.isActive('underline') ? 'bg-indigo-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}><FaUnderline /></button>
+              <button type="button" onClick={() => editor.chain().focus().toggleBulletList().run()} disabled={!editor.can().chain().focus().toggleBulletList().run()} className={`p-2 rounded-md ${editor.isActive('bulletList') ? 'bg-indigo-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}><FaListUl /></button>
+              <button type="button" onClick={() => editor.chain().focus().toggleOrderedList().run()} disabled={!editor.can().chain().focus().toggleOrderedList().run()} className={`p-2 rounded-md ${editor.isActive('orderedList') ? 'bg-indigo-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}><FaListOl /></button>
+              <button type="button" onClick={setLink} className={`p-2 rounded-md ${editor.isActive('link') ? 'bg-indigo-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}><FaLink /></button>
+            </div>
+            <EditorContent editor={editor} className="min-h-[200px] p-2 bg-white border border-gray-300 rounded-md overflow-y-auto" />
+          </>
+        )}
+      </div>
+      <div className="mb-4">
+        <label htmlFor="ord" className="block text-sm font-medium text-gray-700">Order</label>
+        <input
+          type="number"
+          id="ord"
+          name="ord"
+          defaultValue={initialData?.ord || 0}
+          className="mt-1 block w-full pl-3 pr-10 py-2 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm text-gray-900"
+        />
+      </div>
       <div className="mb-4">
         <label htmlFor="fac_type_id" className="block text-sm font-medium text-gray-700">Tipo de FAQ</label>
         <select 

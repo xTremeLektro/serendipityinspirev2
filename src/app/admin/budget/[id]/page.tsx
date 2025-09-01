@@ -4,8 +4,8 @@ import { notFound } from 'next/navigation';
 import { createSupabaseServerClient } from '@/lib/supabase/utils';
 
 export default async function QuoteRequestDetailsPage({ params }: { params: { id: string } }) {
-  const supabase = createSupabaseServerClient();
-  const numericId = parseInt(params.id, 10);
+  const supabase = await createSupabaseServerClient();
+  const numericId = parseInt((await params).id, 10);
 
   if (isNaN(numericId)) {
     notFound();
