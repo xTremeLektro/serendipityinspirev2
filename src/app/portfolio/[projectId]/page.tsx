@@ -1,9 +1,12 @@
-import React from 'react';
+import React, { FC, useMemo } from 'react';
 import Link from 'next/link';
 import { Edu_NSW_ACT_Cursive } from 'next/font/google';
 import { getProjectById } from '@/lib/projects';
 import { notFound } from 'next/navigation';
 import ProjectImageGallery from '@/components/ProjectImageGallery';
+import { generateHTML } from '@tiptap/html';
+import { JSONContent } from '@tiptap/react';
+import { getTiptapExtensions } from '@/lib/tiptap';
 
 // Initialize the font for the Hero Section.
 const eduNSW = Edu_NSW_ACT_Cursive({
@@ -16,6 +19,34 @@ interface ProjectDetailPageProps {
     projectId: string;
   };
 }
+
+const TiptapRenderer: FC<{ content: JSONContent | string | null }> = ({ content }) => {
+  const output = useMemo(() => {
+    if (!content) {
+      return '';
+    }
+
+    let tiptapContent = content;
+
+    if (typeof tiptapContent === 'string') {
+      try {
+        tiptapContent = JSON.parse(tiptapContent);
+      } catch {
+        return tiptapContent;
+      }
+    }
+
+    if (typeof tiptapContent === 'object' && tiptapContent?.type === 'doc') {
+      return generateHTML(tiptapContent, getTiptapExtensions());
+    }
+
+    if (typeof content === 'string') return content;
+    return JSON.stringify(content);
+
+  }, [content]);
+
+  return <div dangerouslySetInnerHTML={{ __html: output }} className="prose prose-sm max-w-none [&_p:empty]:after:content-['\00a0']" />;
+};
 
 const ProjectDetailPage = async (props: ProjectDetailPageProps) => {
   // Implementing the Next.js documentation's recommended approach.
@@ -57,7 +88,7 @@ const ProjectDetailPage = async (props: ProjectDetailPageProps) => {
           {/* Placeholder for Project Description */}
           <div className="mb-8 text-black">
             <h2 className={`text-2xl font-semibold mb-4 ${eduNSW.className}`}>Descripción del Proyecto</h2>
-            <p className="text-gray-700 leading-relaxed">{project.detailed_description}</p>
+            <TiptapRenderer content={project.detailed_description} />
           </div>
 
           {/* Dynamic Project Image Gallery */}
