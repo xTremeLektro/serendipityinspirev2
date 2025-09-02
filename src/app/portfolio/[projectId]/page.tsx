@@ -1,17 +1,17 @@
 import React, { FC, useMemo } from 'react';
 import Link from 'next/link';
-import { Edu_NSW_ACT_Cursive } from 'next/font/google';
 import { getProjectById } from '@/lib/projects';
 import { notFound } from 'next/navigation';
 import ProjectImageGallery from '@/components/ProjectImageGallery';
 import { generateHTML } from '@tiptap/html';
 import { JSONContent } from '@tiptap/react';
 import { getTiptapExtensions } from '@/lib/tiptap';
+import { Inter } from 'next/font/google';
+import { ArrowLeft } from 'lucide-react';
 
-// Initialize the font for the Hero Section.
-const eduNSW = Edu_NSW_ACT_Cursive({
-  weight: ['400', '700'], // You can specify the weights you need
-  fallback: ['cursive'],
+const inter = Inter({
+  subsets: ['latin'],
+  variable: '--font-inter',
 });
 
 interface ProjectDetailPageProps {
@@ -45,13 +45,11 @@ const TiptapRenderer: FC<{ content: JSONContent | string | null }> = ({ content 
 
   }, [content]);
 
-  return <div dangerouslySetInnerHTML={{ __html: output }} className="prose prose-sm max-w-none [&_p:empty]:after:content-['\00a0']" />;
+  return <div dangerouslySetInnerHTML={{ __html: output }} className="prose prose-lg max-w-none text-slate-600 [&_p:empty]:after:content-['\00a0']" />;
 };
 
 const ProjectDetailPage = async (props: ProjectDetailPageProps) => {
-  // Implementing the Next.js documentation's recommended approach.
-  // We explicitly await the params object before accessing its properties.
-  const { projectId } = await props.params;
+  const { projectId } = props.params;
   const project = await getProjectById(projectId);
 
   if (!project) {
@@ -59,43 +57,57 @@ const ProjectDetailPage = async (props: ProjectDetailPageProps) => {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className={`rounded-lg mb-8 bg-black text-white relative ${eduNSW.className}`}>
-        <br />
-        <h1 className="text-4xl md:text-5xl font-bold text-center">{project.project_name}</h1>
-        <br />
-      </div>
+    <main className={`${inter.variable} font-sans bg-slate-50 text-slate-800`}>
+      <div className="container mx-auto px-4 py-16">
 
-      <div className="flex flex-col md:flex-row gap-8">
-        {/* Placeholder for Project Attributes (Sidebar) */}
-        <div className="md:w-1/4 bg-gray-400 p-6 rounded-lg shadow-md flex flex-col justify-between">
-          <div>
-            <h2 className={`text-2xl font-semibold mb-6 text-gray-800 ${eduNSW.className}`}>Atributos</h2>
-            <ul className="list-none p-0 text-gray-700">
-              <li className="mb-3 text-gray-700"><strong className="font-medium text-gray-800">Ubicación:</strong> {project.location}</li>
-              <li className="mb-3 text-gray-700"><strong className="font-medium text-gray-800">Tipo de Propiedad:</strong> {project.property_type}</li>
-              <li className="mb-3 text-gray-700"><strong className="font-medium text-gray-800">Fecha de Finalización:</strong> {project.end_date}</li>
-              <li className="mb-3 text-gray-700"><strong className="font-medium text-gray-800">Estilo:</strong> {project.style}</li>
-              <li><strong className="font-medium text-gray-800">Alcance:</strong> {project.scope}</li>
-            </ul>
-          </div>
-          {/* Placeholder for Back Button or Link */}
-          <Link href="/portfolio" className="bg-blue-600 text-white px-6 py-3 rounded-full text-lg hover:bg-blue-700">Volver al Portfolio</Link>
+        {/* --- Project Header --- */}
+        <div className="text-center mb-8">
+          <h1 className="text-5xl font-bold text-slate-900">{project.project_name}</h1>
+          <p className="text-lg text-slate-600 mt-2">{project.location}</p>
         </div>
 
-        {/* Main content: Description and Images */}
-        <div className="md:w-3/4">
-          {/* Placeholder for Project Description */}
-          <div className="mb-8 text-black">
-            <h2 className={`text-2xl font-semibold mb-4 ${eduNSW.className}`}>Descripción del Proyecto</h2>
-            <TiptapRenderer content={project.detailed_description} />
+        {/* --- Project Details --- */}
+        <div className="grid md:grid-cols-3 gap-12 mb-12">
+          
+          {/* --- Description (Left Column) --- */}
+          <div className="md:col-span-2">
+            <h2 className="text-3xl font-bold text-slate-900 mb-4">Descripción del Proyecto</h2>
+            <div className="bg-white p-8 rounded-lg shadow-md">
+              <TiptapRenderer content={project.detailed_description} />
+            </div>
           </div>
 
-          {/* Dynamic Project Image Gallery */}
+          {/* --- Attributes (Right Column) --- */}
+          <div className="md:col-span-1">
+            <h2 className="text-3xl font-bold text-slate-900 mb-4">Detalles</h2>
+            <div className="bg-white p-8 rounded-lg shadow-md">
+              <ul className="space-y-4 text-lg">
+                <li><strong className="font-semibold text-slate-800 block">Ubicación:</strong> <span className="text-slate-600">{project.location}</span></li>
+                <li><strong className="font-semibold text-slate-800 block">Tipo:</strong> <span className="text-slate-600">{project.property_type}</span></li>
+                <li><strong className="font-semibold text-slate-800 block">Fecha:</strong> <span className="text-slate-600">{project.end_date}</span></li>
+                <li><strong className="font-semibold text-slate-800 block">Estilo:</strong> <span className="text-slate-600">{project.style}</span></li>
+                <li><strong className="font-semibold text-slate-800 block">Alcance:</strong> <span className="text-slate-600">{project.scope}</span></li>
+              </ul>
+            </div>
+          </div>
+
+        </div>
+
+        {/* --- Image Gallery --- */}
+        <div>
           <ProjectImageGallery images={project.project_pics} />
         </div>
+
+        {/* --- Back to Portfolio Link --- */}
+        <div className="text-center mt-16">
+          <Link href="/portfolio" className="inline-flex items-center gap-2 bg-slate-800 text-white px-8 py-3 rounded-full text-lg font-semibold hover:bg-slate-900 transition-colors duration-300 shadow-lg">
+            <ArrowLeft size={20} />
+            Volver al Portfolio
+          </Link>
+        </div>
+
       </div>
-    </div>
+    </main>
   );
 };
 

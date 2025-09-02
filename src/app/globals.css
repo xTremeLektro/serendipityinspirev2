@@ -112,27 +112,26 @@ nav ul a {
   outline: 0;
 }
 
-/* --- Expanding Cards Section --- */
+/* --- Expanding Cards Section (for Hero Background) --- */
 .expanding-cards-container {
   display: flex;
-  width: 90vw;
-  margin-left: auto;
-  margin-right: auto;
+  width: 100%;
+  height: 100%;
 }
 
 .expanding-panel {
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  height: 80vh;
-  border-radius: 50px;
-  color: #FFF;
+  height: 100%;
+  border-radius: 0;
+  color: #fff;
   cursor: pointer;
   flex: 0.5;
-  margin: 10px;
+  margin: 0;
   position: relative;
   transition: flex 0.7s ease-in;
-  -webkit-transition: flex 700ms ease-in; /* For older browser compatibility */
+  -webkit-transition: flex 0.7s ease-in;
 }
 
 .expanding-panel h3 {
@@ -142,7 +141,10 @@ nav ul a {
   left: 20px;
   margin: 0;
   opacity: 0;
-  text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5); /* Added for better text readability */
+  transition: opacity 0.3s ease-in 0.4s;
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 5px 15px;
+  border-radius: 5px;
 }
 
 .expanding-panel.active {
@@ -151,7 +153,6 @@ nav ul a {
 
 .expanding-panel.active h3 {
   opacity: 1;
-  transition: opacity 0.3s ease-in 0.4s;
 }
 
 /* Basic Tiptap Editor Styles */

@@ -1,20 +1,17 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-
-import SandwichMenu from "../components/SandwichMenu";
-import Link from "next/link"; // Assuming you'll need Link within this component for navigation
-import { usePathname } from "next/navigation";
+import { useState } from 'react';
+import SandwichMenu from '../components/SandwichMenu';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { Mulish } from 'next/font/google';
-
-// The path should be relative to the `public` directory.
 import Image from 'next/image';
-const logoImage = '/images/photo-output.PNG';
 
-// Initialize the font, specifying subsets and other options.
+const logoImage = '/images/serendipity-svg/LOGO-3.svg';
+
 const mulish = Mulish({
   subsets: ['latin'],
-  display: 'swap', // This is the default and ensures text is visible while the font loads
+  display: 'swap',
 });
 
 interface LayoutClientProps {
@@ -30,7 +27,7 @@ const LayoutClient: React.FC<LayoutClientProps> = ({ children }) => {
   };
 
   return (
- <div className={`min-h-screen flex flex-col ${mulish.className}`}>
+    <div className={`min-h-screen flex flex-col ${mulish.className}`}>
       <header className="bg-gray-900 text-white shadow-md p-4 flex justify-between items-center">
         <nav id="nav" className={`relative flex items-center ${isMenuOpen ? 'active' : ''}`}>
           <button className="icon" onClick={toggleMenu}>
@@ -45,17 +42,16 @@ const LayoutClient: React.FC<LayoutClientProps> = ({ children }) => {
             <li><Link href="/admin/login" className={pathname === '/admin/login' ? 'font-bold' : ''}>Admin</Link></li>
           </ul>
         </nav>
-          <Image
-            src={logoImage}
-            alt="Imagen Logo Serendipity"
-            width={160}
-            height={40}
-            className="h-10 w-auto"
-          />
+        <Image
+          src={logoImage}
+          alt="Imagen Logo Serendipity"
+          width={160}
+          height={40}
+          className="h-10 w-auto filter brightness-200"
+        />
       </header>
 
       <main className="flex-grow">{children}</main>
-
     </div>
   );
 };

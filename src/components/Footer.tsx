@@ -4,7 +4,7 @@ import Link from 'next/link';
 // The path should be relative to the `public` directory.
 import Image from 'next/image';
 import { Edu_NSW_ACT_Cursive } from 'next/font/google';
-const logoImage = '/images/photo-output.PNG';
+const logoImage = '/images/serendipity-svg/LOGO-3.svg';
 
 const eduNSW = Edu_NSW_ACT_Cursive({
   weight: ['400', '700'], // You can specify the weights you need
@@ -23,7 +23,7 @@ const Footer: React.FC = () => {
               alt="Imagen Logo Serendipity"
               width={160} // Provide an appropriate width based on your image's aspect ratio
               height={40}
-              className="h-10 w-auto mb-4"
+              className="h-10 w-auto mb-4 filter brightness-200"
             />
             <p className={`${eduNSW.className}`}>
               Creando espacios únicos que inspiran.

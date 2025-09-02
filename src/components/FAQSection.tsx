@@ -2,15 +2,14 @@
 
 import React, { useState, useMemo } from 'react';
 import { FaPlus, FaMinus } from 'react-icons/fa';
-import { Edu_NSW_ACT_Cursive } from 'next/font/google';
 import { generateHTML } from '@tiptap/html';
 import { JSONContent } from '@tiptap/react';
 import { getTiptapExtensions } from '@/lib/tiptap';
+import { Inter } from 'next/font/google';
 
-// Initialize the font for the Hero Section.
-const eduNSW = Edu_NSW_ACT_Cursive({
-  weight: ['400', '700'], // You can specify the weights you need
-  fallback: ['cursive'],
+const inter = Inter({
+  subsets: ['latin'],
+  variable: '--font-inter',
 });
 
 interface FAQ {
@@ -48,7 +47,7 @@ const TiptapRenderer: React.FC<{ content: JSONContent | string | null }> = ({ co
 
   }, [content]);
 
-  return <div dangerouslySetInnerHTML={{ __html: output }} className="prose prose-sm max-w-none [&_p:empty]:after:content-['\00a0']" />;
+  return <div dangerouslySetInnerHTML={{ __html: output }} className="prose prose-lg max-w-none text-slate-600 [&_p:empty]:after:content-['\00a0']" />;
 };
 
 const FAQSection: React.FC<FAQSectionProps> = ({ faqs }) => {
@@ -59,35 +58,41 @@ const FAQSection: React.FC<FAQSectionProps> = ({ faqs }) => {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className='bg-black text-white rounded-lg mb-8'>
-        <br />
-        <h2 className={`text-4xl md:text-5xl font-bold text-center ${eduNSW.className}`}>Preguntas Frecuentes</h2>
-        <br />
-      </div>
-      <div className="space-y-4">
-        {faqs.map((faq) => (
-          <div key={faq.id} className="bg-white p-6 rounded-lg shadow-md">
-            <button
-              className="w-full flex justify-between items-center text-left focus:outline-none"
-              onClick={() => toggleFAQ(faq.id)}
-            >
-              <span className="text-xl font-semibold text-gray-800">{faq.question}</span>
-              {openFAQId === faq.id ? (
-                <FaMinus className="text-gray-600" />
-              ) : (
-                <FaPlus className="text-gray-600" />
+    <section className={`${inter.variable} font-sans bg-white py-20`}>
+      <div className="container mx-auto px-4">
+        
+        {/* --- Section Header --- */}
+        <div className="text-center mb-12">
+          <h2 className="text-4xl font-bold text-slate-900">Preguntas Frecuentes</h2>
+          <p className="text-lg text-slate-600 mt-2 max-w-2xl mx-auto">Encuentra respuestas a las dudas más comunes sobre nuestros servicios.</p>
+        </div>
+
+        {/* --- Accordion --- */}
+        <div className="max-w-3xl mx-auto space-y-4">
+          {faqs.map((faq) => (
+            <div key={faq.id} className="border border-slate-200 rounded-lg overflow-hidden">
+              <button
+                className="w-full flex justify-between items-center p-6 text-left focus:outline-none bg-slate-50 hover:bg-slate-100 transition-colors"
+                onClick={() => toggleFAQ(faq.id)}
+              >
+                <span className="text-xl font-semibold text-slate-800">{faq.question}</span>
+                {openFAQId === faq.id ? (
+                  <FaMinus className="text-slate-600" />
+                ) : (
+                  <FaPlus className="text-slate-600" />
+                )}
+              </button>
+              {openFAQId === faq.id && (
+                <div className="p-6 bg-white">
+                  <TiptapRenderer content={faq.answer} />
+                </div>
               )}
-            </button>
-            {openFAQId === faq.id && (
-              <div className="mt-4 text-lg text-gray-700">
-                <TiptapRenderer content={faq.answer} />
-              </div>
-            )}
-          </div>
-        ))}
+            </div>
+          ))}
+        </div>
+
       </div>
-    </div>
+    </section>
   );
 };
 

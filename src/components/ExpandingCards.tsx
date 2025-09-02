@@ -14,14 +14,10 @@ const ExpandingCards: React.FC = () => {
       const supabase = createClient();
       setLoading(true);
       setError(null);
-      console.log('Fetching data from pic_carrousel...');
       const { data, error } = await supabase
         .from('pic_carrousel')
         .select('short_desc, picture, ord')
         .order('ord', { ascending: true });
-
-      console.log('Supabase data response:', data);
-      console.log('Supabase error response:', error);
 
       if (error) {
         console.error('Error fetching carousel data:', error);
@@ -34,7 +30,6 @@ const ExpandingCards: React.FC = () => {
         title: item.short_desc,
         imageUrl: item.picture,
       }));
-      console.log('Mapped cards:', mappedCards);
       setCards(mappedCards);
       setLoading(false);
     };
@@ -68,7 +63,6 @@ const ExpandingCards: React.FC = () => {
   }
 
   return (
-    <section className="py-12 bg-white">
       <div className="expanding-cards-container">
         {cards.map((card, index) => (
           <div
@@ -81,7 +75,6 @@ const ExpandingCards: React.FC = () => {
           </div>
         ))}
       </div>
-    </section>
   );
 };
 
