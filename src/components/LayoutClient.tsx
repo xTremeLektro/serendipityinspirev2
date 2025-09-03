@@ -7,7 +7,7 @@ import { usePathname } from 'next/navigation';
 import { Mulish } from 'next/font/google';
 import Image from 'next/image';
 
-const logoImage = '/images/serendipity-svg/LOGO-3.svg';
+const logoImage = '/images/serendipity-svg/LOGO-4.svg';
 
 const mulish = Mulish({
   subsets: ['latin'],
@@ -28,7 +28,7 @@ const LayoutClient: React.FC<LayoutClientProps> = ({ children }) => {
 
   return (
     <div className={`min-h-screen flex flex-col ${mulish.className}`}>
-      <header className="bg-gray-900 text-white shadow-md p-4 flex justify-between items-center">
+      <header className="bg-gray-900 text-white shadow-md p-6 flex justify-between items-center">
         <nav id="nav" className={`relative flex items-center ${isMenuOpen ? 'active' : ''}`}>
           <button className="icon" onClick={toggleMenu}>
             <SandwichMenu />
@@ -45,9 +45,9 @@ const LayoutClient: React.FC<LayoutClientProps> = ({ children }) => {
         <Image
           src={logoImage}
           alt="Imagen Logo Serendipity"
-          width={160}
-          height={40}
-          className="h-10 w-auto filter brightness-200"
+          width={200}
+          height={50}
+          className="h-12 w-auto filter brightness-200"
         />
       </header>
 
