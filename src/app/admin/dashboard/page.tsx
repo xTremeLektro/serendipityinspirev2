@@ -6,6 +6,7 @@ import { Edu_NSW_ACT_Cursive } from 'next/font/google';
 // Initialize the font for the Hero Section.
 const eduNSW = Edu_NSW_ACT_Cursive({
   weight: ['400', '700'], // You can specify the weights you need
+  subsets: ['latin'], // Specify the subsets you need
   fallback: ['cursive'],
 });
 
