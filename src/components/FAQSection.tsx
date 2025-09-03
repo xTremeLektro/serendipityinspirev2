@@ -33,7 +33,7 @@ const TiptapRenderer: React.FC<{ content: JSONContent | string | null }> = ({ co
     if (typeof tiptapContent === 'string') {
       try {
         tiptapContent = JSON.parse(tiptapContent);
-      } catch (error) {
+      } catch {
         return tiptapContent;
       }
     }

@@ -2,7 +2,7 @@
 
 import AdminHeader from '@/components/AdminHeader';
 import { updateProject } from '../actions';
-import { useState } from 'react';
+// import { useState } from 'react';
 import { Edu_NSW_ACT_Cursive } from 'next/font/google';
 import ProjectForm from '../ProjectForm';
 import ClientOnly from '@/components/ClientOnly';
@@ -11,6 +11,7 @@ import { JSONContent } from '@tiptap/react';
 // Initialize the font for the Hero Section.
 const eduNSW = Edu_NSW_ACT_Cursive({
   weight: ['400', '700'], // You can specify the weights you need
+  subsets: ['latin'],
   fallback: ['cursive'],
 });
 
@@ -27,22 +28,21 @@ interface Project {
   is_home: boolean | null;
 }
 
-interface ProjectPic {
-  id: string;
-  photo_url?: string;
-  caption?: string;
-  is_home?: boolean;
-  is_head_pic?: boolean;
-  ord?: number;
-}
+// interface ProjectPic {
+//   id: string;
+//   photo_url?: string;
+//   caption?: string;
+//   is_home?: boolean;
+//   is_head_pic?: boolean;
+//   ord?: number;
+// }
 
 interface EditProjectPageClientProps {
   project: Project;
-  projectPics: ProjectPic[];
 }
 
 
-export default function EditProjectPageClient({ project, projectPics }: EditProjectPageClientProps) {
+export default function EditProjectPageClient({ project }: EditProjectPageClientProps) {
 
   return (
     <div className="min-h-screen bg-gray-100">

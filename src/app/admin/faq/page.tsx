@@ -9,6 +9,7 @@ import ClientOnly from '@/components/ClientOnly';
 // Initialize the font for the Hero Section.
 const eduNSW = Edu_NSW_ACT_Cursive({
   weight: ['400', '700'],
+  subsets: ['latin'],
   fallback: ['cursive'],
 });
 
