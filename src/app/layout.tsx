@@ -6,6 +6,7 @@ import LayoutClient from '@/components/LayoutClient'; import ThemeProvider from 
 import Footer from '@/components/Footer';
 
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"], }); const geistSans = Geist({
+  variable: "--font-geist-sans",
   subsets: ["latin"],
 });
 

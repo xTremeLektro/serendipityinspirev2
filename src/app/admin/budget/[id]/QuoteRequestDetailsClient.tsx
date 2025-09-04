@@ -12,22 +12,7 @@ const eduNSW = Edu_NSW_ACT_Cursive({
   subsets: ['latin', 'latin-ext'],
 });
 
-interface QuoteRequest {
-  id: number;
-  created_at: string;
-  full_name: string;
-  email: string;
-  phone?: string;
-  address?: string;
-  city?: string;
-  postal_code?: string;
-  project_type?: string;
-  spaces_to_address?: string[];
-  estimated_budget?: string;
-  how_found_us?: string;
-  project_details?: string;
-  attachments?: string[];
-}
+import { QuoteRequest } from '@/lib/types';
 
 interface QuoteRequestDetailsClientProps {
   quoteRequest: QuoteRequest;

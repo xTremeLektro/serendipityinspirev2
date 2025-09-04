@@ -93,7 +93,10 @@ export default function AdminCarouselPage() {
       })
 
       if (!success) {
-        throw new Error(updateError.message)
+        if (updateError) {
+          throw new Error(updateError.message)
+        }
+        throw new Error("An unknown error occurred during update.")
       }
 
       // Clear selected file for this item after successful save
@@ -137,7 +140,10 @@ export default function AdminCarouselPage() {
       )
 
       if (!success) {
-        throw new Error(swapError.message)
+        if (swapError) {
+          throw new Error(swapError.message)
+        }
+        throw new Error("An unknown error occurred during swap.")
       }
 
       // Optimistically update UI for smoother experience

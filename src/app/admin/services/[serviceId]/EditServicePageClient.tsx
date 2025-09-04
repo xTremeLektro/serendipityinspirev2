@@ -22,8 +22,8 @@ interface Service {
   id: string;
   service_name: string;
   service_desc: JSONContent;
-  fac_type_id?: string;
-  ord?: number | null;
+  fac_type_id: string | null;
+  ord: number | null;
 }
 
 interface FaqType {

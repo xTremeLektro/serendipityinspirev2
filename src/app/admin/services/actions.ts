@@ -55,7 +55,7 @@ export async function addService(formData: FormData) {
 
   if (error) {
     console.error('Error adding service:', error)
-    return { error: error.message }
+    throw new Error(error.message)
   }
 
   revalidatePath('/admin/services')
@@ -67,7 +67,7 @@ export async function deleteService(formData: FormData) {
     const { error } = await supabase.from('services').delete().match({ id })
     if (error) {
         console.error('Error deleting service:', error)
-        return { error: error.message }
+        throw new Error(error.message)
     }
     revalidatePath('/admin/services')
 }
@@ -106,7 +106,7 @@ export async function updateService(formData: FormData) {
 
   if (error) {
     console.error('Error updating service:', error)
-    return { error: error.message }
+    throw new Error(error.message)
   }
 
   revalidatePath(`/admin/services/${id}`)
@@ -121,7 +121,7 @@ export async function updateServiceOrder(serviceId: string, formData: FormData) 
 
   if (error) {
     console.error('Error updating service order:', error);
-    return { error: error.message };
+    throw new Error(error.message);
   }
 
   revalidatePath('/admin/services');
@@ -171,12 +171,12 @@ export async function addServicePic(
   }
 
   // 2. Get public URL
-  const { data: publicUrlData, error: urlError } = supabase.storage
+  const { data: publicUrlData } = supabase.storage
     .from('attachments')
     .getPublicUrl(uploadData.path);
 
-  if (urlError || !publicUrlData.publicUrl) {
-    const errorMessage = `Error getting public URL: ${urlError?.message || 'URL not found.'}`;
+  if (!publicUrlData.publicUrl) {
+    const errorMessage = `Error getting public URL: URL not found.`;
     console.error(errorMessage);
     // Clean up the uploaded file if we can't get a URL
     await supabase.storage.from('attachments').remove([uploadData.path]);
@@ -196,7 +196,7 @@ export async function addServicePic(
     const errorMessage = `Error adding service picture to database: ${dbError.message}`;
     console.error(errorMessage);
     // Clean up the uploaded file if the DB insert fails
-    await supabase.storage.from('attachments').remove([uploadData.path]);
+    await supabase.storage.from('attachments').remove([dbError.message]);
     return { error: errorMessage, success: false };
   }
 
@@ -227,7 +227,7 @@ export async function deleteServicePic(formData: FormData) {
   const { error } = await supabase.from('service_pics').delete().match({ id })
   if (error) {
       console.error('Error deleting service picture:', error)
-      return { error: error.message }
+      throw new Error(error.message)
   }
   revalidatePath(`/admin/services/${service_id}`)
 }
@@ -248,7 +248,7 @@ export async function updateServicePicAttributes(formData: FormData) {
 
   if (error) {
     console.error('Error updating service picture attributes:', error)
-    return { error: error.message }
+    throw new Error(error.message)
   }
 
   revalidatePath(`/admin/services/${service_id}`)

@@ -9,7 +9,7 @@ const inter = Inter({
   variable: '--font-inter',
 });
 
-const PortfolioPage = async ({ searchParams }: { searchParams: { page?: string } }) => {
+const PortfolioPage = async ({ searchParams }: { searchParams: Promise<{ page?: string }> }) => {
   const sp = await searchParams;
   const page = sp?.page ?? '1';
   const pageNumber = parseInt(page);

@@ -15,9 +15,7 @@ const inter = Inter({
 });
 
 interface ProjectDetailPageProps {
-  params: {
-    projectId: string;
-  };
+  params: Promise<{ projectId: string }>;
 }
 
 const TiptapRenderer: FC<{ content: JSONContent | string | null }> = ({ content }) => {
@@ -49,7 +47,7 @@ const TiptapRenderer: FC<{ content: JSONContent | string | null }> = ({ content 
 };
 
 const ProjectDetailPage = async (props: ProjectDetailPageProps) => {
-  const { projectId } = props.params;
+  const { projectId } = await props.params;
   const project = await getProjectById(projectId);
 
   if (!project) {

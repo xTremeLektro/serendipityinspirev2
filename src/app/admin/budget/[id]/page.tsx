@@ -3,7 +3,11 @@ import QuoteRequestDetailsClient from './QuoteRequestDetailsClient';
 import { notFound } from 'next/navigation';
 import { createSupabaseServerClient } from '@/lib/supabase/utils';
 
-export default async function QuoteRequestDetailsPage({ params }: { params: { id: string } }) {
+interface QuoteRequestDetailsPageProps {
+  params: Promise<{ id: string }>;
+}
+
+export default async function QuoteRequestDetailsPage({ params }: QuoteRequestDetailsPageProps) {
   const supabase = await createSupabaseServerClient();
   const numericId = parseInt((await params).id, 10);
 

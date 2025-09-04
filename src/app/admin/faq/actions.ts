@@ -19,7 +19,7 @@ export async function addFaqType(formData: FormData) {
   const { error } = await supabase.from('faq_type_list').insert([{ faq_type: faqType }])
   if (error) {
     console.error('Error adding FAQ type:', error)
-    return { error: error.message }
+    throw new Error(error.message)
   }
   revalidatePath('/admin/faq')
 }
@@ -30,7 +30,7 @@ export async function deleteFaqType(formData: FormData) {
     const { error } = await supabase.from('faq_type_list').delete().match({ id })
     if (error) {
         console.error('Error deleting FAQ type:', error)
-        return { error: error.message }
+        throw new Error(error.message)
     }
     revalidatePath('/admin/faq')
 }
@@ -58,7 +58,7 @@ export async function addFaq(formData: FormData) {
 
   if (error) {
     console.error('Error adding FAQ:', error)
-    return { error: error.message }
+    throw new Error(error.message)
   }
 
   revalidatePath('/admin/faq')
@@ -70,7 +70,7 @@ export async function deleteFaq(formData: FormData) {
     const { error } = await supabase.from('faq_list').delete().match({ id })
     if (error) {
         console.error('Error deleting FAQ:', error)
-        return { error: error.message }
+        throw new Error(error.message)
     }
     revalidatePath('/admin/faq')
 }
@@ -110,7 +110,7 @@ export async function updateFaq(formData: FormData) {
 
   if (error) {
     console.error('Error updating FAQ:', error)
-    return { error: error.message }
+    throw new Error(error.message)
   }
 
   revalidatePath('/admin/faq')
@@ -124,7 +124,7 @@ export async function updateFaqOrder(faqId: string, formData: FormData) {
 
   if (error) {
     console.error('Error updating faq order:', error);
-    return { error: error.message };
+    throw new Error(error.message);
   }
 
   revalidatePath('/admin/faq');

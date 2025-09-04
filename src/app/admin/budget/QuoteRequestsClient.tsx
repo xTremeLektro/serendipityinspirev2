@@ -1,9 +1,9 @@
 "use client";
 
 // import Link from 'next/link'
-import { useState, useEffect } from 'react';
-import { getQuoteRequests, updateQuoteRequestStatus } from './actions';
-// import { QuoteRequest } from '@/lib/types'; // Removed, using local interface below
+import { useState } from 'react';
+import { updateQuoteRequestStatus } from './actions';
+import { QuoteRequest } from '@/lib/types';
 import { Edu_NSW_ACT_Cursive } from 'next/font/google';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
@@ -14,24 +14,8 @@ const eduNSW = Edu_NSW_ACT_Cursive({
   subsets: ['latin', 'latin-ext'],
 });
 
-export default function QuoteRequestsClient() {
-  const [quoteRequests, setQuoteRequests] = useState<QuoteRequest[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    const fetchQuoteRequests = async () => {
-      setLoading(true);
-      const { data, error } = await getQuoteRequests();
-      if (error) {
-        setError(error);
-      } else if (data) {
-        setQuoteRequests(data);
-      }
-      setLoading(false);
-    };
-    fetchQuoteRequests();
-  }, []);
+export default function QuoteRequestsClient({ quoteRequests: initialQuoteRequests }: { quoteRequests: QuoteRequest[] }) {
+  const [quoteRequests, setQuoteRequests] = useState<QuoteRequest[]>(initialQuoteRequests);
 
   const handleStatusChange = async (id: string, newStatus: string) => {
     const formData = new FormData();
@@ -47,8 +31,7 @@ export default function QuoteRequestsClient() {
     }
   };
 
-  if (loading) return <p>Cargando solicitudes...</p>;
-  if (error) return <p className="text-red-500">Error: {error}</p>;
+  
 
   return (
     <div className="container mx-auto p-4">
@@ -117,22 +100,4 @@ export default function QuoteRequestsClient() {
   );
 }
 
-interface QuoteRequest {
-  id: number;
-  created_at: string;
-  full_name: string;
-  email: string;
-  phone?: string;
-  address?: string;
-  city?: string;
-  postal_code?: string;
-  project_type?: string;
-  service_type?: string;
-  spaces_to_address?: string[];
-  estimated_budget?: string;
-  how_found_us?: string;
-  project_details?: string;
-  attachments?: string[];
-  message?: string;
-  status: 'pending' | 'contacted' | 'completed' | 'cancelled';
-}
+

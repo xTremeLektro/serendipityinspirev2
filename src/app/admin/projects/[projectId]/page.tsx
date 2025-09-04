@@ -3,9 +3,7 @@ import EditProjectPageClient from './EditProjectPageClient';
 import AdminHeader from '@/components/AdminHeader';
 
 interface PageProps {
-  params: {
-    projectId: string;
-  };
+  params: Promise<{ projectId: string }>;
 }
 
 export default async function Page({ params }: PageProps) {

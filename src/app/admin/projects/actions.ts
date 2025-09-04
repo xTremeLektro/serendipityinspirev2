@@ -39,7 +39,7 @@ export async function addProject(formData: FormData) {
 
   if (error) {
     console.error('Error adding project:', error)
-    return { error: error.message }
+    throw new Error(error.message)
   }
 
   revalidatePath('/admin/projects')
@@ -51,7 +51,7 @@ export async function deleteProject(formData: FormData) {
     const { error } = await supabase.from('projects').delete().match({ id })
     if (error) {
         console.error('Error deleting project:', error)
-        return { error: error.message }
+        throw new Error(error.message)
     }
     revalidatePath('/admin/projects')
 }
@@ -93,7 +93,7 @@ export async function updateProject(formData: FormData) {
 
   if (error) {
     console.error('Error updating project:', error)
-    return { error: error.message }
+    throw new Error(error.message)
   }
 
   revalidatePath(`/admin/projects/${id}`)
@@ -144,12 +144,12 @@ export async function addProjectPic(
   }
 
   // 2. Get public URL
-  const { data: publicUrlData, error: urlError } = supabase.storage
+  const { data: publicUrlData } = supabase.storage
     .from('attachments')
     .getPublicUrl(uploadData.path);
 
-  if (urlError || !publicUrlData.publicUrl) {
-    const errorMessage = `Error getting public URL: ${urlError?.message || 'URL not found.'}`;
+  if (!publicUrlData.publicUrl) {
+    const errorMessage = `Error getting public URL: URL not found.`;
     console.error(errorMessage);
     // Clean up the uploaded file if we can't get a URL
     await supabase.storage.from('attachments').remove([uploadData.path]);
@@ -200,7 +200,7 @@ export async function deleteProjectPic(formData: FormData) {
   const { error } = await supabase.from('project_pics').delete().match({ id })
   if (error) {
       console.error('Error deleting project picture:', error)
-      return { error: error.message }
+      throw new Error(error.message)
   }
   revalidatePath(`/admin/projects/${project_id}`)
 }
@@ -221,7 +221,7 @@ export async function updateProjectPicAttributes(formData: FormData) {
 
   if (error) {
     console.error('Error updating project picture attributes:', error)
-    return { error: error.message }
+    throw new Error(error.message)
   }
 
   revalidatePath(`/admin/projects/${project_id}`)

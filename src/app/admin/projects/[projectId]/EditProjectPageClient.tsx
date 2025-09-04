@@ -28,17 +28,18 @@ interface Project {
   is_home: boolean | null;
 }
 
-// interface ProjectPic {
-//   id: string;
-//   photo_url?: string;
-//   caption?: string;
-//   is_home?: boolean;
-//   is_head_pic?: boolean;
-//   ord?: number;
-// }
+interface ProjectPic {
+  id: string;
+  photo_url?: string;
+  caption?: string;
+  is_home?: boolean;
+  is_head_pic?: boolean;
+  ord?: number;
+}
 
 interface EditProjectPageClientProps {
   project: Project;
+  projectPics: ProjectPic[];
 }
 
 
