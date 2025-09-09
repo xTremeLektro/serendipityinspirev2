@@ -167,7 +167,7 @@ const ContactPage = () => {
             <div className={activeTab === 'general' ? 'block' : 'hidden'}>
               <form onSubmit={handleBasicSubmit} className="space-y-6">
                 <div>
-                  <label htmlFor="name" className="block text-lg font-semibold text-slate-700 mb-2">Nombre</label>
+                  <label htmlFor="name" className="block text-lg font-semibold text-slate-700 mb-2">Nombre Completo</label>
                   <input type="text" id="name" name="name" className="w-full p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#E67E22] focus:border-transparent transition" />
                 </div>
                 <div>
