@@ -26,6 +26,20 @@ This is a Next.js application for Serendipity Inspire, a web platform to showcas
   - Manage FAQ types.
   - Rich text editor for answers.
 
+### Blog
+
+- **Supabase Table:**
+  - Created `blog_posts` table with columns for `id`, `created_at`, `title`, `slug`, `content`, `excerpt`, `image_url`, and `published_at`.
+- **Data Fetching:**
+  - Created `src/lib/blog.ts` with functions to fetch the latest, all, and single blog posts.
+- **UI Components:**
+  - Created `src/components/BlogPostCard.tsx` to display a blog post in a card format.
+- **Homepage Integration:**
+  - Added a new section to the homepage to display the latest 3 blog posts.
+- **Blog Pages:**
+  - Created a main blog page at `src/app/blog/page.tsx` to display all blog posts.
+  - Created a dynamic page at `src/app/blog/[slug]/page.tsx` to display the full content of a single blog post.
+
 ## Current Task: Enhance FAQ Management
 
 ### Plan

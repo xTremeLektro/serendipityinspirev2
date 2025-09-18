@@ -17,3 +17,14 @@ export interface QuoteRequest {
   message?: string;
   status: 'pending' | 'contacted' | 'completed' | 'cancelled';
 }
+
+export interface BlogPost {
+  id: number;
+  created_at: string;
+  title: string;
+  slug: string;
+  content?: string;
+  excerpt?: string;
+  image_url?: string;
+  published_at: string;
+}

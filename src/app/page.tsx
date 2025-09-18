@@ -3,6 +3,8 @@ import Link from "next/link";
 import ExpandingCards from "@/components/ExpandingCards";
 import { Edu_NSW_ACT_Cursive, Inter } from 'next/font/google';
 import { getHomeProjects } from "@/lib/projects";
+import { getLatestBlogPosts } from "@/lib/blog";
+import BlogPostCard from "@/components/BlogPostCard";
 import { ArrowRight } from 'lucide-react'; // Using lucide-react for icons, you may need to install it: npm install lucide-react
 
 // Initialize the fonts
@@ -20,6 +22,7 @@ const inter = Inter({
 
 export default async function Home() {
   const projects = await getHomeProjects();
+  const latestPosts = await getLatestBlogPosts(3);
 
   return (
     <main className={`${inter.variable} ${eduNSW.variable} font-sans bg-slate-50 text-slate-800`}>
@@ -115,6 +118,26 @@ export default async function Home() {
           <div className="text-center mt-12">
             <Link href="/portfolio" className="inline-flex items-center gap-2 bg-[#E67E22] text-white px-8 py-3 rounded-full text-lg font-semibold hover:bg-slate-900 transition-colors duration-300 shadow-lg">
               Ver Portfolio Completo <ArrowRight size={20} />
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* --- Blog Section --- */}
+      <section className="py-20 bg-slate-100">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl font-bold">Desde Nuestro Blog</h2>
+            <p className="text-lg text-slate-600 mt-2">Ideas, tendencias e inspiración para tus próximos proyectos.</p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {latestPosts.map((post) => (
+              <BlogPostCard key={post.id} post={post} />
+            ))}
+          </div>
+          <div className="text-center mt-12">
+            <Link href="/blog" className="inline-flex items-center gap-2 bg-[#E67E22] text-white px-8 py-3 rounded-full text-lg font-semibold hover:bg-slate-900 transition-colors duration-300 shadow-lg">
+              Visita Nuestro Blog <ArrowRight size={20} />
             </Link>
           </div>
         </div>
