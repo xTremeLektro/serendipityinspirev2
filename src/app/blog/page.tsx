@@ -1,6 +1,7 @@
 import { getAllBlogPostsForDisplay } from '@/lib/blog';
 import BlogPostCard from '@/components/BlogPostCard';
 import { Inter } from 'next/font/google';
+import Link from 'next/link';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -16,7 +17,7 @@ export default async function BlogPage() {
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <h1 className="text-5xl font-bold">Nuestro Blog</h1>
-            <p className="text-lg text-slate-600 mt-2">Explora nuestras ideas, consejos y las últimas tendencias en diseño de interiores.</p>
+            <p className="text-lg text-slate-600 mt-2">Explora nuestras ideas, consejos y las últimas tendencias en diseño de interiores. <Link href="/contact" className="text-[#E67E22] hover:underline">Suscríbete aquí</Link> para no perderte ninguna novedad.</p>
           </div>
           
           {posts.length > 0 ? (

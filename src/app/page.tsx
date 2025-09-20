@@ -128,7 +128,7 @@ export default async function Home() {
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <h2 className="text-4xl font-bold">Desde Nuestro Blog</h2>
-            <p className="text-lg text-slate-600 mt-2">Ideas, tendencias e inspiración para tus próximos proyectos.</p>
+            <p className="text-lg text-slate-600 mt-2">Ideas, tendencias e inspiración para tus próximos proyectos. <Link href="/contact" className="text-[#E67E22] hover:underline">Suscríbete aquí</Link> para no perderte ninguna novedad.</p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {latestPosts.map((post) => (

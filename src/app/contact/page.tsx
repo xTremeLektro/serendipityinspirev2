@@ -33,12 +33,14 @@ const ContactPage = () => {
     const form = event.currentTarget;
     const formData = new FormData(form);
     const data = Object.fromEntries(formData.entries());
+    const subscribed = formData.has('subscribed');
 
     try {
       const { error } = await supabase.from('contact_inquiries').insert([{
         name: data.name.toString(),
         email: data.email.toString(),
         message: data.message.toString(),
+        subscribed: subscribed,
       }]);
 
       if (error) {
@@ -177,6 +179,10 @@ const ContactPage = () => {
                 <div>
                   <label htmlFor="message" className="block text-lg font-semibold text-slate-700 mb-2">Mensaje</label>
                   <textarea id="message" name="message" rows={4} className="w-full p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#E67E22] focus:border-transparent transition"></textarea>
+                </div>
+                <div className="flex items-center">
+                  <input type="checkbox" id="subscribed" name="subscribed" className="h-5 w-5 text-[#E67E22] border-slate-300 rounded focus:ring-[#E67E22] transition" />
+                  <label htmlFor="subscribed" className="ml-2 text-slate-700">Deseo suscribirme para recibir comunicaciones y novedades.</label>
                 </div>
                 <button type="submit" className="w-full bg-[#E67E22] text-white px-8 py-3 rounded-full text-lg font-semibold hover:bg-[#d35400] transition-colors duration-300 shadow-lg">Enviar Mensaje</button>
               </form>

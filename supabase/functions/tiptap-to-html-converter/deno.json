@@ -1,0 +1,8 @@
+{
+  "imports": {
+    "@tiptap/html": "https://esm.sh/@tiptap/html@2.0.0",
+    "@tiptap/extension-document": "https://esm.sh/@tiptap/extension-document@2.0.0",
+    "@tiptap/extension-paragraph": "https://esm.sh/@tiptap/extension-paragraph@2.0.0",
+    "@tiptap/extension-text": "https://esm.sh/@tiptap/extension-text@2.0.0"
+  }
+}

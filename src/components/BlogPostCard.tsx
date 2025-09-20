@@ -21,9 +21,8 @@ const BlogPostCard: React.FC<BlogPostCardProps> = ({ post }) => {
           <Image
             src={post.image_url || "/images/0000 - Public Serendipity Site v2/carrousel1.jpg"}
             alt={`Imagen del post ${post.title}`}
-            layout="fill"
-            objectFit="cover"
-            className="group-hover:scale-110 transition-transform duration-500"
+            fill
+            className="object-cover group-hover:scale-110 transition-transform duration-500"
           />
         </div>
         <div className="p-6 flex flex-col flex-grow">
