@@ -1,217 +1,90 @@
 'use client';
 
-import { useState, useCallback, useEffect } from 'react';
-import { useEditor, EditorContent } from '@tiptap/react';
-import StarterKit from '@tiptap/starter-kit';
-import Underline from '@tiptap/extension-underline';
-import TiptapImageExtension from '@tiptap/extension-image';
-import Link from '@tiptap/extension-link';
-import AdminHeader from '@/components/AdminHeader';
+import { FC, useEffect, useState, useMemo, useCallback } from 'react';
+import { useEditor, EditorContent, JSONContent } from '@tiptap/react';
+import { FaBold, FaItalic, FaListUl, FaListOl, FaLink, FaUnderline } from 'react-icons/fa';
+import { getTiptapExtensions } from '@/lib/tiptap';
 import { updateBlogPost } from '../actions';
-import ClientOnly from '@/components/ClientOnly';
+import AdminHeader from '@/components/AdminHeader';
 import Image from 'next/image';
 import { BlogPost } from '@/lib/types';
 
-const MenuBar = ({ editor }) => {
-  const addImage = useCallback(() => {
-    const url = window.prompt('URL')
-
-    if (url) {
-      editor.chain().focus().setImage({ src: url }).run()
-    }
-  }, [editor])
-
-  const setLink = useCallback(() => {
-    const previousUrl = editor.getAttributes('link').href
-    const url = window.prompt('URL', previousUrl)
-
-    // cancelled
-    if (url === null) {
-      return
-    }
-
-    // empty
-    if (url === '') {
-      editor.chain().focus().extendMarkRange('link').unsetLink().run()
-
-      return
-    }
-
-    // update link
-    editor.chain().focus().extendMarkRange('link').setLink({ href: url }).run()
-  }, [editor])
-
-  if (!editor) {
-    return null
-  }
-
-  return (
-    <div className="flex flex-wrap items-center gap-2 p-2 bg-gray-100 rounded-t-md">
-      <button
-        onClick={() => editor.chain().focus().toggleBold().run()}
-        disabled={!editor.can().chain().focus().toggleBold().run()}
-        className={editor.isActive('bold') ? 'is-active' : ''}
-      >
-        bold
-      </button>
-      <button
-        onClick={() => editor.chain().focus().toggleItalic().run()}
-        disabled={!editor.can().chain().focus().toggleItalic().run()}
-        className={editor.isActive('italic') ? 'is-active' : ''}
-      >
-        italic
-      </button>
-      <button
-        onClick={() => editor.chain().focus().toggleStrike().run()}
-        disabled={!editor.can().chain().focus().toggleStrike().run()}
-        className={editor.isActive('strike') ? 'is-active' : ''}
-      >
-        strike
-      </button>
-      <button
-        onClick={() => editor.chain().focus().toggleCode().run()}
-        disabled={!editor.can().chain().focus().toggleCode().run()}
-        className={editor.isActive('code') ? 'is-active' : ''}
-      >
-        code
-      </button>
-      <button onClick={() => editor.chain().focus().unsetAllMarks().run()}>
-        clear marks
-      </button>
-      <button onClick={() => editor.chain().focus().clearNodes().run()}>
-        clear nodes
-      </button>
-      <button
-        onClick={() => editor.chain().focus().setParagraph().run()}
-        className={editor.isActive('paragraph') ? 'is-active' : ''}
-      >
-        paragraph
-      </button>
-      <button
-        onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
-        className={editor.isActive('heading', { level: 1 }) ? 'is-active' : ''}
-      >
-        h1
-      </button>
-      <button
-        onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
-        className={editor.isActive('heading', { level: 2 }) ? 'is-active' : ''}
-      >
-        h2
-      </button>
-      <button
-        onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
-        className={editor.isActive('heading', { level: 3 }) ? 'is-active' : ''}
-      >
-        h3
-      </button>
-      <button
-        onClick={() => editor.chain().focus().toggleHeading({ level: 4 }).run()}
-        className={editor.isActive('heading', { level: 4 }) ? 'is-active' : ''}
-      >
-        h4
-      </button>
-      <button
-        onClick={() => editor.chain().focus().toggleHeading({ level: 5 }).run()}
-        className={editor.isActive('heading', { level: 5 }) ? 'is-active' : ''}
-      >
-        h5
-      </button>
-      <button
-        onClick={() => editor.chain().focus().toggleHeading({ level: 6 }).run()}
-        className={editor.isActive('heading', { level: 6 }) ? 'is-active' : ''}
-      >
-        h6
-      </button>
-      <button
-        onClick={() => editor.chain().focus().toggleBulletList().run()}
-        className={editor.isActive('bulletList') ? 'is-active' : ''}
-      >
-        bullet list
-      </button>
-      <button
-        onClick={() => editor.chain().focus().toggleOrderedList().run()}
-        className={editor.isActive('orderedList') ? 'is-active' : ''}
-      >
-        ordered list
-      </button>
-      <button
-        onClick={() => editor.chain().focus().toggleCodeBlock().run()}
-        className={editor.isActive('codeBlock') ? 'is-active' : ''}
-      >
-        code block
-      </button>
-      <button
-        onClick={() => editor.chain().focus().toggleBlockquote().run()}
-        className={editor.isActive('blockquote') ? 'is-active' : ''}
-      >
-        blockquote
-      </button>
-      <button onClick={() => editor.chain().focus().setHorizontalRule().run()}>
-        horizontal rule
-      </button>
-      <button onClick={() => editor.chain().focus().setHardBreak().run()}>
-        hard break
-      </button>
-      <button onClick={addImage}>add image from URL</button>
-      <button onClick={setLink} className={editor.isActive('link') ? 'is-active' : ''}>
-        set link
-      </button>
-      <button
-        onClick={() => editor.chain().focus().undo().run()}
-        disabled={!editor.can().chain().focus().undo().run()}
-      >
-        undo
-      </button>
-      <button
-        onClick={() => editor.chain().focus().redo().run()}
-        disabled={!editor.can().chain().focus().redo().run()}
-      >
-        redo
-      </button>
-    </div>
-  )
-}
-
-const TiptapEditor = ({ content, onChange }) => {
-  const editor = useEditor({
-    immediatelyRender: false,
-    extensions: [
-      StarterKit,
-      Underline,
-      TiptapImageExtension,
-      Link.configure({
-        openOnClick: false,
-      }),
-    ],
-    content: content,
-    onUpdate: ({ editor }) => {
-      onChange(editor.getJSON());
-    },
-  });
-
-  return (
-    <div className="border border-gray-300 rounded-md">
-      <MenuBar editor={editor} />
-      <div className="prose max-w-full p-4">
-        <EditorContent editor={editor} />
-      </div>
-    </div>
-  );
-};
-
 interface EditBlogPostFormProps {
-    post: BlogPost;
+  post: BlogPost;
 }
 
-export default function EditBlogPostForm({ post }: EditBlogPostFormProps) {
+function parseContent(content: JSONContent | string | null): JSONContent {
+  if (!content) {
+    return { type: 'doc', content: [{ type: 'paragraph' }] };
+  }
+  if (typeof content === 'string') {
+    try {
+      const parsed = JSON.parse(content);
+      if (parsed.type === 'doc') {
+        return parsed;
+      }
+    } catch {
+      // Not JSON, treat as plain text
+    }
+    return {
+      type: 'doc',
+      content: [{ type: 'paragraph', content: [{ type: 'text', text: content }] }],
+    };
+  }
+  if (typeof content === 'object' && content.type === 'doc') {
+    return content;
+  }
+  return { type: 'doc', content: [{ type: 'paragraph' }] }; // fallback for unknown
+}
+
+const EditBlogPostForm: FC<EditBlogPostFormProps> = ({ post }) => {
+  const [isClient, setIsClient] = useState(false);
+
+  const initialContent = useMemo(() => parseContent(post.content), [post.content]);
   const [title, setTitle] = useState(post.title);
   const [slug, setSlug] = useState(post.slug);
-  const [content, setContent] = useState(post.content);
   const [excerpt, setExcerpt] = useState(post.excerpt);
   const [imageUrl, setImageUrl] = useState(post.image_url);
   const [publishedAt, setPublishedAt] = useState(post.published_at);
   const [imagePreview, setImagePreview] = useState<string | null>(post.image_url);
+  const [description, setDescription] = useState(JSON.stringify(initialContent));
+
+
+  const editor = useEditor({
+    extensions: getTiptapExtensions(),
+    content: initialContent,
+    onUpdate: ({ editor }) => {
+      setDescription(JSON.stringify(editor.getJSON()));
+    },
+    immediatelyRender: false,
+  });
+
+  const setLink = useCallback(() => {
+    if (!editor) return;
+    const previousUrl = editor.getAttributes('link').href;
+    const url = window.prompt('URL', previousUrl);
+
+    if (url === null) {
+        return;
+    }
+
+    if (url === '') {
+        editor.chain().focus().extendMarkRange('link').unsetLink().run();
+        return;
+    }
+
+    editor.chain().focus().extendMarkRange('link').setLink({ href: url }).run();
+  }, [editor]);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  useEffect(() => {
+    if (editor && initialContent) {
+      editor.commands.setContent(initialContent);
+    }
+  }, [initialContent, editor]);
 
   useEffect(() => {
     const generatedSlug = title
@@ -236,17 +109,17 @@ export default function EditBlogPostForm({ post }: EditBlogPostFormProps) {
     }
   };
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const formData = new FormData();
-    formData.append('id', post.id);
-    formData.append('title', title);
-    formData.append('slug', slug);
-    formData.append('content', JSON.stringify(content));
-    formData.append('excerpt', excerpt);
-    formData.append('image_url', imageUrl);
+    const formData = new FormData(event.currentTarget);
+    formData.set('content', description);
+    formData.set('id', post.id);
+    formData.set('title', title);
+    formData.set('slug', slug);
+    formData.set('excerpt', excerpt);
+    formData.set('image_url', imageUrl);
     if (publishedAt) {
-      formData.append('published_at', publishedAt);
+      formData.set('published_at', publishedAt);
     }
     await updateBlogPost(formData);
   };
@@ -299,11 +172,19 @@ export default function EditBlogPostForm({ post }: EditBlogPostFormProps) {
             </div>
             <div className="mb-4">
               <label htmlFor="content" className="block text-sm font-medium text-gray-700">Content</label>
-              <div className="mt-1 block w-full rounded-md shadow-sm sm:text-sm">
-                <ClientOnly>
-                  <TiptapEditor key={post.id} content={content} onChange={setContent} />
-                </ClientOnly>
-              </div>
+              {isClient && editor && (
+              <>
+                  <div className="mb-2 p-2 border border-gray-300 rounded-md bg-gray-50 flex flex-wrap gap-2">
+                  <button type="button" onClick={() => editor.chain().focus().toggleBold().run()} disabled={!editor.can().chain().focus().toggleBold().run()} className={`p-2 rounded-md ${editor.isActive('bold') ? 'bg-indigo-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}><FaBold /></button>
+                  <button type="button" onClick={() => editor.chain().focus().toggleItalic().run()} disabled={!editor.can().chain().focus().toggleItalic().run()} className={`p-2 rounded-md ${editor.isActive('italic') ? 'bg-indigo-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}><FaItalic /></button>
+                  <button type="button" onClick={() => editor.chain().focus().toggleUnderline().run()} disabled={!editor.can().chain().focus().toggleUnderline().run()} className={`p-2 rounded-md ${editor.isActive('underline') ? 'bg-indigo-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}><FaUnderline /></button>
+                  <button type="button" onClick={() => editor.chain().focus().toggleBulletList().run()} disabled={!editor.can().chain().focus().toggleBulletList().run()} className={`p-2 rounded-md ${editor.isActive('bulletList') ? 'bg-indigo-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}><FaListUl /></button>
+                  <button type="button" onClick={() => editor.chain().focus().toggleOrderedList().run()} disabled={!editor.can().chain().focus().toggleOrderedList().run()} className={`p-2 rounded-md ${editor.isActive('orderedList') ? 'bg-indigo-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}><FaListOl /></button>
+                  <button type="button" onClick={setLink} className={`p-2 rounded-md ${editor.isActive('link') ? 'bg-indigo-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}><FaLink /></button>
+                  </div>
+                  <EditorContent editor={editor} className="min-h-[200px] p-2 bg-white border border-gray-300 rounded-md overflow-y-auto" />
+              </>
+              )}
             </div>
             <div className="flex items-center justify-between">
               <button
@@ -337,4 +218,6 @@ export default function EditBlogPostForm({ post }: EditBlogPostFormProps) {
       </main>
     </div>
   );
-}
+};
+
+export default EditBlogPostForm;
