@@ -23,7 +23,7 @@ This document outlines the structure and features of the Serendipity Inspire v2 
   - **Publish/Unpublish:** Buttons to publish or unpublish the blog post.
   - **Image Upload:** A file input to upload an image for the blog post with a preview.
 - **Delete Blog Post:** A button on the blog post list to delete a blog post.
-- **TipTap Editor:** The create and edit pages use the TipTap editor to modify the `content` field of the blog post, which is stored as JSON.
+- **TipTap Editor:** The create and edit pages use the TipTap editor to modify the `content` field of the blog post, which is stored as JSON. When updating a blog post, the `content` field is converted to HTML and stored in the `content_html` field in the database.
 - **TipTap Editor Toolbar:** The TipTap editor includes a toolbar with the following features:
   - Bold, italic, underline, strike, code, and clear format.
   - Headings of different levels.

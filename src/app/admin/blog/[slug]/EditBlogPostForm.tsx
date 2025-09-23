@@ -1,6 +1,6 @@
 'use client';
 
-import { FC, useEffect, useState, useMemo, useCallback } from 'react';
+import { useEffect, useState, useMemo, useCallback } from 'react';
 import { useEditor, EditorContent, JSONContent } from '@tiptap/react';
 import { FaBold, FaItalic, FaListUl, FaListOl, FaLink, FaUnderline } from 'react-icons/fa';
 import { getTiptapExtensions } from '@/lib/tiptap';
@@ -8,9 +8,26 @@ import { updateBlogPost } from '../actions';
 import AdminHeader from '@/components/AdminHeader';
 import Image from 'next/image';
 import { BlogPost } from '@/lib/types';
+import { createBuildTimeClient } from '@/lib/supabase/client';
 
 interface EditBlogPostFormProps {
-  post: BlogPost;
+  slug: string;
+}
+
+async function getBlogPost(slug: string): Promise<BlogPost | null> {
+  const supabase = createBuildTimeClient();
+  const { data, error } = await supabase
+    .from('blog_posts')
+    .select('*')
+    .eq('slug', slug)
+    .single();
+
+  if (error) {
+    console.error('Error fetching blog post:', JSON.stringify(error));
+    return null;
+  }
+
+  return data as BlogPost;
 }
 
 function parseContent(content: JSONContent | string | null): JSONContent {
@@ -37,20 +54,38 @@ function parseContent(content: JSONContent | string | null): JSONContent {
   return { type: 'doc', content: [{ type: 'paragraph' }] }; // fallback for unknown
 }
 
-const EditBlogPostForm: FC<EditBlogPostFormProps> = ({ post }) => {
+export default function EditBlogPostForm({ slug }: EditBlogPostFormProps) {
+  const [post, setPost] = useState<BlogPost | null>(null);
   const [isClient, setIsClient] = useState(false);
 
-  const initialContent = useMemo(() => parseContent(post.content), [post.content]);
-  const [title, setTitle] = useState(post.title);
-  const [slug, setSlug] = useState(post.slug);
-  const [excerpt, setExcerpt] = useState(post.excerpt);
-  const [imageUrl, setImageUrl] = useState(post.image_url);
-  const [publishedAt, setPublishedAt] = useState(post.published_at);
-  const [imagePreview, setImagePreview] = useState<string | null>(post.image_url);
-  const [description, setDescription] = useState(JSON.stringify(initialContent));
+  const initialContent = useMemo(() => post ? parseContent(post.content) : { type: 'doc', content: [] }, [post]);
+  const [title, setTitle] = useState('');
+  const [currentSlug, setCurrentSlug] = useState('');
+  const [excerpt, setExcerpt] = useState('');
+  const [imageUrl, setImageUrl] = useState('');
+  const [publishedAt, setPublishedAt] = useState<string | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [description, setDescription] = useState<string>(JSON.stringify({ type: 'doc', content: [] }));
+ 
+  useEffect(() => {
+    const fetchPost = async () => {
+      const blogPost = await getBlogPost(slug);
+      if (blogPost) {
+        setPost(blogPost);
+        setTitle(blogPost.title);
+        setCurrentSlug(blogPost.slug);
+        setExcerpt(blogPost.excerpt || '');
+        setImageUrl(blogPost.image_url || '');
+        setPublishedAt(blogPost.published_at ? blogPost.published_at : null);
+        setImagePreview(blogPost.image_url);
+        setDescription(JSON.stringify(parseContent(blogPost.content))); // Ensure content is parsed and stringified
+      }
+    };
+    fetchPost();
+  }, [slug]);
 
 
-  const editor = useEditor({
+  const editor = useEditor({ // Initialize editor with initialContent
     extensions: getTiptapExtensions(),
     content: initialContent,
     onUpdate: ({ editor }) => {
@@ -81,18 +116,20 @@ const EditBlogPostForm: FC<EditBlogPostFormProps> = ({ post }) => {
   }, []);
 
   useEffect(() => {
-    if (editor && initialContent) {
+    if (editor && initialContent && !editor.isDestroyed) {
       editor.commands.setContent(initialContent);
     }
   }, [initialContent, editor]);
 
   useEffect(() => {
-    const generatedSlug = title
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, '-')
-      .replace(/(^-|-$)+/g, '');
-    setSlug(generatedSlug);
-  }, [title]);
+    if (post && title) { // Only generate slug if post and title are available
+      const generatedSlug = title
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/(^-|-$)+/g, '');
+      setCurrentSlug(generatedSlug);
+    }
+  }, [title, post]);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -111,11 +148,12 @@ const EditBlogPostForm: FC<EditBlogPostFormProps> = ({ post }) => {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    if (!post) return;
     const formData = new FormData(event.currentTarget);
     formData.set('content', description);
     formData.set('id', post.id);
     formData.set('title', title);
-    formData.set('slug', slug);
+    formData.set('slug', currentSlug);
     formData.set('excerpt', excerpt);
     formData.set('image_url', imageUrl);
     if (publishedAt) {
@@ -123,6 +161,10 @@ const EditBlogPostForm: FC<EditBlogPostFormProps> = ({ post }) => {
     }
     await updateBlogPost(formData);
   };
+
+  if (!post) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className="min-h-screen bg-gray-100">
@@ -145,8 +187,8 @@ const EditBlogPostForm: FC<EditBlogPostFormProps> = ({ post }) => {
               <input
                 type="text"
                 id="slug"
-                value={slug}
-                onChange={(e) => setSlug(e.target.value)}
+                value={currentSlug}
+                onChange={(e) => setCurrentSlug(e.target.value)}
                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm text-gray-900"
               />
             </div>
@@ -178,7 +220,7 @@ const EditBlogPostForm: FC<EditBlogPostFormProps> = ({ post }) => {
                   <button type="button" onClick={() => editor.chain().focus().toggleBold().run()} disabled={!editor.can().chain().focus().toggleBold().run()} className={`p-2 rounded-md ${editor.isActive('bold') ? 'bg-indigo-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}><FaBold /></button>
                   <button type="button" onClick={() => editor.chain().focus().toggleItalic().run()} disabled={!editor.can().chain().focus().toggleItalic().run()} className={`p-2 rounded-md ${editor.isActive('italic') ? 'bg-indigo-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}><FaItalic /></button>
                   <button type="button" onClick={() => editor.chain().focus().toggleUnderline().run()} disabled={!editor.can().chain().focus().toggleUnderline().run()} className={`p-2 rounded-md ${editor.isActive('underline') ? 'bg-indigo-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}><FaUnderline /></button>
-                  <button type="button" onClick={() => editor.chain().focus().toggleBulletList().run()} disabled={!editor.can().chain().focus().toggleBulletList().run()} className={`p-2 rounded-md ${editor.isActive('bulletList') ? 'bg-indigo-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}><FaListUl /></button>
+                  <button type="button" onClick={() => editor.chain().focus().toggleBulletList().run()} disabled={!editor.can().chain().toggleBulletList().run()} className={`p-2 rounded-md ${editor.isActive('bulletList') ? 'bg-indigo-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}><FaListUl /></button>
                   <button type="button" onClick={() => editor.chain().focus().toggleOrderedList().run()} disabled={!editor.can().chain().focus().toggleOrderedList().run()} className={`p-2 rounded-md ${editor.isActive('orderedList') ? 'bg-indigo-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}><FaListOl /></button>
                   <button type="button" onClick={setLink} className={`p-2 rounded-md ${editor.isActive('link') ? 'bg-indigo-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}><FaLink /></button>
                   </div>
@@ -218,6 +260,4 @@ const EditBlogPostForm: FC<EditBlogPostFormProps> = ({ post }) => {
       </main>
     </div>
   );
-};
-
-export default EditBlogPostForm;
+}

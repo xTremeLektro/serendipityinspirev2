@@ -15,7 +15,7 @@ const eduNSW = Edu_NSW_ACT_Cursive({
   fallback: ['cursive'],
 });
 
-const POSTS_PER_PAGE = 10;
+const POSTS_PER_PAGE = 10
 
 export default function AdminBlogPage() {
   const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);

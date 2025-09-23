@@ -4,6 +4,7 @@ import { FormEvent, useState } from 'react';
 import { Inter } from 'next/font/google';
 import { createClient } from '@/lib/supabase';
 import { Mail, Phone, MapPin } from 'lucide-react';
+import ConfirmationModal from '@/components/ConfirmationModal';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -14,6 +15,21 @@ const ContactPage = () => {
   const supabase = createClient();
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [activeTab, setActiveTab] = useState('general');
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [modalTitle, setModalTitle] = useState('');
+  const [modalMessage, setModalMessage] = useState('');
+  const [modalIsSuccess, setModalIsSuccess] = useState(false);
+
+  const openModal = (title: string, message: string, isSuccess: boolean) => {
+    setModalTitle(title);
+    setModalMessage(message);
+    setModalIsSuccess(isSuccess);
+    setModalIsOpen(true);
+  };
+
+  const closeModal = () => {
+    setModalIsOpen(false);
+  };
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files) {
@@ -45,14 +61,14 @@ const ContactPage = () => {
 
       if (error) {
         console.error("Error inserting data:", error);
-        alert('Hubo un error al enviar tu mensaje. Por favor, inténtalo de nuevo.');
+        openModal('Error', 'Hubo un error al enviar tu mensaje. Por favor, inténtalo de nuevo.', false);
       } else {
-        alert('¡Gracias por tu mensaje! Nos pondremos en contacto pronto.');
+        openModal('¡Mensaje Enviado!', '¡Gracias por tu mensaje! Nos pondremos en contacto pronto.', true);
         form.reset();
       }
     } catch (error) {
       console.error("An unexpected error occurred:", error);
-      alert('Hubo un error inesperado al enviar tu mensaje. Por favor, inténtalo de nuevo.');
+      openModal('Error Inesperado', 'Hubo un error inesperado al enviar tu mensaje. Por favor, inténtalo de nuevo.', false);
     }
   };
 
@@ -73,7 +89,7 @@ const ContactPage = () => {
 
         if (fileError) {
           console.error('Error uploading file:', fileError);
-          alert('Hubo un error al subir un archivo. Por favor, inténtalo de nuevo.');
+          openModal('Error de Archivo', 'Hubo un error al subir un archivo. Por favor, inténtalo de nuevo.', false);
           return;
         }
 
@@ -103,20 +119,27 @@ const ContactPage = () => {
 
       if (error) {
         console.error("Error inserting data:", error);
-        alert('Hubo un error al enviar tu solicitud. Por favor, inténtalo de nuevo.');
+        openModal('Error', 'Hubo un error al enviar tu solicitud. Por favor, inténtalo de nuevo.', false);
       } else {
-        alert('¡Gracias por tu solicitud de presupuesto! Nos pondremos en contacto pronto.');
+        openModal('¡Solicitud Enviada!', '¡Gracias por tu solicitud de presupuesto! Nos pondremos en contacto pronto.', true);
         form.reset();
         setSelectedFiles([]);
       }
     } catch (error) {
       console.error("An unexpected error occurred:", error);
-      alert('Hubo un error inesperado al enviar tu solicitud. Por favor, inténtalo de nuevo.');
+      openModal('Error Inesperado', 'Hubo un error inesperado al enviar tu solicitud. Por favor, inténtalo de nuevo.', false);
     }
   };
 
   return (
     <main className={`${inter.variable} font-sans bg-slate-50 text-slate-800`}>
+      <ConfirmationModal
+        isOpen={modalIsOpen}
+        onClose={closeModal}
+        title={modalTitle}
+        message={modalMessage}
+        isSuccess={modalIsSuccess}
+      />
       <div className="container mx-auto px-4 py-16">
 
         {/* --- Page Header --- */}

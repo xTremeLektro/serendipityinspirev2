@@ -1,7 +1,13 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
-import { revalidatePath } from 'next/cache'
+
+
+import { revalidatePath } from 'next/cache';
+
+
+import { generateHTML } from '@tiptap/html';
+import { getTiptapExtensions } from '../../../lib/tiptap';
 import { BlogPost } from '@/lib/types';
 
 export async function getBlogPosts(searchTerm: string, statusFilter: string, page: number, pageSize: number) {
@@ -45,6 +51,8 @@ export async function updateBlogPost(formData: FormData) {
   const title = formData.get('title') as string
   const slug = formData.get('slug') as string
   const content = formData.get('content') as string
+  const parsedContent = JSON.parse(content);
+  const content_html = generateHTML(parsedContent, getTiptapExtensions());
   const excerpt = formData.get('excerpt') as string
   const image_url = formData.get('image_url') as string
   const published_at = formData.get('published_at') as string
@@ -52,7 +60,8 @@ export async function updateBlogPost(formData: FormData) {
   const postData: Partial<BlogPost> = {
     title,
     slug,
-    content: JSON.parse(content),
+    content: parsedContent,
+    content_html,
     excerpt,
     image_url,
   };
@@ -60,7 +69,7 @@ export async function updateBlogPost(formData: FormData) {
   if (published_at) {
     postData.published_at = published_at;
   } else {
-    postData.published_at = null;
+    postData.published_at = null as unknown as string; // Explicitly cast null to string to satisfy type, as Supabase handles null for date fields
   }
 
   const { error } = await supabase.from('blog_posts').update(postData).eq('id', id)
@@ -93,4 +102,3 @@ export async function deleteMultipleBlogPosts(ids: string[]) {
   }
   revalidatePath('/admin/blog')
 }
-
