@@ -1,12 +1,13 @@
 'use client';
 
 import { useState, FC, Fragment, useMemo, useEffect } from 'react';
-import { FaTrash, FaEdit } from 'react-icons/fa';
+import { FaTrash, FaEdit, FaAngleDoubleLeft, FaChevronLeft, FaChevronRight, FaAngleDoubleRight } from 'react-icons/fa';
 import { deleteFaq } from './actions';
 import EditFaqModal from './EditFaqModal';
 import { generateHTML } from '@tiptap/html';
 import { JSONContent } from '@tiptap/react';
 import { getTiptapExtensions } from '@/lib/tiptap';
+import { useRouter } from 'next/navigation';
 
 type FaqType = {
   id: string;
@@ -25,9 +26,14 @@ type Faq = {
 };
 
 interface FaqListClientProps {
-  initialFaqs: Faq[]
+  initialFaqs: Faq[];
   faqTypes: FaqType[];
+  totalPages: number;
+  currentPage: number;
+  totalFaqs: number;
 }
+
+const FAQS_PER_PAGE = 10;
 
 const TiptapRenderer: FC<{ content: JSONContent | string | null }> = ({ content }) => {
   const output = useMemo(() => {
@@ -57,9 +63,10 @@ const TiptapRenderer: FC<{ content: JSONContent | string | null }> = ({ content 
   return <div dangerouslySetInnerHTML={{ __html: output }} className="prose prose-sm max-w-none [&_p:empty]:after:content-['\00a0']" />;
 };
 
-const FaqListClient: FC<FaqListClientProps> = ({ initialFaqs, faqTypes }) => {
+const FaqListClient: FC<FaqListClientProps> = ({ initialFaqs, faqTypes, totalPages, currentPage, totalFaqs }) => {
   const [faqs, setFaqs] = useState<Faq[]>(initialFaqs);
   const [editingFaq, setEditingFaq] = useState<Faq | null>(null);
+  const router = useRouter();
 
   useEffect(() => {
     setFaqs(initialFaqs);
@@ -71,6 +78,10 @@ const FaqListClient: FC<FaqListClientProps> = ({ initialFaqs, faqTypes }) => {
 
   const handleCloseModal = () => {
     setEditingFaq(null);
+  };
+
+  const handlePageChange = (page: number) => {
+    router.push(`/admin/faq?page=${page}`);
   };
 
   return (
@@ -107,6 +118,62 @@ const FaqListClient: FC<FaqListClientProps> = ({ initialFaqs, faqTypes }) => {
           ))}
         </tbody>
       </table>
+      {/* Pagination */}
+      <div className="flex justify-between items-center mt-6">
+        <div className="text-sm text-gray-600">
+          Mostrando <span className="font-bold">{(currentPage - 1) * FAQS_PER_PAGE + 1}</span> a <span className="font-bold">{Math.min(currentPage * FAQS_PER_PAGE, totalFaqs)}</span> de <span className="font-bold">{totalFaqs}</span> resultados
+        </div>
+        <nav aria-label="Pagination">
+          <ul className="inline-flex items-center -space-x-px">
+            <li>
+              <button
+                onClick={() => handlePageChange(1)}
+                disabled={currentPage === 1}
+                className="px-3 py-2 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <FaAngleDoubleLeft />
+              </button>
+            </li>
+            <li>
+              <button
+                onClick={() => handlePageChange(currentPage - 1)}
+                disabled={currentPage === 1}
+                className="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <FaChevronLeft />
+              </button>
+            </li>
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
+              <li key={page}>
+                <button
+                  onClick={() => handlePageChange(page)}
+                  className={`px-3 py-2 leading-tight border border-gray-300 ${currentPage === page ? 'text-blue-600 bg-blue-50' : 'text-gray-500 bg-white'} hover:bg-gray-100 hover:text-gray-700`}
+                >
+                  {page}
+                </button>
+              </li>
+            ))}
+            <li>
+              <button
+                onClick={() => handlePageChange(currentPage + 1)}
+                disabled={currentPage === totalPages}
+                className="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <FaChevronRight />
+              </button>
+            </li>
+            <li>
+              <button
+                onClick={() => handlePageChange(totalPages)}
+                disabled={currentPage === totalPages}
+                className="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <FaAngleDoubleRight />
+              </button>
+            </li>
+          </ul>
+        </nav>
+      </div>
       {editingFaq && (
         <EditFaqModal 
           faq={editingFaq} 

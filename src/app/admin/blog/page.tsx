@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import AdminHeader from '@/components/AdminHeader';
 import { getBlogPosts, deleteBlogPost, updateBlogPost, deleteMultipleBlogPosts } from './actions';
-import { FaEdit, FaTrash, FaEye, FaEyeSlash } from 'react-icons/fa';
+import { FaEdit, FaTrash, FaEye, FaEyeSlash, FaAngleDoubleLeft, FaChevronLeft, FaChevronRight, FaAngleDoubleRight } from 'react-icons/fa';
 import { Edu_NSW_ACT_Cursive } from 'next/font/google';
 import Link from 'next/link';
 import { BlogPost } from '@/lib/types';
@@ -24,12 +24,15 @@ export default function AdminBlogPage() {
   const [selectedPosts, setSelectedPosts] = useState<string[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPosts, setTotalPosts] = useState(0);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchBlogPosts = async () => {
+      setLoading(true);
       const { posts, count } = await getBlogPosts(searchTerm, statusFilter, currentPage, POSTS_PER_PAGE);
       setBlogPosts(posts as BlogPost[]);
       setTotalPosts(count);
+      setLoading(false);
     };
     fetchBlogPosts();
   }, [searchTerm, statusFilter, currentPage]);
@@ -72,7 +75,7 @@ export default function AdminBlogPage() {
   const totalPages = Math.ceil(totalPosts / POSTS_PER_PAGE);
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className={`min-h-screen bg-gray-100 ${loading ? 'loading-cursor' : ''}`}>
       <AdminHeader title="Gestión de Blog" />
       <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
         <div className="px-4 py-6 sm:px-0">
@@ -86,12 +89,12 @@ export default function AdminBlogPage() {
                 placeholder="Buscar por título..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm text-black"
               />
               <select
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value)}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm text-black"
               >
                 <option value="all">Todos</option>
                 <option value="published">Publicados</option>
@@ -159,18 +162,18 @@ export default function AdminBlogPage() {
                     <button
                       onClick={() => setCurrentPage(1)}
                       disabled={currentPage === 1}
-                      className="px-3 py-2 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 disabled:opacity-50"
+                      className="px-3 py-2 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                      Primera
+                      <FaAngleDoubleLeft />
                     </button>
                   </li>
                   <li>
                     <button
                       onClick={() => setCurrentPage(currentPage - 1)}
                       disabled={currentPage === 1}
-                      className="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 disabled:opacity-50"
+                      className="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                      Anterior
+                      <FaChevronLeft />
                     </button>
                   </li>
                   {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
@@ -187,18 +190,18 @@ export default function AdminBlogPage() {
                     <button
                       onClick={() => setCurrentPage(currentPage + 1)}
                       disabled={currentPage === totalPages}
-                      className="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 disabled:opacity-50"
+                      className="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                      Siguiente
+                      <FaChevronRight />
                     </button>
                   </li>
                   <li>
                     <button
                       onClick={() => setCurrentPage(totalPages)}
                       disabled={currentPage === totalPages}
-                      className="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700 disabled:opacity-50"
+                      className="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                      Última
+                      <FaAngleDoubleRight />
                     </button>
                   </li>
                 </ul>

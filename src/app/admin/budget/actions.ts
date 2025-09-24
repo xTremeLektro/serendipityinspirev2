@@ -21,16 +21,23 @@ export async function deleteQuoteRequest(formData: FormData) {
   revalidatePath('/admin/budget');
 }
 
-export async function getQuoteRequests(): Promise<{ data: QuoteRequest[] | null; error: string | null }> {
+export async function getQuoteRequests(page: number, limit: number): Promise<{ data: QuoteRequest[] | null; error: string | null, count: number | null }> {
   const supabase = await createSupabaseServerClient();
-  const { data, error } = await supabase.from('quote_requests').select('*').order('created_at', { ascending: false });
+  const from = (page - 1) * limit;
+  const to = from + limit - 1;
+
+  const { data, error, count } = await supabase
+    .from('quote_requests')
+    .select('*', { count: 'exact' })
+    .order('created_at', { ascending: false })
+    .range(from, to);
 
   if (error) {
     console.error('Error fetching quote requests:', error);
-    return { data: null, error: error.message };
+    return { data: null, error: error.message, count: 0 };
   }
 
-  return { data, error: null };
+  return { data, error: null, count };
 }
 
 export async function updateQuoteRequestStatus(formData: FormData) {

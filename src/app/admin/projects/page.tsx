@@ -1,9 +1,13 @@
+'use client'
+
+import { useState, useEffect } from 'react';
 import AdminHeader from '@/components/AdminHeader';
 import { getProjects, addProject, deleteProject } from './actions';
-import { FaTrash } from 'react-icons/fa';
+import { FaTrash, FaAngleDoubleLeft, FaChevronLeft, FaChevronRight, FaAngleDoubleRight } from 'react-icons/fa';
 import { Edu_NSW_ACT_Cursive } from 'next/font/google';
 import ProjectForm from './ProjectForm';
 import ClientOnly from '@/components/ClientOnly';
+import { Project } from '@/lib/types';
 
 // Initialize the font for the Hero Section.
 const eduNSW = Edu_NSW_ACT_Cursive({
@@ -12,8 +16,23 @@ const eduNSW = Edu_NSW_ACT_Cursive({
   fallback: ['cursive'],
 });
 
-export default async function AdminProjectsPage() {
-  const projects = await getProjects();
+const PROJECTS_PER_PAGE = 10;
+
+export default function AdminProjectsPage() {
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
+  const [totalProjects, setTotalProjects] = useState(0);
+
+  useEffect(() => {
+    const fetchProjects = async () => {
+      const { data, count } = await getProjects(currentPage, PROJECTS_PER_PAGE);
+      setProjects(data || []);
+      setTotalProjects(count || 0);
+      setTotalPages(Math.ceil((count || 0) / PROJECTS_PER_PAGE));
+    };
+    fetchProjects();
+  }, [currentPage]);
 
   return (
     <div className="min-h-screen bg-gray-100">
@@ -58,6 +77,62 @@ export default async function AdminProjectsPage() {
                   ))}
                 </tbody>
               </table>
+            </div>
+            {/* Pagination */}
+            <div className="flex justify-between items-center mt-6">
+              <div className="text-sm text-gray-600">
+                Mostrando <span className="font-bold">{(currentPage - 1) * PROJECTS_PER_PAGE + 1}</span> a <span className="font-bold">{Math.min(currentPage * PROJECTS_PER_PAGE, totalProjects)}</span> de <span className="font-bold">{totalProjects}</span> resultados
+              </div>
+              <nav aria-label="Pagination">
+                <ul className="inline-flex items-center -space-x-px">
+                  <li>
+                    <button
+                      onClick={() => setCurrentPage(1)}
+                      disabled={currentPage === 1}
+                      className="px-3 py-2 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      <FaAngleDoubleLeft />
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      onClick={() => setCurrentPage(currentPage - 1)}
+                      disabled={currentPage === 1}
+                      className="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      <FaChevronLeft />
+                    </button>
+                  </li>
+                  {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
+                    <li key={page}>
+                      <button
+                        onClick={() => setCurrentPage(page)}
+                        className={`px-3 py-2 leading-tight border border-gray-300 ${currentPage === page ? 'text-blue-600 bg-blue-50' : 'text-gray-500 bg-white'} hover:bg-gray-100 hover:text-gray-700`}
+                      >
+                        {page}
+                      </button>
+                    </li>
+                  ))}
+                  <li>
+                    <button
+                      onClick={() => setCurrentPage(currentPage + 1)}
+                      disabled={currentPage === totalPages}
+                      className="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      <FaChevronRight />
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      onClick={() => setCurrentPage(totalPages)}
+                      disabled={currentPage === totalPages}
+                      className="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      <FaAngleDoubleRight />
+                    </button>
+                  </li>
+                </ul>
+              </nav>
             </div>
           </div>
         </div>

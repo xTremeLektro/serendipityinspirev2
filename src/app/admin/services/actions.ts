@@ -13,17 +13,21 @@ interface Service {
   ord: number | null;
 }
 
-export async function getServices(): Promise<Service[]> {
+export async function getServices(page: number, limit: number): Promise<{ data: Service[], count: number }> {
   const supabase = await createClient()
-  const { data, error } = await supabase.from('services').select(`
+  const from = (page - 1) * limit;
+  const to = from + limit - 1;
+
+  const { data, error, count } = await supabase.from('services').select(`
     *,
     faq_type_list (faq_type)
-  `)
+  `, { count: 'exact' }).range(from, to);
+
   if (error) {
     console.error('Error fetching services:', error)
-    return []
+    return { data: [], count: 0 };
   }
-  return data
+  return { data: data as Service[], count: count ?? 0 };
 }
 
 export async function getFaqTypes() {

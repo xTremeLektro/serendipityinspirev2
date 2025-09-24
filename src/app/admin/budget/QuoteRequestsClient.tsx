@@ -1,21 +1,37 @@
 "use client";
 
-// import Link from 'next/link'
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { updateQuoteRequestStatus } from './actions';
 import { QuoteRequest } from '@/lib/types';
 import { Edu_NSW_ACT_Cursive } from 'next/font/google';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
+import { FaAngleDoubleLeft, FaChevronLeft, FaChevronRight, FaAngleDoubleRight } from 'react-icons/fa';
 
 const eduNSW = Edu_NSW_ACT_Cursive({
-  weight: ['400', '700'], // You can specify the weights you need
+  weight: ['400', '700'],
   fallback: ['cursive'],
   subsets: ['latin', 'latin-ext'],
 });
 
-export default function QuoteRequestsClient({ quoteRequests: initialQuoteRequests }: { quoteRequests: QuoteRequest[] }) {
+const QUOTES_PER_PAGE = 15;
+
+interface QuoteRequestsClientProps {
+  quoteRequests: QuoteRequest[];
+  totalPages: number;
+  currentPage: number;
+  totalQuoteRequests: number;
+}
+
+export default function QuoteRequestsClient({ 
+  quoteRequests: initialQuoteRequests, 
+  totalPages,
+  currentPage,
+  totalQuoteRequests
+}: QuoteRequestsClientProps) {
   const [quoteRequests, setQuoteRequests] = useState<QuoteRequest[]>(initialQuoteRequests);
+  const router = useRouter();
 
   const handleStatusChange = async (id: string, newStatus: string) => {
     const formData = new FormData();
@@ -31,7 +47,9 @@ export default function QuoteRequestsClient({ quoteRequests: initialQuoteRequest
     }
   };
 
-  
+  const handlePageChange = (page: number) => {
+    router.push(`/admin/budget?page=${page}`);
+  };
 
   return (
     <div className="container mx-auto p-4">
@@ -39,62 +57,120 @@ export default function QuoteRequestsClient({ quoteRequests: initialQuoteRequest
       {quoteRequests.length === 0 ? (
         <p>No hay solicitudes de presupuesto.</p>
       ) : (
-        <div className="overflow-x-auto">
-          <table className="min-w-full bg-white shadow-md rounded-lg overflow-hidden">
-            <thead className="bg-gray-800 text-white">
-              <tr>
-                <th className="py-3 px-4 text-left">Fecha</th>
-                <th className="py-3 px-4 text-left">Nombre</th>
-                <th className="py-3 px-4 text-left">Email</th>
-                <th className="py-3 px-4 text-left">Teléfono</th>
-                <th className="py-3 px-4 text-left">Servicio</th>
-                <th className="py-3 px-4 text-left">Mensaje</th>
-                <th className="py-3 px-4 text-left">Estado</th>
-                <th className="py-3 px-4 text-left">Acciones</th>
-              </tr>
-            </thead>
-            <tbody className="text-gray-700">
-              {quoteRequests.map((request) => (
-                <tr key={request.id} className="border-b border-gray-200 hover:bg-gray-100">
-                  <td className="py-3 px-4">{format(new Date(request.created_at), 'dd/MM/yyyy HH:mm', { locale: es })}</td>
-                  <td className="py-3 px-4">{request.full_name}</td>
-                  <td className="py-3 px-4">{request.email}</td>
-                  <td className="py-3 px-4">{request.phone}</td>
-                  <td className="py-3 px-4">{request.service_type}</td>
-                  <td className="py-3 px-4">{request.message}</td>
-                  <td className="py-3 px-4">
-                    <span className={`px-2 py-1 rounded-full text-xs font-semibold
-                      ${request.status === 'pending' ? 'bg-yellow-200 text-yellow-800' :
-                        request.status === 'contacted' ? 'bg-blue-200 text-blue-800' :
-                        request.status === 'completed' ? 'bg-green-200 text-green-800' :
-                        'bg-gray-200 text-gray-800'}
-                    `}>
-                      {request.status}
-                    </span>
-                  </td>
-                  <td className="py-3 px-4">
-                    <select
-                      value={request.status}
-                      onChange={(e) => handleStatusChange(request.id.toString(), e.target.value)}
-                      className="block w-full mt-1 rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                    >
-                      <option value="pending">Pendiente</option>
-                      <option value="contacted">Contactado</option>
-                      <option value="completed">Completado</option>
-                      <option value="cancelled">Cancelado</option>
-                    </select>
-                    <a 
-                      href={`/admin/budget/${request.id}`}
-                      className="mt-2 inline-flex items-center px-3 py-1 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                    >
-                      Ver Detalles
-                    </a>
-                  </td>
+        <>
+          <div className="overflow-x-auto">
+            <table className="min-w-full bg-white shadow-md rounded-lg overflow-hidden">
+              <thead className="bg-gray-800 text-white">
+                <tr>
+                  <th className="py-3 px-4 text-left">Fecha</th>
+                  <th className="py-3 px-4 text-left">Nombre</th>
+                  <th className="py-3 px-4 text-left">Email</th>
+                  <th className="py-3 px-4 text-left">Teléfono</th>
+                  <th className="py-3 px-4 text-left">Servicio</th>
+                  <th className="py-3 px-4 text-left">Mensaje</th>
+                  <th className="py-3 px-4 text-left">Estado</th>
+                  <th className="py-3 px-4 text-left">Acciones</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+              </thead>
+              <tbody className="text-gray-700">
+                {quoteRequests.map((request) => (
+                  <tr key={request.id} className="border-b border-gray-200 hover:bg-gray-100">
+                    <td className="py-3 px-4">{format(new Date(request.created_at), 'dd/MM/yyyy HH:mm', { locale: es })}</td>
+                    <td className="py-3 px-4">{request.full_name}</td>
+                    <td className="py-3 px-4">{request.email}</td>
+                    <td className="py-3 px-4">{request.phone}</td>
+                    <td className="py-3 px-4">{request.service_type}</td>
+                    <td className="py-3 px-4">{request.message}</td>
+                    <td className="py-3 px-4">
+                      <span className={`px-2 py-1 rounded-full text-xs font-semibold
+                        ${request.status === 'pending' ? 'bg-yellow-200 text-yellow-800' :
+                          request.status === 'contacted' ? 'bg-blue-200 text-blue-800' :
+                          request.status === 'completed' ? 'bg-green-200 text-green-800' :
+                          'bg-gray-200 text-gray-800'}
+                      `}>
+                        {request.status}
+                      </span>
+                    </td>
+                    <td className="py-3 px-4">
+                      <select
+                        value={request.status}
+                        onChange={(e) => handleStatusChange(request.id.toString(), e.target.value)}
+                        className="block w-full mt-1 rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                      >
+                        <option value="pending">Pendiente</option>
+                        <option value="contacted">Contactado</option>
+                        <option value="completed">Completado</option>
+                        <option value="cancelled">Cancelado</option>
+                      </select>
+                      <a 
+                        href={`/admin/budget/${request.id}`}
+                        className="mt-2 inline-flex items-center px-3 py-1 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                      >
+                        Ver Detalles
+                      </a>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          {/* Pagination */}
+          <div className="flex justify-between items-center mt-6">
+            <div className="text-sm text-gray-600">
+              Mostrando <span className="font-bold">{(currentPage - 1) * QUOTES_PER_PAGE + 1}</span> a <span className="font-bold">{Math.min(currentPage * QUOTES_PER_PAGE, totalQuoteRequests)}</span> de <span className="font-bold">{totalQuoteRequests}</span> resultados
+            </div>
+            <nav aria-label="Pagination">
+              <ul className="inline-flex items-center -space-x-px">
+                <li>
+                  <button
+                    onClick={() => handlePageChange(1)}
+                    disabled={currentPage === 1}
+                    className="px-3 py-2 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    <FaAngleDoubleLeft />
+                  </button>
+                </li>
+                <li>
+                  <button
+                    onClick={() => handlePageChange(currentPage - 1)}
+                    disabled={currentPage === 1}
+                    className="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    <FaChevronLeft />
+                  </button>
+                </li>
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
+                  <li key={page}>
+                    <button
+                      onClick={() => handlePageChange(page)}
+                      className={`px-3 py-2 leading-tight border border-gray-300 ${currentPage === page ? 'text-blue-600 bg-blue-50' : 'text-gray-500 bg-white'} hover:bg-gray-100 hover:text-gray-700`}
+                    >
+                      {page}
+                    </button>
+                  </li>
+                ))}
+                <li>
+                  <button
+                    onClick={() => handlePageChange(currentPage + 1)}
+                    disabled={currentPage === totalPages}
+                    className="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    <FaChevronRight />
+                  </button>
+                </li>
+                <li>
+                  <button
+                    onClick={() => handlePageChange(totalPages)}
+                    disabled={currentPage === totalPages}
+                    className="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    <FaAngleDoubleRight />
+                  </button>
+                </li>
+              </ul>
+            </nav>
+          </div>
+        </>
       )}
     </div>
   );

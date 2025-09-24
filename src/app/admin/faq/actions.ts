@@ -35,17 +35,21 @@ export async function deleteFaqType(formData: FormData) {
     revalidatePath('/admin/faq')
 }
 
-export async function getFaqs() {
+export async function getFaqs(page: number, limit: number) {
   const supabase = await createClient()
-  const { data, error } = await supabase.from('faq_list').select(`
+  const from = (page - 1) * limit;
+  const to = from + limit - 1;
+
+  const { data, error, count } = await supabase.from('faq_list').select(`
     *,
     faq_type_list (faq_type)
-  `).order('ord')
+  `, { count: 'exact' }).order('ord').range(from, to);
+
   if (error) {
     console.error('Error fetching FAQs:', error)
-    return []
+    return { data: [], count: 0 };
   }
-  return data
+  return { data, count: count ?? 0 };
 }
 
 export async function addFaq(formData: FormData) {

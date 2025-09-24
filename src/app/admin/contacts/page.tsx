@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import AdminHeader from '@/components/AdminHeader'
 import { fetchContactInquiries, updateContactInquiryStatus } from './actions'
 import { format } from 'date-fns'
+import { FaAngleDoubleLeft, FaChevronLeft, FaChevronRight, FaAngleDoubleRight } from 'react-icons/fa';
 
 interface ContactInquiry {
   id: string
@@ -18,6 +19,7 @@ export default function AdminContactsPage() {
   const [inquiries, setInquiries] = useState<ContactInquiry[]>([])
   const [page, setPage] = useState(1)
   const [totalPages, setTotalPages] = useState(0)
+  const [totalInquiries, setTotalInquiries] = useState(0);
   const [startDate, setStartDate] = useState<string | undefined>(undefined)
   const [endDate, setEndDate] = useState<string | undefined>(undefined)
   const [isReviewedFilter, setIsReviewedFilter] = useState<boolean | undefined>(undefined)
@@ -34,9 +36,8 @@ export default function AdminContactsPage() {
         isReviewed: isReviewedFilter,
         searchName,
       })
-      console.log('Fetched Inquiries Data:', data)
-      console.log('Fetched Inquiries Count:', count)
       setInquiries(data || [])
+      setTotalInquiries(count || 0);
       if (count !== null) {
         setTotalPages(Math.ceil(count / limit))
       }
@@ -114,14 +115,14 @@ export default function AdminContactsPage() {
 
               {/* Contacts Table */}
               <div className="overflow-x-auto">
-                <table className="min-w-full divide-y divide-gray-200">
+                <table className="min-w-full divide-y divide-gray-200 table-fixed">
                   <thead className="bg-gray-50">
                     <tr>
-                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Fecha</th>
-                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nombre</th>
-                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Correo Electrónico</th>
-                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Mensaje</th>
-                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Revisado</th>
+                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-1/6">Fecha</th>
+                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-1/6">Nombre</th>
+                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-1/6">Correo Electrónico</th>
+                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-2/6">Mensaje</th>
+                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-1/12">Revisado</th>
                     </tr>
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-200">
@@ -135,7 +136,7 @@ export default function AdminContactsPage() {
                           <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{format(new Date(inquiry.created_at), 'dd/MM/yyyy HH:mm')}</td>
                           <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{inquiry.name}</td>
                           <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{inquiry.email}</td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{inquiry.message}</td>
+                          <td className="px-6 py-4 text-sm text-gray-900 whitespace-normal break-words">{inquiry.message}</td>
                           <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                             <input
                               type="checkbox"
@@ -154,36 +155,61 @@ export default function AdminContactsPage() {
               <br />
 
               {/* Pagination */}
-              <div className="mt-4">
-                <nav
-                  className="flex items-center justify-between border-t border-gray-200 px-4 sm:px-0"
-                  aria-label="Pagination"
-                >
-                  <div className="flex-1 flex justify-between">
-                    <div>
-                      <p className="text-sm text-gray-700">
-                        Página <span className="font-medium">{page}</span> de <span className="font-medium">{totalPages}</span>
-                      </p>
-                    </div>
-                    <div className="flex space-x-3">
-                      <button
-                        onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
-                        disabled={page === 1}
-                        className="relative inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
-                      >
-                        Anterior
-                      </button>
-                      <button
-                        onClick={() => setPage((prev) => Math.min(prev + 1, totalPages))}
-                        disabled={page === totalPages}
-                        className="relative inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
-                      >
-                        Siguiente
-                      </button>
-                    </div>
-                  </div>
-                </nav>
+              <div className="flex justify-between items-center mt-6">
+              <div className="text-sm text-gray-600">
+                Mostrando <span className="font-bold">{(page - 1) * limit + 1}</span> a <span className="font-bold">{Math.min(page * limit, totalInquiries)}</span> de <span className="font-bold">{totalInquiries}</span> resultados
               </div>
+              <nav aria-label="Pagination">
+                <ul className="inline-flex items-center -space-x-px">
+                  <li>
+                    <button
+                      onClick={() => setPage(1)}
+                      disabled={page === 1}
+                      className="px-3 py-2 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      <FaAngleDoubleLeft />
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      onClick={() => setPage(page - 1)}
+                      disabled={page === 1}
+                      className="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      <FaChevronLeft />
+                    </button>
+                  </li>
+                  {Array.from({ length: totalPages }, (_, i) => i + 1).map(p => (
+                    <li key={p}>
+                      <button
+                        onClick={() => setPage(p)}
+                        className={`px-3 py-2 leading-tight border border-gray-300 ${page === p ? 'text-blue-600 bg-blue-50' : 'text-gray-500 bg-white'} hover:bg-gray-100 hover:text-gray-700`}
+                      >
+                        {p}
+                      </button>
+                    </li>
+                  ))}
+                  <li>
+                    <button
+                      onClick={() => setPage(page + 1)}
+                      disabled={page === totalPages}
+                      className="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      <FaChevronRight />
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      onClick={() => setPage(totalPages)}
+                      disabled={page === totalPages}
+                      className="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      <FaAngleDoubleRight />
+                    </button>
+                  </li>
+                </ul>
+              </nav>
+            </div>
             </div>
           </div>
         </div>
