@@ -1,5 +1,6 @@
 ## Here I'm going to include all what is in my mind right now for Serendipity Inspire v2
 -- New Feature / Being or Partially Implemented
+
 ~~-- Implemented Feature~~
  
 ## General Features
