@@ -177,6 +177,11 @@ nav#nav ul a {
   border-radius: 0.375rem; /* Matches Tailwind's rounded-md */
   background-color: white;
   color: black; /* Ensure text is visible */
+  caret-color: black;
+}
+
+.ProseMirror ::selection {
+  background-color: #ACCEF7;
 }
 
 .ProseMirror p {
@@ -246,4 +251,3 @@ html.loading-cursor,
 html.loading-cursor * {
   cursor: wait !important;
 }
-

@@ -1,5 +1,5 @@
 import * as React from "react"
-import { EditorContent, EditorContext, useEditor, JSONContent } from "@tiptap/react"
+import { EditorContent, EditorContext, useEditor, JSONContent, Editor } from "@tiptap/react"
 
 // --- Tiptap Core Extensions ---
 import { StarterKit } from "@tiptap/starter-kit"
@@ -72,8 +72,6 @@ import { handleImageUpload, MAX_FILE_SIZE } from "@/lib/tiptap-utils"
 
 // --- Styles ---
 import "@/components/tiptap-templates/simple/simple-editor.scss"
-
-import content from "@/components/tiptap-templates/simple/data/content.json"
 
 const MainToolbarContent = ({
   onHighlighterClick,
@@ -180,7 +178,7 @@ const MobileToolbarContent = ({
   </>
 )
 
-export function SimpleEditor({ content: initialContent }: { content: JSONContent | string | null }) {
+export function SimpleEditor({ content: initialContent, onUpdate }: { content: JSONContent | string | null, onUpdate: (editorState: { editor: Editor }) => void }) {
   const isMobile = useMobile()
   const windowSize = useWindowSize()
   const [mobileView, setMobileView] = React.useState<
@@ -221,7 +219,8 @@ export function SimpleEditor({ content: initialContent }: { content: JSONContent
       TrailingNode,
       Link.configure({ openOnClick: false }),
     ],
-    content: content,
+    content: typeof initialContent === 'string' ? JSON.parse(initialContent) : initialContent,
+    onUpdate: onUpdate,
   })
 
   const bodyRect = useCursorVisibility({

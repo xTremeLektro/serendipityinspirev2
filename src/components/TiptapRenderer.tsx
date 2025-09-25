@@ -3,7 +3,7 @@
 import React, { FC, useEffect, useState } from 'react';
 import { generateHTML } from '@tiptap/core';
 import { JSONContent } from '@tiptap/react';
-import { getTiptapExtensions } from '@/lib/tiptap';
+import { getTiptapClientExtensions as getTiptapExtensions } from '@/lib/tiptap';
 
 const TiptapRenderer: FC<{ content: JSONContent | string | null }> = ({ content }) => {
   const [renderedHtml, setRenderedHtml] = useState('');

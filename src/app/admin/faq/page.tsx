@@ -11,7 +11,7 @@ import ClientOnly from '@/components/ClientOnly';
 import EditFaqModal from './EditFaqModal';
 import { generateHTML } from '@tiptap/core';
 import { JSONContent } from '@tiptap/react';
-import { getTiptapExtensions } from '@/lib/tiptap';
+import { getTiptapClientExtensions as getTiptapExtensions } from '@/lib/tiptap';
 import { Faq, FaqType } from '@/lib/types';
 
 const eduNSW = Edu_NSW_ACT_Cursive({

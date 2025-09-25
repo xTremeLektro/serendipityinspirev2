@@ -4,7 +4,7 @@ import { useState, FC, useEffect, useMemo, useCallback } from 'react';
 import { useEditor, EditorContent, JSONContent } from '@tiptap/react';
 import { FaBold, FaItalic, FaListUl, FaListOl, FaTimes, FaLink, FaUnderline } from 'react-icons/fa';
 import { updateFaq } from './actions';
-import { getTiptapExtensions } from '@/lib/tiptap';
+import { getTiptapClientExtensions as getTiptapExtensions } from '@/lib/tiptap';
 
 type FaqType = {
   id: string;

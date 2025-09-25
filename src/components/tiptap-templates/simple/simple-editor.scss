@@ -3,6 +3,8 @@
 body {
   --tt-toolbar-height: 44px;
   --tt-theme-text: var(--tt-gray-light-900);
+  --tt-cursor-color: #000000;
+  --tt-selection-color: #ACCEF7;
 
   .dark & {
     --tt-theme-text: var(--tt-gray-dark-900);
@@ -26,9 +28,7 @@ body,
   background-color: var(--tt-bg-color);
 }
 
-body {
-  overflow: hidden;
-}
+
 
 .tiptap.ProseMirror {
   font-family: "DM Sans", sans-serif;
@@ -58,9 +58,7 @@ body {
 }
 
 .simple-editor-content {
-  max-width: 640px;
   width: 100%;
-  margin: 0 auto;
 }
 
 .simple-editor-content .tiptap.ProseMirror {

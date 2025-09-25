@@ -51,8 +51,13 @@ export async function updateBlogPost(formData: FormData) {
   const title = formData.get('title') as string
   const slug = formData.get('slug') as string
   const content = formData.get('content') as string
-  const parsedContent = JSON.parse(content);
-  const content_html = generateHTML(parsedContent, getTiptapServerExtensions());
+  let content_html = '';
+  try {
+    const parsedContent = JSON.parse(content);
+    content_html = generateHTML(parsedContent, getTiptapServerExtensions());
+  } catch (error) {
+    console.error('Error generating HTML from content:', error);
+  }
   const excerpt = formData.get('excerpt') as string
   const image_url = formData.get('image_url') as string
   const published_at = formData.get('published_at') as string
@@ -60,7 +65,7 @@ export async function updateBlogPost(formData: FormData) {
   const postData: Partial<BlogPost> = {
     title,
     slug,
-    content: parsedContent,
+    content: content, // Save the stringified JSON
     content_html,
     excerpt,
     image_url,

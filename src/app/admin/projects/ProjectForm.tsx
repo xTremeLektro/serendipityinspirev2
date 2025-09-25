@@ -3,7 +3,7 @@
 import { FC, useEffect, useState, useMemo, useCallback } from 'react';
 import { useEditor, EditorContent, JSONContent } from '@tiptap/react';
 import { FaBold, FaItalic, FaListUl, FaListOl, FaLink, FaUnderline } from 'react-icons/fa';
-import { getTiptapExtensions } from '@/lib/tiptap';
+import { getTiptapClientExtensions as getTiptapExtensions } from '@/lib/tiptap';
 
 // Define the types for the props
 type Project = {
