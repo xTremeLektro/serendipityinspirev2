@@ -37,3 +37,37 @@ This document outlines the structure and features of the Serendipity Inspire v2 
 - **Server Actions:** The page uses server actions to fetch, create, update and delete blog post data.
 - **SSR Fix:** Wrapped the Tiptap editor in a `ClientOnly` component to prevent SSR issues.
 - **Dynamic Route Fix:** Fixed a warning related to the use of `params` in dynamic routes.
+
+### Admin - Project Management
+
+- **Project List:** A page at `/admin/projects` that displays a list of all projects.
+  - **Pagination:** A pagination system to navigate through the projects.
+- **Create Project:** The `/admin/projects` page includes a form to add new projects.
+- **Edit Project:** A dynamic route at `/admin/projects/[projectId]` that allows editing an existing project.
+- **Delete Project:** A button on the project list to delete a project.
+- **TipTap Editor:** The `ProjectForm` component, used for both creating and editing projects, integrates the full-featured `SimpleEditor` component for the `detailed_description` field. The content is stored as JSON.
+- **TipTap Editor Toolbar:** The `SimpleEditor` in `ProjectForm` includes a comprehensive toolbar with various formatting options, consistent with the blog post editor.
+- **Server Actions:** The project management pages use server actions to fetch, create, update, and delete project data.
+- **SSR Fix:** The `ProjectForm` component is wrapped in a `ClientOnly` component to prevent SSR issues with the Tiptap editor.
+
+### Admin - Service Management
+
+- **Service List:** A page at `/admin/services` that displays a list of all services.
+  - **Pagination:** A pagination system to navigate through the services.
+- **Create Service:** The `/admin/services` page includes a form to add new services.
+- **Edit Service:** A dynamic route at `/admin/services/[serviceId]` that allows editing an existing service.
+- **Delete Service:** A button on the service list to delete a service.
+- **TipTap Editor:** The `ServiceForm` component, used for both creating and editing services, integrates the full-featured `SimpleEditor` component for the `service_desc` field. The content is stored as JSON.
+- **TipTap Editor Toolbar:** The `SimpleEditor` in `ServiceForm` includes a comprehensive toolbar with various formatting options, consistent with the blog post editor.
+- **Server Actions:** The service management pages use server actions to fetch, create, update, and delete service data.
+- **SSR Fix:** The `ServiceForm` component is wrapped in a `ClientOnly` component to prevent SSR issues with the Tiptap editor.
+
+### Admin - FAQ Management
+
+- **FAQ List:** A page at `/admin/faq` that displays a list of all FAQs.
+  - **Pagination:** A pagination system to navigate through the FAQs.
+- **Create FAQ:** The `AddFaqForm` component, used on the `/admin/faq` page, integrates the full-featured `SimpleEditor` component for the `answer` field. The content is stored as JSON.
+- **Edit FAQ:** The `EditFaqModal` component, used for editing existing FAQs, integrates the full-featured `SimpleEditor` component for the `answer` field. The content is stored as JSON.
+- **TipTap Editor Toolbar:** The `SimpleEditor` in both `AddFaqForm` and `EditFaqModal` includes a comprehensive toolbar with various formatting options, consistent with the blog post editor.
+- **Server Actions:** The FAQ management pages use server actions to fetch, create, update, and delete FAQ data.
+- **SSR Fix:** Both `AddFaqForm` and `EditFaqModal` components are wrapped in a `ClientOnly` component (or rendered conditionally with `isClient`) to prevent SSR issues with the Tiptap editor.

@@ -1,10 +1,10 @@
 'use client';
 
-import { useState, FC, useEffect, useMemo, useCallback } from 'react';
-import { useEditor, EditorContent, JSONContent } from '@tiptap/react';
-import { FaBold, FaItalic, FaListUl, FaListOl, FaTimes, FaLink, FaUnderline } from 'react-icons/fa';
+import { useState, FC, useEffect, useMemo } from 'react';
+import { JSONContent } from '@tiptap/react';
+import { FaTimes } from 'react-icons/fa';
 import { updateFaq } from './actions';
-import { getTiptapClientExtensions as getTiptapExtensions } from '@/lib/tiptap';
+import { SimpleEditor } from '@/components/tiptap-templates/simple/simple-editor';
 
 type FaqType = {
   id: string;
@@ -29,7 +29,7 @@ interface EditFaqModalProps {
 }
 
 function parseContent(content: JSONContent | string | null): JSONContent {
-  if (!content) {
+  if (!content || content === '') {
     return { type: 'doc', content: [{ type: 'paragraph' }] };
   }
   if (typeof content === 'string') {
@@ -60,41 +60,9 @@ const EditFaqModal: FC<EditFaqModalProps> = ({ faq, faqTypes, onClose }) => {
   const initialContent = useMemo(() => parseContent(faq.answer), [faq.answer]);
   const [answer, setAnswer] = useState(JSON.stringify(initialContent));
 
-  const editor = useEditor({
-    extensions: getTiptapExtensions(),
-    content: initialContent,
-    onUpdate: ({ editor }) => {
-      setAnswer(JSON.stringify(editor.getJSON()));
-    },
-    immediatelyRender: false,
-  });
-
-  const setLink = useCallback(() => {
-    if (!editor) return;
-    const previousUrl = editor.getAttributes('link').href;
-    const url = window.prompt('URL', previousUrl);
-
-    if (url === null) {
-        return;
-    }
-
-    if (url === '') {
-        editor.chain().focus().extendMarkRange('link').unsetLink().run();
-        return;
-    }
-
-    editor.chain().focus().extendMarkRange('link').setLink({ href: url }).run();
-  }, [editor]);
-
   useEffect(() => {
     setIsClient(true);
   }, []);
-
-  useEffect(() => {
-    if (editor && initialContent) {
-      editor.commands.setContent(initialContent);
-    }
-  }, [initialContent, editor]);
 
   const handleFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -129,18 +97,13 @@ const EditFaqModal: FC<EditFaqModalProps> = ({ faq, faqTypes, onClose }) => {
           </div>
           <div className="mb-4">
             <label className="block text-sm font-medium text-gray-700">Respuesta</label>
-            {isClient && editor && (
-              <>
-                <div className="mb-2 p-2 border border-gray-300 rounded-md bg-gray-50 flex flex-wrap gap-2">
-                  <button type="button" onClick={() => editor.chain().focus().toggleBold().run()} disabled={!editor.can().chain().focus().toggleBold().run()} className={`p-2 rounded-md ${editor.isActive('bold') ? 'bg-indigo-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}><FaBold /></button>
-                  <button type="button" onClick={() => editor.chain().focus().toggleItalic().run()} disabled={!editor.can().chain().focus().toggleItalic().run()} className={`p-2 rounded-md ${editor.isActive('italic') ? 'bg-indigo-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}><FaItalic /></button>
-                  <button type="button" onClick={() => editor.chain().focus().toggleUnderline().run()} disabled={!editor.can().chain().focus().toggleUnderline().run()} className={`p-2 rounded-md ${editor.isActive('underline') ? 'bg-indigo-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}><FaUnderline /></button>
-                  <button type="button" onClick={() => editor.chain().focus().toggleBulletList().run()} disabled={!editor.can().chain().focus().toggleBulletList().run()} className={`p-2 rounded-md ${editor.isActive('bulletList') ? 'bg-indigo-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}><FaListUl /></button>
-                  <button type="button" onClick={() => editor.chain().focus().toggleOrderedList().run()} disabled={!editor.can().chain().focus().toggleOrderedList().run()} className={`p-2 rounded-md ${editor.isActive('orderedList') ? 'bg-indigo-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}><FaListOl /></button>
-                  <button type="button" onClick={setLink} className={`p-2 rounded-md ${editor.isActive('link') ? 'bg-indigo-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}><FaLink /></button>
-                </div>
-                <EditorContent editor={editor} className="min-h-[200px] p-2 bg-white border border-gray-300 rounded-md overflow-y-auto" />
-              </>
+            {isClient && (
+              <SimpleEditor
+                content={initialContent} // Pass initial content
+                onUpdate={(editorState) => {
+                  setAnswer(JSON.stringify(editorState.editor.getJSON()));
+                }}
+              />
             )}
           </div>
           <div className="mb-4">

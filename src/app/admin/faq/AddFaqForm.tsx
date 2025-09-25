@@ -1,12 +1,9 @@
 'use client';
 
-import { useState, FC, useEffect, useCallback } from 'react';
-import { useEditor, EditorContent } from '@tiptap/react';
-import StarterKit from '@tiptap/starter-kit';
-import Link from '@tiptap/extension-link';
-import Underline from '@tiptap/extension-underline';
-import { FaBold, FaItalic, FaListUl, FaListOl, FaLink, FaUnderline } from 'react-icons/fa';
+import { useState, FC, useEffect } from 'react';
 import { addFaq } from './actions';
+import { SimpleEditor } from '@/components/tiptap-templates/simple/simple-editor';
+import { JSONContent } from '@tiptap/react';
 
 type FaqType = {
     id: string;
@@ -17,45 +14,37 @@ interface AddFaqFormProps {
     faqTypes: FaqType[];
 }
 
+function parseContent(content: JSONContent | string | null): JSONContent {
+  if (!content) {
+    return { type: 'doc', content: [{ type: 'paragraph' }] };
+  }
+  if (typeof content === 'string') {
+    try {
+      const parsed = JSON.parse(content);
+      if (parsed.type === 'doc') {
+        return parsed;
+      }
+    } catch {
+      // Not JSON, treat as plain text
+    }
+    return {
+      type: 'doc', 
+      content: [{ type: 'paragraph', content: [{ type: 'text', text: content }] }],
+    };
+  }
+  if (typeof content === 'object' && content.type === 'doc') {
+    return content;
+  }
+  return { type: 'doc', content: [{ type: 'paragraph' }] }; // fallback for unknown
+}
+
 const AddFaqForm: FC<AddFaqFormProps> = ({ faqTypes }) => {
-    const [answer, setAnswer] = useState('');
+    const [answer, setAnswer] = useState(JSON.stringify({ type: 'doc', content: [{ type: 'paragraph' }] }));
     const [isClient, setIsClient] = useState(false);
 
     useEffect(() => {
         setIsClient(true);
     }, []);
-
-    const editor = useEditor({
-        extensions: [
-            StarterKit,
-            Underline,
-            Link.configure({
-                openOnClick: false,
-            }),
-        ],
-        content: '',
-        onUpdate: ({ editor }) => {
-            setAnswer(JSON.stringify(editor.getJSON()));
-        },
-        immediatelyRender: false,
-    });
-
-    const setLink = useCallback(() => {
-        if (!editor) return;
-        const previousUrl = editor.getAttributes('link').href;
-        const url = window.prompt('URL', previousUrl);
-
-        if (url === null) {
-            return;
-        }
-
-        if (url === '') {
-            editor.chain().focus().extendMarkRange('link').unsetLink().run();
-            return;
-        }
-
-        editor.chain().focus().extendMarkRange('link').setLink({ href: url }).run();
-    }, [editor]);
 
     const handleFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -66,10 +55,7 @@ const AddFaqForm: FC<AddFaqFormProps> = ({ faqTypes }) => {
         await addFaq(formData);
 
         (event.target as HTMLFormElement).reset();
-        setAnswer('');
-        if (editor) {
-            editor.commands.setContent('');
-        }
+        setAnswer(JSON.stringify({ type: 'doc', content: [{ type: 'paragraph' }] }));
     };
 
     return (
@@ -80,18 +66,13 @@ const AddFaqForm: FC<AddFaqFormProps> = ({ faqTypes }) => {
             </div>
             <div className="mb-4">
                 <label htmlFor="answer" className="block text-sm font-medium text-gray-700">Respuesta</label>
-                {isClient && editor && (
-                    <>
-                        <div className="mb-2 p-2 border border-gray-300 rounded-md bg-gray-50 flex flex-wrap gap-2">
-                            <button type="button" onClick={() => editor.chain().focus().toggleBold().run()} disabled={!editor.can().chain().focus().toggleBold().run()} className={`p-2 rounded-md ${editor.isActive('bold') ? 'bg-indigo-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}><FaBold /></button>
-                            <button type="button" onClick={() => editor.chain().focus().toggleItalic().run()} disabled={!editor.can().chain().focus().toggleItalic().run()} className={`p-2 rounded-md ${editor.isActive('italic') ? 'bg-indigo-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}><FaItalic /></button>
-                            <button type="button" onClick={() => editor.chain().focus().toggleUnderline().run()} disabled={!editor.can().chain().focus().toggleUnderline().run()} className={`p-2 rounded-md ${editor.isActive('underline') ? 'bg-indigo-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}><FaUnderline /></button>
-                            <button type="button" onClick={() => editor.chain().focus().toggleBulletList().run()} disabled={!editor.can().chain().focus().toggleBulletList().run()} className={`p-2 rounded-md ${editor.isActive('bulletList') ? 'bg-indigo-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}><FaListUl /></button>
-                            <button type="button" onClick={() => editor.chain().focus().toggleOrderedList().run()} disabled={!editor.can().chain().focus().toggleOrderedList().run()} className={`p-2 rounded-md ${editor.isActive('orderedList') ? 'bg-indigo-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}><FaListOl /></button>
-                            <button type="button" onClick={setLink} className={`p-2 rounded-md ${editor.isActive('link') ? 'bg-indigo-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}><FaLink /></button>
-                        </div>
-                        <EditorContent editor={editor} className="min-h-[150px] p-2 bg-white border border-gray-300 rounded-md" />
-                    </>
+                {isClient && (
+                    <SimpleEditor
+                      content={parseContent(answer)} // Pass initial content
+                      onUpdate={(editorState) => {
+                        setAnswer(JSON.stringify(editorState.editor.getJSON()));
+                      }}
+                    />
                 )}
             </div>
             <div className="mb-4">
@@ -109,4 +90,3 @@ const AddFaqForm: FC<AddFaqFormProps> = ({ faqTypes }) => {
 }
 
 export default AddFaqForm;
-

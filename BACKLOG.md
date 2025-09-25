@@ -14,7 +14,7 @@
 
 
 ## Rich Text Editing
--- Implement a rich text editor full featured (tiptap sample isolated and then tell gemini to integrate it) - Key to multiple parts of the app
+~~-- Implement a rich text editor full featured (tiptap sample isolated and then tell gemini to integrate it) - Key to multiple parts of the app~~
 
 
 ## Blog Management and Communications
