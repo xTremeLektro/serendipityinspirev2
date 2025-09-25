@@ -5,8 +5,11 @@
  
 ## General Features
 ~~-- When the system is processing change the icon to a sand clock for better user feedback~~
+
 ~~-- Include a modal for the contact pages~~
+
 -- Include a modal to tell the user that the operation to the DB was successfully completed. (will define which operations require this)
+
 ~~-- Fix the problem with the visualization of the pagination bar in those pages that require pagination.~~
 
 
