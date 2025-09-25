@@ -1,4 +1,5 @@
-import { getAllBlogPosts, getPostBySlug } from '@/lib/blog';
+import { getPostBySlug } from '@/lib/blog';
+import { getAllBlogPosts } from '@/lib/blog.client';
 import { notFound } from 'next/navigation';
 import { Inter } from 'next/font/google';
 import TiptapRenderer from '@/components/TiptapRenderer';

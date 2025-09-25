@@ -1,11 +1,9 @@
-import React, { FC, useMemo } from 'react';
+import React from 'react';
 import Link from 'next/link';
 import { getProjectById } from '@/lib/projects';
 import { notFound } from 'next/navigation';
 import ProjectImageGallery from '@/components/ProjectImageGallery';
-import { generateHTML } from '@tiptap/html';
-import { JSONContent } from '@tiptap/react';
-import { getTiptapExtensions } from '@/lib/tiptap';
+import TiptapRenderer from '@/components/TiptapRenderer'; // New import
 import { Inter } from 'next/font/google';
 import { ArrowLeft } from 'lucide-react';
 
@@ -17,34 +15,6 @@ const inter = Inter({
 interface ProjectDetailPageProps {
   params: Promise<{ projectId: string }>;
 }
-
-const TiptapRenderer: FC<{ content: JSONContent | string | null }> = ({ content }) => {
-  const output = useMemo(() => {
-    if (!content) {
-      return '';
-    }
-
-    let tiptapContent = content;
-
-    if (typeof tiptapContent === 'string') {
-      try {
-        tiptapContent = JSON.parse(tiptapContent);
-      } catch {
-        return tiptapContent;
-      }
-    }
-
-    if (typeof tiptapContent === 'object' && tiptapContent?.type === 'doc') {
-      return generateHTML(tiptapContent, getTiptapExtensions());
-    }
-
-    if (typeof content === 'string') return content;
-    return JSON.stringify(content);
-
-  }, [content]);
-
-  return <div dangerouslySetInnerHTML={{ __html: output }} className="prose prose-lg max-w-none text-slate-600 [&_p:empty]:after:content-['\00a0']" />;
-};
 
 const ProjectDetailPage = async (props: ProjectDetailPageProps) => {
   const { projectId } = await props.params;
@@ -66,7 +36,7 @@ const ProjectDetailPage = async (props: ProjectDetailPageProps) => {
 
         {/* --- Project Details --- */}
         <div className="grid md:grid-cols-3 gap-12 mb-12">
-          
+
           {/* --- Description (Left Column) --- */}
           <div className="md:col-span-2">
             <h2 className="text-3xl font-bold text-slate-900 mb-4">Descripción del Proyecto</h2>

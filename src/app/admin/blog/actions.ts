@@ -6,8 +6,8 @@ import { createClient } from '@/lib/supabase/server'
 import { revalidatePath } from 'next/cache';
 
 
-import { generateHTML } from '@tiptap/html';
-import { getTiptapExtensions } from '../../../lib/tiptap';
+import { generateHTML } from '@tiptap/core';
+import { getTiptapServerExtensions } from '../../../lib/tiptap';
 import { BlogPost } from '@/lib/types';
 
 export async function getBlogPosts(searchTerm: string, statusFilter: string, page: number, pageSize: number) {
@@ -52,7 +52,7 @@ export async function updateBlogPost(formData: FormData) {
   const slug = formData.get('slug') as string
   const content = formData.get('content') as string
   const parsedContent = JSON.parse(content);
-  const content_html = generateHTML(parsedContent, getTiptapExtensions());
+  const content_html = generateHTML(parsedContent, getTiptapServerExtensions());
   const excerpt = formData.get('excerpt') as string
   const image_url = formData.get('image_url') as string
   const published_at = formData.get('published_at') as string

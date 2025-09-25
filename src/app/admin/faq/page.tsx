@@ -9,7 +9,7 @@ import { FaTrash, FaEdit, FaAngleDoubleLeft, FaChevronLeft, FaChevronRight, FaAn
 import AddFaqForm from './AddFaqForm';
 import ClientOnly from '@/components/ClientOnly';
 import EditFaqModal from './EditFaqModal';
-import { generateHTML } from '@tiptap/html';
+import { generateHTML } from '@tiptap/core';
 import { JSONContent } from '@tiptap/react';
 import { getTiptapExtensions } from '@/lib/tiptap';
 import { Faq, FaqType } from '@/lib/types';

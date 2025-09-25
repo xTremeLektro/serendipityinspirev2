@@ -1,75 +1,32 @@
 'use client';
 
-import { useEffect, useState, useMemo, useCallback } from 'react';
-import { useEditor, EditorContent, JSONContent } from '@tiptap/react';
-import { FaBold, FaItalic, FaListUl, FaListOl, FaLink, FaUnderline } from 'react-icons/fa';
-import { getTiptapExtensions } from '@/lib/tiptap';
+import { useEffect, useState } from 'react';
 import { updateBlogPost } from '../actions';
 import AdminHeader from '@/components/AdminHeader';
 import Image from 'next/image';
 import { BlogPost } from '@/lib/types';
-import { createBuildTimeClient } from '@/lib/supabase/client';
+import { getPostBySlugForClient } from '@/lib/blog.client';
+import { SimpleEditor } from '@/components/tiptap-templates/simple/simple-editor'; // New import
 
 interface EditBlogPostFormProps {
   slug: string;
-}
-
-async function getBlogPost(slug: string): Promise<BlogPost | null> {
-  const supabase = createBuildTimeClient();
-  const { data, error } = await supabase
-    .from('blog_posts')
-    .select('*')
-    .eq('slug', slug)
-    .single();
-
-  if (error) {
-    console.error('Error fetching blog post:', JSON.stringify(error));
-    return null;
-  }
-
-  return data as BlogPost;
-}
-
-function parseContent(content: JSONContent | string | null): JSONContent {
-  if (!content) {
-    return { type: 'doc', content: [{ type: 'paragraph' }] };
-  }
-  if (typeof content === 'string') {
-    try {
-      const parsed = JSON.parse(content);
-      if (parsed.type === 'doc') {
-        return parsed;
-      }
-    } catch {
-      // Not JSON, treat as plain text
-    }
-    return {
-      type: 'doc',
-      content: [{ type: 'paragraph', content: [{ type: 'text', text: content }] }],
-    };
-  }
-  if (typeof content === 'object' && content.type === 'doc') {
-    return content;
-  }
-  return { type: 'doc', content: [{ type: 'paragraph' }] }; // fallback for unknown
 }
 
 export default function EditBlogPostForm({ slug }: EditBlogPostFormProps) {
   const [post, setPost] = useState<BlogPost | null>(null);
   const [isClient, setIsClient] = useState(false);
 
-  const initialContent = useMemo(() => post ? parseContent(post.content) : { type: 'doc', content: [] }, [post]);
   const [title, setTitle] = useState('');
   const [currentSlug, setCurrentSlug] = useState('');
   const [excerpt, setExcerpt] = useState('');
   const [imageUrl, setImageUrl] = useState('');
   const [publishedAt, setPublishedAt] = useState<string | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
-  const [description, setDescription] = useState<string>(JSON.stringify({ type: 'doc', content: [] }));
- 
+  const [description, setDescription] = useState<string>(JSON.stringify({ type: 'doc', content: [] })); // This will be updated by SimpleEditor
+
   useEffect(() => {
     const fetchPost = async () => {
-      const blogPost = await getBlogPost(slug);
+      const blogPost = await getPostBySlugForClient(slug);
       if (blogPost) {
         setPost(blogPost);
         setTitle(blogPost.title);
@@ -78,51 +35,19 @@ export default function EditBlogPostForm({ slug }: EditBlogPostFormProps) {
         setImageUrl(blogPost.image_url || '');
         setPublishedAt(blogPost.published_at ? blogPost.published_at : null);
         setImagePreview(blogPost.image_url);
-        setDescription(JSON.stringify(parseContent(blogPost.content))); // Ensure content is parsed and stringified
+        // Assuming post.content is already JSONContent or can be parsed by SimpleEditor
+        setDescription(JSON.stringify(blogPost.content)); // Update description with fetched content
       }
     };
     fetchPost();
   }, [slug]);
-
-
-  const editor = useEditor({ // Initialize editor with initialContent
-    extensions: getTiptapExtensions(),
-    content: initialContent,
-    onUpdate: ({ editor }) => {
-      setDescription(JSON.stringify(editor.getJSON()));
-    },
-    immediatelyRender: false,
-  });
-
-  const setLink = useCallback(() => {
-    if (!editor) return;
-    const previousUrl = editor.getAttributes('link').href;
-    const url = window.prompt('URL', previousUrl);
-
-    if (url === null) {
-        return;
-    }
-
-    if (url === '') {
-        editor.chain().focus().extendMarkRange('link').unsetLink().run();
-        return;
-    }
-
-    editor.chain().focus().extendMarkRange('link').setLink({ href: url }).run();
-  }, [editor]);
 
   useEffect(() => {
     setIsClient(true);
   }, []);
 
   useEffect(() => {
-    if (editor && initialContent && !editor.isDestroyed) {
-      editor.commands.setContent(initialContent);
-    }
-  }, [initialContent, editor]);
-
-  useEffect(() => {
-    if (post && title) { // Only generate slug if post and title are available
+    if (post && title) {
       const generatedSlug = title
         .toLowerCase()
         .replace(/[^a-z0-9]+/g, '-')
@@ -139,9 +64,6 @@ export default function EditBlogPostForm({ slug }: EditBlogPostFormProps) {
         setImagePreview(reader.result as string);
       };
       reader.readAsDataURL(file);
-      // Here you would typically upload the file to a storage service
-      // and setImageUrl with the returned URL.
-      // For this example, we'll just use the local preview.
       setImageUrl(URL.createObjectURL(file));
     }
   };
@@ -150,7 +72,7 @@ export default function EditBlogPostForm({ slug }: EditBlogPostFormProps) {
     event.preventDefault();
     if (!post) return;
     const formData = new FormData(event.currentTarget);
-    formData.set('content', description);
+    formData.set('content', description); // description now holds the updated content from SimpleEditor
     formData.set('id', post.id);
     formData.set('title', title);
     formData.set('slug', currentSlug);
@@ -214,18 +136,13 @@ export default function EditBlogPostForm({ slug }: EditBlogPostFormProps) {
             </div>
             <div className="mb-4">
               <label htmlFor="content" className="block text-sm font-medium text-gray-700">Content</label>
-              {isClient && editor && (
-              <>
-                  <div className="mb-2 p-2 border border-gray-300 rounded-md bg-gray-50 flex flex-wrap gap-2">
-                  <button type="button" onClick={() => editor.chain().focus().toggleBold().run()} disabled={!editor.can().chain().focus().toggleBold().run()} className={`p-2 rounded-md ${editor.isActive('bold') ? 'bg-indigo-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}><FaBold /></button>
-                  <button type="button" onClick={() => editor.chain().focus().toggleItalic().run()} disabled={!editor.can().chain().focus().toggleItalic().run()} className={`p-2 rounded-md ${editor.isActive('italic') ? 'bg-indigo-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}><FaItalic /></button>
-                  <button type="button" onClick={() => editor.chain().focus().toggleUnderline().run()} disabled={!editor.can().chain().focus().toggleUnderline().run()} className={`p-2 rounded-md ${editor.isActive('underline') ? 'bg-indigo-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}><FaUnderline /></button>
-                  <button type="button" onClick={() => editor.chain().focus().toggleBulletList().run()} disabled={!editor.can().chain().toggleBulletList().run()} className={`p-2 rounded-md ${editor.isActive('bulletList') ? 'bg-indigo-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}><FaListUl /></button>
-                  <button type="button" onClick={() => editor.chain().focus().toggleOrderedList().run()} disabled={!editor.can().chain().focus().toggleOrderedList().run()} className={`p-2 rounded-md ${editor.isActive('orderedList') ? 'bg-indigo-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}><FaListOl /></button>
-                  <button type="button" onClick={setLink} className={`p-2 rounded-md ${editor.isActive('link') ? 'bg-indigo-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}><FaLink /></button>
-                  </div>
-                  <EditorContent editor={editor} className="min-h-[200px] p-2 bg-white border border-gray-300 rounded-md overflow-y-auto" />
-              </>
+              {isClient && (
+                <SimpleEditor
+                  content={post.content} // Pass initial content
+                  onUpdate={(editorState) => {
+                    setDescription(JSON.stringify(editorState.editor.getJSON()));
+                  }}
+                />
               )}
             </div>
             <div className="flex items-center justify-between">

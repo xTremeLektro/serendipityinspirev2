@@ -1,5 +1,6 @@
 @import "tailwindcss";
 
+
 :root {
   --background: white; /* White */
   --foreground: black; /* Black */
@@ -19,8 +20,20 @@
 }
 
 body {
-  background-color: var(--background);
-  color: var(--foreground);
+  font-family: "Inter", sans-serif;
+  color: var(--tt-theme-text);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+  padding: 0;
+}
+
+html,
+body,
+#root,
+#app {
+  height: 100%;
+  background-color: var(--tt-bg-color);
 }
 
 .form-select:not([multiple]) {
@@ -94,7 +107,7 @@ nav#nav.active ul li {
 
 nav#nav ul a {
   position: relative;
-  color: #FFF;
+  color: #FFF; /* This sets the text color to white */
   text-decoration: none;
 }
 
@@ -233,3 +246,4 @@ html.loading-cursor,
 html.loading-cursor * {
   cursor: wait !important;
 }
+

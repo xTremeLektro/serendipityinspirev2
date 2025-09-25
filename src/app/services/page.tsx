@@ -1,45 +1,15 @@
-import React, { FC, useMemo } from 'react';
+import React from 'react';
 import Image from "next/image";
 import { getServicesWithHeadPics } from '@/lib/services';
 import { getGeneralFAQs } from '@/lib/faq';
 import FAQSection from '@/components/FAQSection';
-import { generateHTML } from '@tiptap/html';
-import { JSONContent } from '@tiptap/react';
-import { getTiptapExtensions } from '@/lib/tiptap';
+import TiptapRenderer from '@/components/TiptapRenderer'; // New import
 import { Inter } from 'next/font/google';
 
 const inter = Inter({
   subsets: ['latin'],
   variable: '--font-inter',
 });
-
-const TiptapRenderer: FC<{ content: JSONContent | string | null }> = ({ content }) => {
-  const output = useMemo(() => {
-    if (!content) {
-      return '';
-    }
-
-    let tiptapContent = content;
-
-    if (typeof tiptapContent === 'string') {
-      try {
-        tiptapContent = JSON.parse(tiptapContent);
-      } catch {
-        return tiptapContent;
-      }
-    }
-
-    if (typeof tiptapContent === 'object' && tiptapContent?.type === 'doc') {
-      return generateHTML(tiptapContent, getTiptapExtensions());
-    }
-
-    if (typeof content === 'string') return content;
-    return JSON.stringify(content);
-
-  }, [content]);
-
-  return <div dangerouslySetInnerHTML={{ __html: output }} className="prose prose-lg max-w-none text-slate-600 [&_p:empty]:after:content-['\00a0']" />;
-};
 
 const ServicesPage: React.FC = async () => {
   const services = await getServicesWithHeadPics();

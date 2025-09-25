@@ -2,7 +2,7 @@
 
 import React, { useState, useMemo } from 'react';
 import { FaPlus, FaMinus } from 'react-icons/fa';
-import { generateHTML } from '@tiptap/html';
+import { generateHTML } from '@tiptap/core';
 import { JSONContent } from '@tiptap/react';
 import { getTiptapExtensions } from '@/lib/tiptap';
 import { Inter } from 'next/font/google';

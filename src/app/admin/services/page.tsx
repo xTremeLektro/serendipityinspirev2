@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useMemo, FC } from 'react';
+import { useState, useEffect } from 'react';
 import AdminHeader from '@/components/AdminHeader';
 import { getServices, addService, deleteService, getFaqTypes } from './actions';
 import { FaTrash, FaEdit, FaAngleDoubleLeft, FaChevronLeft, FaChevronRight, FaAngleDoubleRight } from 'react-icons/fa';
@@ -8,9 +8,7 @@ import { Edu_NSW_ACT_Cursive } from 'next/font/google';
 import Link from 'next/link';
 import ServiceForm from './ServiceForm';
 import ClientOnly from '@/components/ClientOnly';
-import { generateHTML } from '@tiptap/html';
-import { JSONContent } from '@tiptap/react';
-import { getTiptapExtensions } from '@/lib/tiptap';
+import TiptapRenderer from '@/components/TiptapRenderer'; // New import
 import { Service, FaqType } from '@/lib/types';
 
 const eduNSW = Edu_NSW_ACT_Cursive({
@@ -18,27 +16,6 @@ const eduNSW = Edu_NSW_ACT_Cursive({
   subsets: ['latin'],
   fallback: ['cursive'],
 });
-
-const TiptapRenderer: FC<{ content: JSONContent | string | null }> = ({ content }) => {
-  const output = useMemo(() => {
-    if (!content) return '';
-    let tiptapContent = content;
-    if (typeof tiptapContent === 'string') {
-      try {
-        tiptapContent = JSON.parse(tiptapContent);
-      } catch {
-        return tiptapContent;
-      }
-    }
-    if (typeof tiptapContent === 'object' && tiptapContent?.type === 'doc') {
-      return generateHTML(tiptapContent, getTiptapExtensions());
-    }
-    if (typeof content === 'string') return content;
-    return JSON.stringify(content);
-  }, [content]);
-
-  return <div dangerouslySetInnerHTML={{ __html: output }} className="prose prose-sm max-w-none [&_p:empty]:after:content-['\00a0']" />;
-};
 
 const SERVICES_PER_PAGE = 10;
 
@@ -183,4 +160,3 @@ export default function AdminServicesPage() {
     </div>
   );
 }
-
