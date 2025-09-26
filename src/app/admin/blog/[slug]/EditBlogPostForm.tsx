@@ -33,7 +33,7 @@ export default function EditBlogPostForm({ slug }: EditBlogPostFormProps) {
         setCurrentSlug(blogPost.slug);
         setExcerpt(blogPost.excerpt || '');
         setImageUrl(blogPost.image_url || '');
-        setPublishedAt(blogPost.published_at ? blogPost.published_at : null);
+        setPublishedAt(blogPost.published_at || null);
         setImagePreview(blogPost.image_url);
         // Assuming post.content is already JSONContent or can be parsed by SimpleEditor
         setDescription(JSON.stringify(blogPost.content)); // Update description with fetched content
@@ -90,12 +90,12 @@ export default function EditBlogPostForm({ slug }: EditBlogPostFormProps) {
 
   return (
     <div className="min-h-screen bg-gray-100">
-      <AdminHeader title="Edit Blog Post" backUrl="/admin/blog" backText="Return to Blog Posts" />
+      <AdminHeader title="Editar Blog Post" backUrl="/admin/blog" backText="Return to Blog Posts" />
       <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
         <div className="px-4 py-6 sm:px-0">
           <form onSubmit={handleSubmit} className="bg-white p-8 rounded-lg shadow-md w-full">
             <div className="mb-4">
-              <label htmlFor="title" className="block text-sm font-medium text-gray-700">Title</label>
+              <label htmlFor="title" className="block text-lg font-bold text-gray-700">Título</label>
               <input
                 type="text"
                 id="title"
@@ -105,7 +105,7 @@ export default function EditBlogPostForm({ slug }: EditBlogPostFormProps) {
               />
             </div>
             <div className="mb-4">
-              <label htmlFor="slug" className="block text-sm font-medium text-gray-700">Slug</label>
+              <label htmlFor="slug" className="block text-lg font-bold text-gray-700">Slug</label>
               <input
                 type="text"
                 id="slug"
@@ -115,7 +115,7 @@ export default function EditBlogPostForm({ slug }: EditBlogPostFormProps) {
               />
             </div>
             <div className="mb-4">
-              <label htmlFor="excerpt" className="block text-sm font-medium text-gray-700">Excerpt</label>
+              <label htmlFor="excerpt" className="block text-lg font-bold text-gray-700">Extracto</label>
               <textarea
                 id="excerpt"
                 value={excerpt}
@@ -125,7 +125,7 @@ export default function EditBlogPostForm({ slug }: EditBlogPostFormProps) {
               />
             </div>
             <div className="mb-4">
-              <label htmlFor="image" className="block text-sm font-medium text-gray-700">Image</label>
+              <label htmlFor="image" className="block text-lg font-bold text-gray-700">Imagen</label>
               <input
                 type="file"
                 id="image"
@@ -135,10 +135,10 @@ export default function EditBlogPostForm({ slug }: EditBlogPostFormProps) {
               {imagePreview && <Image src={imagePreview} alt="Image preview" width={128} height={128} className="mt-2 h-32 object-cover" />}
             </div>
             <div className="mb-4">
-              <label htmlFor="content" className="block text-sm font-medium text-gray-700">Content</label>
+              <label htmlFor="content" className="block text-lg font-bold text-gray-700">Contenido</label>
               {isClient && (
-                <SimpleEditor
-                  content={post.content} // Pass initial content
+                <SimpleEditor 
+                  content={post.content as string} // Pass initial content
                   onUpdate={(editorState) => {
                     setDescription(JSON.stringify(editorState.editor.getJSON()));
                   }}

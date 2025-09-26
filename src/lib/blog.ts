@@ -6,6 +6,7 @@ export async function getLatestBlogPosts(limit: number = 3): Promise<BlogPost[]>
   const { data, error } = await supabase
     .from('blog_posts')
     .select('*')
+    .not('published_at', 'is', null) // Only published posts
     .order('published_at', { ascending: false })
     .limit(limit);
 
@@ -22,6 +23,7 @@ export async function getAllBlogPostsForDisplay(): Promise<BlogPost[]> {
     const { data, error } = await supabase
         .from('blog_posts')
         .select('*')
+        .not('published_at', 'is', null) // Only published posts
         .order('published_at', { ascending: false });
 
     if (error) {

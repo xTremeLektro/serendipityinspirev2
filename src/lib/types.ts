@@ -23,7 +23,8 @@ export interface BlogPost {
   created_at: string;
   title: string;
   slug: string;
-  content?: string;
+  content?: Record<string, any>; // <--- Changed from string
+  content_html?: string;
   excerpt?: string;
   image_url?: string;
   published_at: string;

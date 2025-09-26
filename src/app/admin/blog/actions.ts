@@ -6,7 +6,7 @@ import { createClient } from '@/lib/supabase/server'
 import { revalidatePath } from 'next/cache';
 
 
-import { generateHTML } from '@tiptap/core';
+import { generateHTML } from '@tiptap/html';
 import { getTiptapServerExtensions } from '../../../lib/tiptap';
 import { BlogPost } from '@/lib/types';
 
@@ -50,14 +50,41 @@ export async function updateBlogPost(formData: FormData) {
   const id = formData.get('id') as string
   const title = formData.get('title') as string
   const slug = formData.get('slug') as string
-  const content = formData.get('content') as string
+  const content = formData.get('content') as string // Raw stringified JSON from form
+
+  let parsedContent: any = null; 
   let content_html = '';
-  try {
-    const parsedContent = JSON.parse(content);
-    content_html = generateHTML(parsedContent, getTiptapServerExtensions());
-  } catch (error) {
-    console.error('Error generating HTML from content:', error);
+  
+  const contentToParse = content?.trim();
+
+  // --- STEP 1: Parse the JSON string (MUST be isolated) ---
+  if (contentToParse) {
+    try {
+      // If parsing succeeds, parsedContent retains the object value.
+      parsedContent = JSON.parse(contentToParse);
+    } catch (e) {
+      // If parsing fails (e.g., malformed JSON), parsedContent remains null.
+      console.error('Error parsing content JSON (The input string was not valid JSON):', e);
+    }
   }
+
+  // --- STEP 2: Generate HTML (Prone to server-side errors like 'window is not defined') ---
+  if (parsedContent) {
+    try {
+      // console.log('Parsed Content before generateHTML:', parsedContent);
+      // NOTE: The "window is not defined" error happens here.
+      content_html = generateHTML(parsedContent, getTiptapServerExtensions());
+    } catch (error) {
+      // If HTML generation fails, we log the error, clear the HTML, 
+      // but we RETAIN the successfully parsed JSON data (parsedContent).
+      console.error('Error generating HTML from content (Likely a server-side dependency issue):', error);
+      // HINT: Review getTiptapServerExtensions() for client-only dependencies.
+      content_html = ''; 
+    }
+  }
+  // If parsedContent is null, both loops are skipped, and NULL is correctly saved.
+
+
   const excerpt = formData.get('excerpt') as string
   const image_url = formData.get('image_url') as string
   const published_at = formData.get('published_at') as string
@@ -65,18 +92,23 @@ export async function updateBlogPost(formData: FormData) {
   const postData: Partial<BlogPost> = {
     title,
     slug,
-    content: content, // Save the stringified JSON
-    content_html,
+    content: parsedContent, // <--- FIX: We save the JavaScript Object here!
+    content_html: content_html,
     excerpt,
     image_url,
   };
-
+  
+  // Handling published_at as before...
   if (published_at) {
     postData.published_at = published_at;
   } else {
-    postData.published_at = null as unknown as string; // Explicitly cast null to string to satisfy type, as Supabase handles null for date fields
+    // Note: If you want to explicitly null the date, you might need to exclude it 
+    // from the object or ensure your Supabase client handles the type conversion correctly.
+    // Assuming 'null' is passed correctly to clear the timestamp.
+    postData.published_at = null as unknown as string; 
   }
 
+  // ... (rest of the function)
   const { error } = await supabase.from('blog_posts').update(postData).eq('id', id)
 
   if (error) {

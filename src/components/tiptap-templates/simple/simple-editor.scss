@@ -57,6 +57,11 @@ body,
   scrollbar-color: var(--tt-scrollbar-color) transparent;
 }
 
+.tiptap-button-icon {
+  color: var(--tt-theme-text);
+  fill: var(--tt-theme-text);
+}
+
 .simple-editor-content {
   width: 100%;
 }

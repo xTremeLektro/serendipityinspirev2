@@ -18,10 +18,8 @@ export function ThemeToggle() {
   }, [])
 
   React.useEffect(() => {
-    const initialDarkMode =
-      !!document.querySelector('meta[name="color-scheme"][content="dark"]') ||
-      window.matchMedia("(prefers-color-scheme: dark)").matches
-    setIsDarkMode(initialDarkMode)
+    // Default to light mode
+    setIsDarkMode(false)
   }, [])
 
   React.useEffect(() => {
