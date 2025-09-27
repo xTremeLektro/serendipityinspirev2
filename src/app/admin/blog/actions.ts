@@ -87,7 +87,6 @@ export async function updateBlogPost(formData: FormData) {
 
 
   const excerpt = formData.get('excerpt') as string
-  const image_url = formData.get('image_url') as string
   const published_at = formData.get('published_at') as string
 
   const postData: Partial<BlogPost> = {
@@ -96,7 +95,6 @@ export async function updateBlogPost(formData: FormData) {
     content: parsedContent, // <--- FIX: We save the JavaScript Object here!
     content_html: content_html,
     excerpt,
-    image_url,
   };
   
   // Handling published_at as before...

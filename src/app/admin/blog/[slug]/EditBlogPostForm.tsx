@@ -3,7 +3,6 @@
 import { useEffect, useState } from 'react';
 import { updateBlogPost } from '../actions';
 import AdminHeader from '@/components/AdminHeader';
-import Image from 'next/image';
 import { BlogPost } from '@/lib/types';
 import { getPostBySlugForClient } from '@/lib/blog.client';
 import { SimpleEditor } from '@/components/tiptap-templates/simple/simple-editor'; // New import
@@ -19,9 +18,7 @@ export default function EditBlogPostForm({ slug }: EditBlogPostFormProps) {
   const [title, setTitle] = useState('');
   const [currentSlug, setCurrentSlug] = useState('');
   const [excerpt, setExcerpt] = useState('');
-  const [imageUrl, setImageUrl] = useState('');
   const [publishedAt, setPublishedAt] = useState<string | null>(null);
-  const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [description, setDescription] = useState<string>(JSON.stringify({ type: 'doc', content: [] })); // This will be updated by SimpleEditor
 
   useEffect(() => {
@@ -32,9 +29,7 @@ export default function EditBlogPostForm({ slug }: EditBlogPostFormProps) {
         setTitle(blogPost.title);
         setCurrentSlug(blogPost.slug);
         setExcerpt(blogPost.excerpt || '');
-        setImageUrl(blogPost.image_url || '');
         setPublishedAt(blogPost.published_at || null);
-        setImagePreview(blogPost.image_url);
         // Assuming post.content is already JSONContent or can be parsed by SimpleEditor
         setDescription(JSON.stringify(blogPost.content)); // Update description with fetched content
       }
@@ -56,18 +51,6 @@ export default function EditBlogPostForm({ slug }: EditBlogPostFormProps) {
     }
   }, [title, post]);
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImagePreview(reader.result as string);
-      };
-      reader.readAsDataURL(file);
-      setImageUrl(URL.createObjectURL(file));
-    }
-  };
-
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!post) return;
@@ -77,7 +60,6 @@ export default function EditBlogPostForm({ slug }: EditBlogPostFormProps) {
     formData.set('title', title);
     formData.set('slug', currentSlug);
     formData.set('excerpt', excerpt);
-    formData.set('image_url', imageUrl);
     if (publishedAt) {
       formData.set('published_at', publishedAt);
     }
@@ -125,16 +107,6 @@ export default function EditBlogPostForm({ slug }: EditBlogPostFormProps) {
               />
             </div>
             <div className="mb-4">
-              <label htmlFor="image" className="block text-lg font-bold text-gray-700">Imagen</label>
-              <input
-                type="file"
-                id="image"
-                onChange={handleImageChange}
-                className="mt-1 block w-full"
-              />
-              {imagePreview && <Image src={imagePreview} alt="Image preview" width={128} height={128} className="mt-2 h-32 object-cover" />}
-            </div>
-            <div className="mb-4">
               <label htmlFor="content" className="block text-lg font-bold text-gray-700">Contenido</label>
               {isClient && (
                 <SimpleEditor 
@@ -144,6 +116,10 @@ export default function EditBlogPostForm({ slug }: EditBlogPostFormProps) {
                   }}
                 />
               )}
+            </div>
+            <div className="mb-4">
+                <label className="block text-lg font-bold text-gray-700">Published At</label>
+                <p className="text-gray-900">{publishedAt ? new Date(publishedAt).toLocaleString() : 'Not published'}</p>
             </div>
             <div className="flex items-center justify-between">
               <button

@@ -16,11 +16,10 @@ This document outlines the structure and features of the Serendipity Inspire v2 
 - **Create Blog Post:** A page at `/admin/blog/new` that allows creating a new blog post.
   - **Slug Generation:** The slug is automatically generated from the title.
   - **Publish/Unpublish:** Buttons to publish or unpublish the blog post.
-  - **Image Upload:** A file input to upload an image for the blog post with a preview.
 - **Edit Blog Post:** A dynamic route at `/admin/blog/[slug]` that allows editing the content of a blog post.
   - **Slug Generation:** The slug is automatically generated from the title.
   - **Publish/Unpublish:** Buttons to publish or unpublish the blog post.
-  - **Image Upload:** A file input to upload an image for the blog post with a preview.
+  - **Published Date Display:** The published date is displayed below the content editor.
 - **Delete Blog Post:** A button on the blog post list to delete a blog post.
 - **TipTap Editor:** The create and edit pages use the TipTap editor to modify the `content` field of the blog post, which is stored as JSON. When updating a blog post, the `content` field is converted to HTML and stored in the `content_html` field in the database.
 - **TipTap Editor Toolbar:** The TipTap editor includes a toolbar with the following features:
@@ -60,3 +59,8 @@ This document outlines the structure and features of the Serendipity Inspire v2 
 - **TipTap Editor Toolbar:** The `SimpleEditor` in `ServiceForm` includes a comprehensive toolbar with various formatting options, consistent with the blog post editor.
 - **Server Actions:** The service management pages use server actions to fetch, a new section to the `blueprint.md` with the changes I have made.
 - **Inverted Publish/Unpublish Icons:** Inverted the `FaEye` and `FaEyeSlash` icons in the blog post list to correctly represent the published status.
+
+## Current Request
+
+- **Remove Image Field from Blog Edit Page:** Removed the image upload field from the blog edit page.
+- **Display Published Date:** Added the published date to the blog edit page.
