@@ -58,23 +58,5 @@ This document outlines the structure and features of the Serendipity Inspire v2 
 - **Delete Service:** A button on the service list to delete a service.
 - **TipTap Editor:** The `ServiceForm` component, used for both creating and editing services, integrates the full-featured `SimpleEditor` component for the `service_desc` field. The content is stored as JSON.
 - **TipTap Editor Toolbar:** The `SimpleEditor` in `ServiceForm` includes a comprehensive toolbar with various formatting options, consistent with the blog post editor.
-- **Server Actions:** The service management pages use server actions to fetch, create, update, and delete service data.
-- **SSR Fix:** The `ServiceForm` component is wrapped in a `ClientOnly` component to prevent SSR issues with the Tiptap editor.
-
-### Admin - FAQ Management
-
-- **FAQ List:** A page at `/admin/faq` that displays a list of all FAQs.
-  - **Pagination:** A pagination system to navigate through the FAQs.
-- **Create FAQ:** The `AddFaqForm` component, used on the `/admin/faq` page, integrates the full-featured `SimpleEditor` component for the `answer` field. The content is stored as JSON.
-- **Edit FAQ:** The `EditFaqModal` component, used for editing existing FAQs, integrates the full-featured `SimpleEditor` component for the `answer` field. The content is stored as JSON.
-- **TipTap Editor Toolbar:** The `SimpleEditor` in both `AddFaqForm` and `EditFaqModal` includes a comprehensive toolbar with various formatting options, consistent with the blog post editor.
-- **Server Actions:** The FAQ management pages use server actions to fetch, create, update, and delete FAQ data.
-- **SSR Fix:** Both `AddFaqForm` and `EditFaqModal` components are wrapped in a `ClientOnly` component (or rendered conditionally with `isClient`) to prevent SSR issues with the Tiptap editor.
-
-## Current Request
-
-- **Remove Multiple Blog Post Deletion:** Removed the ability to delete multiple blog posts at once from the `/admin/blog` page.
-  - Removed the checkboxes from the blog post list.
-  - Removed the "Delete Selected" button.
-  - Removed the `deleteMultipleBlogPosts` server action.
-  - Fixed linting errors that arose from the changes.
+- **Server Actions:** The service management pages use server actions to fetch, a new section to the `blueprint.md` with the changes I have made.
+- **Inverted Publish/Unpublish Icons:** Inverted the `FaEye` and `FaEyeSlash` icons in the blog post list to correctly represent the published status.

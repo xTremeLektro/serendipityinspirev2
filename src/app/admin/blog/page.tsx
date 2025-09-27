@@ -109,7 +109,7 @@ export default function AdminBlogPage() {
                             </button>
                           </form>
                           <button onClick={() => handlePublishToggle(post)} className="text-gray-600 hover:text-gray-900">
-                            {post.published_at ? <FaEyeSlash size={18} /> : <FaEye size={18} />}
+                            {post.published_at ? <FaEye size={18} /> : <FaEyeSlash size={18} />}
                           </button>
                         </div>
                       </td>
