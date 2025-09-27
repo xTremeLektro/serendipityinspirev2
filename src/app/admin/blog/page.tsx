@@ -7,6 +7,7 @@ import { FaEdit, FaTrash, FaEye, FaEyeSlash, FaAngleDoubleLeft, FaChevronLeft, F
 import { Edu_NSW_ACT_Cursive } from 'next/font/google';
 import Link from 'next/link';
 import { BlogPost } from '@/lib/types';
+import ConfirmationModal from '@/components/ConfirmationModal';
 
 // Initialize the font for the Hero Section.
 const eduNSW = Edu_NSW_ACT_Cursive({
@@ -24,15 +25,17 @@ export default function AdminBlogPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPosts, setTotalPosts] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const fetchBlogPosts = async () => {
+    setLoading(true);
+    const { posts, count } = await getBlogPosts(searchTerm, statusFilter, currentPage, POSTS_PER_PAGE);
+    setBlogPosts(posts as BlogPost[]);
+    setTotalPosts(count);
+    setLoading(false);
+  };
 
   useEffect(() => {
-    const fetchBlogPosts = async () => {
-      setLoading(true);
-      const { posts, count } = await getBlogPosts(searchTerm, statusFilter, currentPage, POSTS_PER_PAGE);
-      setBlogPosts(posts as BlogPost[]);
-      setTotalPosts(count);
-      setLoading(false);
-    };
     fetchBlogPosts();
   }, [searchTerm, statusFilter, currentPage]);
 
@@ -50,9 +53,23 @@ export default function AdminBlogPage() {
       formData.append('published_at', new Date().toISOString());
     }
     await updateBlogPost(formData);
-    const { posts, count } = await getBlogPosts(searchTerm, statusFilter, currentPage, POSTS_PER_PAGE);
-    setBlogPosts(posts as BlogPost[]);
-    setTotalPosts(count);
+    fetchBlogPosts();
+  };
+
+  const handleGeneratePost = async () => {
+    setIsModalOpen(false);
+    setLoading(true);
+    try {
+      await fetch('https://n8n.xtreme-automations.com/webhook/8f0db7e6-79d7-47ac-ade4-c18e10972a01', {
+        method: 'POST',
+      });
+      setTimeout(() => {
+        fetchBlogPosts();
+      }, 5000); // Refresh after 5 seconds
+    } catch (error) {
+      console.error('Error triggering n8n webhook:', error);
+      setLoading(false);
+    }
   };
 
   const totalPages = Math.ceil(totalPosts / POSTS_PER_PAGE);
@@ -63,6 +80,17 @@ export default function AdminBlogPage() {
       <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
         <div className="px-4 py-6 sm:px-0">
           <div className="bg-white p-8 rounded-lg shadow-md w-full">
+            <div className="mb-8">
+              <h2 className={`text-2xl font-bold text-gray-900 ${eduNSW.className}`}>Opciones</h2>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+                <button 
+                  onClick={() => setIsModalOpen(true)}
+                  className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                >
+                  Generar Nuevo Post
+                </button>
+              </div>
+            </div>
             <div className="flex justify-between items-center mb-4">
               <h2 className={`text-2xl font-bold text-gray-900 ${eduNSW.className}`}>Entradas de Blog Existentes</h2>
             </div>
@@ -103,7 +131,7 @@ export default function AdminBlogPage() {
                           <Link href={`/admin/blog/${post.slug}`} className="text-indigo-600 hover:text-indigo-900">
                             <FaEdit size={18} />
                           </Link>
-                          <form action={async () => { await deleteBlogPost(post.id); const { posts, count } = await getBlogPosts(searchTerm, statusFilter, currentPage, POSTS_PER_PAGE); setBlogPosts(posts as BlogPost[]); setTotalPosts(count); }}>
+                          <form action={async () => { await deleteBlogPost(post.id); fetchBlogPosts(); }}>
                             <button type="submit" className="text-red-600 hover:text-red-900">
                               <FaTrash size={18} />
                             </button>
@@ -176,6 +204,13 @@ export default function AdminBlogPage() {
           </div>
         </div>
       </main>
+      <ConfirmationModal 
+        isOpen={isModalOpen} 
+        onClose={() => setIsModalOpen(false)} 
+        onConfirm={handleGeneratePost} 
+        title="Generar Nuevo Post" 
+        message="¿Estás seguro de que quieres generar un nuevo post? Esta acción no se puede deshacer."
+      />
     </div>
   );
 }

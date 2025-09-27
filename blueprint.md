@@ -13,6 +13,7 @@ This document outlines the structure and features of the Serendipity Inspire v2 
   - **Status Filter:** A dropdown to filter blog posts by status (published or draft).
   - **Publish/Unpublish:** A button to publish or unpublish a blog post directly from the list.
   - **Pagination:** A pagination system to navigate through the blog posts.
+  - **Generate New Post:** A button that triggers an n8n webhook to generate a new blog post, with a confirmation modal.
 - **Create Blog Post:** A page at `/admin/blog/new` that allows creating a new blog post.
   - **Slug Generation:** The slug is automatically generated from the title.
   - **Publish/Unpublish:** Buttons to publish or unpublish the blog post.
@@ -64,3 +65,4 @@ This document outlines the structure and features of the Serendipity Inspire v2 
 
 - **Remove Image Field from Blog Edit Page:** Removed the image upload field from the blog edit page.
 - **Display Published Date:** Added the published date to the blog edit page.
+- **Generate New Post Button:** Added a button to the blog admin page to trigger an n8n webhook to generate a new post, with a confirmation modal.
