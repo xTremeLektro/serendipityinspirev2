@@ -19,11 +19,11 @@
 -- Functionalities asociated to the Admin Page  
     ~~- Implement the ability in the admin blog page to publish/unpublish a post.~~  
     ~~- Implement the ability in the admin blog page to delete a post~~  
-    - Although the post runs once per week, have the ability to manually launch the post generation process (n8n) from the admin page  
+    ~~- Although the post runs once per week, have the ability to manually launch the post generation process (n8n) from the admin page~~  
     - Have the ability to launch the publishing by mail once draft is reviewed in the admin page.  
 
 -- General access to posts  
-    - Change the visualization in the home page and in the blog list page to show only non-draft posts.  
+    ~~- Change the visualization in the home page and in the blog list page to show only non-draft posts.~~  
     
 -- New n8n to deliver communications  
     - Implement the n8n process to evaluate subscribed people and send the blog by mail.  

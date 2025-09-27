@@ -51,19 +51,35 @@ export default function EditBlogPostForm({ slug }: EditBlogPostFormProps) {
     }
   }, [title, post]);
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+  const savePost = async (publishAction?: 'publish' | 'unpublish') => {
     if (!post) return;
-    const formData = new FormData(event.currentTarget);
-    formData.set('content', description); // description now holds the updated content from SimpleEditor
+
+    let finalPublishedAt = publishedAt;
+    if (publishAction === 'publish') {
+      finalPublishedAt = new Date().toISOString();
+    } else if (publishAction === 'unpublish') {
+      finalPublishedAt = null;
+    }
+    
+    setPublishedAt(finalPublishedAt);
+
+    const formData = new FormData();
+    formData.set('content', description);
     formData.set('id', post.id);
     formData.set('title', title);
     formData.set('slug', currentSlug);
     formData.set('excerpt', excerpt);
-    if (publishedAt) {
-      formData.set('published_at', publishedAt);
+    if (finalPublishedAt) {
+      formData.set('published_at', finalPublishedAt);
+    } else {
+      formData.set('published_at', '');
     }
     await updateBlogPost(formData);
+  };
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    await savePost();
   };
 
   if (!post) {
@@ -132,7 +148,7 @@ export default function EditBlogPostForm({ slug }: EditBlogPostFormProps) {
                 {publishedAt ? (
                   <button
                     type="button"
-                    onClick={() => setPublishedAt(null)}
+                    onClick={() => savePost('unpublish')}
                     className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
                   >
                     Despublicar
@@ -140,7 +156,7 @@ export default function EditBlogPostForm({ slug }: EditBlogPostFormProps) {
                 ) : (
                   <button
                     type="button"
-                    onClick={() => setPublishedAt(new Date().toISOString())}
+                    onClick={() => savePost('publish')}
                     className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
                   >
                     Publicar
