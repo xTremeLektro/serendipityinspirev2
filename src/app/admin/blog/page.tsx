@@ -85,7 +85,7 @@ export default function AdminBlogPage() {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
                 <button 
                   onClick={() => setIsModalOpen(true)}
-                  className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                  className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-bold rounded-md text-white bg-blue-500 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                 >
                   Generar Nuevo Post
                 </button>

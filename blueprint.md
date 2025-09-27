@@ -66,3 +66,4 @@ This document outlines the structure and features of the Serendipity Inspire v2 
 - **Remove Image Field from Blog Edit Page:** Removed the image upload field from the blog edit page.
 - **Display Published Date:** Added the published date to the blog edit page.
 - **Generate New Post Button:** Added a button to the blog admin page to trigger an n8n webhook to generate a new post, with a confirmation modal.
+- **Confirmation Modal Fix:** Fixed a z-index issue with the confirmation modal that was causing it to be unresponsive.
