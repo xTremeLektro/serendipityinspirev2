@@ -2,7 +2,6 @@
 
 import StarterKit from '@tiptap/starter-kit';
 import Underline from '@tiptap/extension-underline';
-import Link from '@tiptap/extension-link';
 import Image from '@tiptap/extension-image';
 import TextAlign from '@tiptap/extension-text-align';
 import TaskList from '@tiptap/extension-task-list';
@@ -51,7 +50,7 @@ export const getTiptapClientExtensions = () => [
     accept: "image/*",
     maxSize: 5 * 1024 * 1024, // 5MB
     limit: 3,
-    upload: async (file) => {
+    upload: async () => {
       // This is a client-side placeholder. Server-side will handle actual upload.
       return "/placeholder-image.jpg";
     },

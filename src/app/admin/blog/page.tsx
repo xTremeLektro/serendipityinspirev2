@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import AdminHeader from '@/components/AdminHeader';
-import { getBlogPosts, deleteBlogPost, updateBlogPost, deleteMultipleBlogPosts } from './actions';
+import { getBlogPosts, deleteBlogPost, updateBlogPost } from './actions';
 import { FaEdit, FaTrash, FaEye, FaEyeSlash, FaAngleDoubleLeft, FaChevronLeft, FaChevronRight, FaAngleDoubleRight } from 'react-icons/fa';
 import { Edu_NSW_ACT_Cursive } from 'next/font/google';
 import Link from 'next/link';
@@ -21,7 +21,6 @@ export default function AdminBlogPage() {
   const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
-  const [selectedPosts, setSelectedPosts] = useState<string[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPosts, setTotalPosts] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -56,22 +55,6 @@ export default function AdminBlogPage() {
     setTotalPosts(count);
   };
 
-  const handleSelectPost = (id: string) => {
-    if (selectedPosts.includes(id)) {
-      setSelectedPosts(selectedPosts.filter((postId) => postId !== id));
-    } else {
-      setSelectedPosts([...selectedPosts, id]);
-    }
-  };
-
-  const handleDeleteSelected = async () => {
-    await deleteMultipleBlogPosts(selectedPosts);
-    setSelectedPosts([]);
-    const { posts, count } = await getBlogPosts(searchTerm, statusFilter, currentPage, POSTS_PER_PAGE);
-    setBlogPosts(posts as BlogPost[]);
-    setTotalPosts(count);
-  };
-
   const totalPages = Math.ceil(totalPosts / POSTS_PER_PAGE);
 
   return (
@@ -100,25 +83,11 @@ export default function AdminBlogPage() {
                 <option value="published">Publicados</option>
                 <option value="draft">Borradores</option>
               </select>
-              {selectedPosts.length > 0 && (
-                <button onClick={handleDeleteSelected} className="ml-4 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
-                  Eliminar Seleccionados
-                </button>
-              )}
             </div>
             <div className="overflow-x-auto">
               <table className="min-w-full divide-y divide-gray-200">
                 <thead className="bg-gray-50">
                   <tr>
-                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      <input type="checkbox" onChange={(e) => {
-                        if (e.target.checked) {
-                          setSelectedPosts(blogPosts.map(p => p.id.toString()));
-                        } else {
-                          setSelectedPosts([]);
-                        }
-                      }} />
-                    </th>
                     <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Título</th>
                     <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Fecha de Publicación</th>
                     <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Acciones</th>
@@ -127,9 +96,6 @@ export default function AdminBlogPage() {
                 <tbody className="bg-white divide-y divide-gray-200">
                   {blogPosts.map((post) => (
                     <tr key={post.id}>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <input type="checkbox" checked={selectedPosts.includes(post.id.toString())} onChange={() => handleSelectPost(post.id.toString())} />
-                      </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{post.title}</td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{post.published_at ? new Date(post.published_at).toLocaleDateString() : 'Borrador'}</td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">

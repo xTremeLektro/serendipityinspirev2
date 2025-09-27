@@ -13,7 +13,6 @@ This document outlines the structure and features of the Serendipity Inspire v2 
   - **Status Filter:** A dropdown to filter blog posts by status (published or draft).
   - **Publish/Unpublish:** A button to publish or unpublish a blog post directly from the list.
   - **Pagination:** A pagination system to navigate through the blog posts.
-  - **Multiple Selection and Deletion:** A system to select multiple blog posts and delete them at once.
 - **Create Blog Post:** A page at `/admin/blog/new` that allows creating a new blog post.
   - **Slug Generation:** The slug is automatically generated from the title.
   - **Publish/Unpublish:** Buttons to publish or unpublish the blog post.
@@ -71,3 +70,11 @@ This document outlines the structure and features of the Serendipity Inspire v2 
 - **TipTap Editor Toolbar:** The `SimpleEditor` in both `AddFaqForm` and `EditFaqModal` includes a comprehensive toolbar with various formatting options, consistent with the blog post editor.
 - **Server Actions:** The FAQ management pages use server actions to fetch, create, update, and delete FAQ data.
 - **SSR Fix:** Both `AddFaqForm` and `EditFaqModal` components are wrapped in a `ClientOnly` component (or rendered conditionally with `isClient`) to prevent SSR issues with the Tiptap editor.
+
+## Current Request
+
+- **Remove Multiple Blog Post Deletion:** Removed the ability to delete multiple blog posts at once from the `/admin/blog` page.
+  - Removed the checkboxes from the blog post list.
+  - Removed the "Delete Selected" button.
+  - Removed the `deleteMultipleBlogPosts` server action.
+  - Fixed linting errors that arose from the changes.

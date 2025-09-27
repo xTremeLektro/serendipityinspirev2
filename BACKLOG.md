@@ -14,11 +14,11 @@
 ## Blog Management and Communications
 -- Change the n8n process that generates the blog to,   
     - Improve the content for every blog post.  
-~~    - Make sure every post is stored in the database when created with the flag of (Borrador).~~  
+~~- Make sure every post is stored in the database when created with the flag of (Borrador).~~  
 
 -- Functionalities asociated to the Admin Page  
     - Implement the ability in the admin blog page to publish/unpublish a post.  
-~~    - Implement the ability in the admin blog page to delete a post~~  
+~~- Implement the ability in the admin blog page to delete a post~~  
     - Although the post runs once per week, have the ability to manually launch the post generation process (n8n) from the admin page  
     - Have the ability to launch the publishing by mail once draft is reviewed in the admin page.  
 
@@ -28,5 +28,5 @@
 -- New n8n to deliver communications  
     - Implement the n8n process to evaluate subscribed people and send the blog by mail.  
     - Evaluate other publishing options like Instagram, X, etc. (future work)  
-    
+
 

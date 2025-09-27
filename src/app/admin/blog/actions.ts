@@ -1,5 +1,6 @@
 'use server'
 
+import { JSONContent } from '@tiptap/react';
 import { createClient } from '@/lib/supabase/server'
 
 
@@ -52,7 +53,7 @@ export async function updateBlogPost(formData: FormData) {
   const slug = formData.get('slug') as string
   const content = formData.get('content') as string // Raw stringified JSON from form
 
-  let parsedContent: any = null; 
+  let parsedContent: JSONContent | null = null; 
   let content_html = '';
   
   const contentToParse = content?.trim();
@@ -128,14 +129,4 @@ export async function deleteBlogPost(id: number) {
         throw new Error(error.message)
     }
     revalidatePath('/admin/blog')
-}
-
-export async function deleteMultipleBlogPosts(ids: string[]) {
-  const supabase = await createClient()
-  const { error } = await supabase.from('blog_posts').delete().in('id', ids)
-  if (error) {
-    console.error('Error deleting multiple blog posts:', error)
-    throw new Error(error.message)
-  }
-  revalidatePath('/admin/blog')
 }
