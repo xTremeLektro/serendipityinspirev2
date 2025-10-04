@@ -6,7 +6,8 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "test": "node scripts/test-routes.js"
   },
   "dependencies": {
     "@floating-ui/react": "^0.27.12",

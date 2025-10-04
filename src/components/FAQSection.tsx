@@ -4,7 +4,7 @@ import React, { useState, useMemo } from 'react';
 import { FaPlus, FaMinus } from 'react-icons/fa';
 import { generateHTML } from '@tiptap/core';
 import { JSONContent } from '@tiptap/react';
-import { getTiptapClientExtensions as getTiptapExtensions } from '@/lib/tiptap';
+import { getTiptapClientExtensions as getTiptapExtensions } from '@/lib/tiptap.client';
 import { Inter } from 'next/font/google';
 
 const inter = Inter({
