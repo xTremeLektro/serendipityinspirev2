@@ -4,17 +4,12 @@ import { useState, useEffect } from 'react';
 import AdminHeader from '@/components/AdminHeader';
 import { getProjects, addProject, deleteProject } from './actions';
 import { FaTrash, FaAngleDoubleLeft, FaChevronLeft, FaChevronRight, FaAngleDoubleRight } from 'react-icons/fa';
-import { Edu_NSW_ACT_Cursive } from 'next/font/google';
+import { eduNSW } from '@/lib/fonts';
 import ProjectForm from './ProjectForm';
 import ClientOnly from '@/components/ClientOnly';
 import { Project } from '@/lib/types';
 
-// Initialize the font for the Hero Section.
-const eduNSW = Edu_NSW_ACT_Cursive({
-  weight: ['400', '700'], // You can specify the weights you need
-  subsets: ['latin'],
-  fallback: ['cursive'],
-});
+
 
 const PROJECTS_PER_PAGE = 10;
 

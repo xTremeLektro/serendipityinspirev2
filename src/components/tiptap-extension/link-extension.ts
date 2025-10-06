@@ -18,7 +18,8 @@ export const Link = TiptapLink.extend({
     const { editor } = this
 
     return [
-      ...(this.parent?.() || []),
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      ...((this as any).parent?.() || []),
       new Plugin({
         props: {
           handleKeyDown: (_: EditorView, event: KeyboardEvent) => {

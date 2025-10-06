@@ -92,7 +92,7 @@ export async function updateBlogPost(formData: FormData) {
   const postData: Partial<BlogPost> = {
     title,
     slug,
-    content: parsedContent, // <--- FIX: We save the JavaScript Object here!
+    content: parsedContent ?? undefined, // <--- FIX: We save the JavaScript Object here!
     content_html: content_html,
     excerpt,
   };
@@ -104,7 +104,7 @@ export async function updateBlogPost(formData: FormData) {
     // Note: If you want to explicitly null the date, you might need to exclude it 
     // from the object or ensure your Supabase client handles the type conversion correctly.
     // Assuming 'null' is passed correctly to clear the timestamp.
-    postData.published_at = null as unknown as string; 
+    postData.published_at = undefined; 
   }
 
   // ... (rest of the function)

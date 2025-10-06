@@ -31,3 +31,23 @@ export interface BlogPost {
   image_url?: string;
   published_at: string;
 }
+
+export interface Project {
+  id: number;
+  project_name: string;
+  location: string;
+  end_date: string;
+}
+
+export interface Service {
+  id: string;
+  service_name: string;
+  service_desc: JSONContent;
+  faq_type_list?: { faq_type: string };
+  ord: number | null;
+}
+
+export interface FaqType {
+  id: string;
+  faq_type: string;
+}

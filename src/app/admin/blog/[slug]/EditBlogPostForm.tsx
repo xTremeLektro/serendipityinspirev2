@@ -65,7 +65,7 @@ export default function EditBlogPostForm({ slug }: EditBlogPostFormProps) {
 
     const formData = new FormData();
     formData.set('content', description);
-    formData.set('id', post.id);
+    formData.set('id', post.id.toString());
     formData.set('title', title);
     formData.set('slug', currentSlug);
     formData.set('excerpt', excerpt);
@@ -126,7 +126,7 @@ export default function EditBlogPostForm({ slug }: EditBlogPostFormProps) {
               <label htmlFor="content" className="block text-lg font-bold text-gray-700">Contenido</label>
               {isClient && (
                 <SimpleEditor 
-                  content={post.content as string} // Pass initial content
+                  content={JSON.stringify(post.content)} // Pass initial content
                   onUpdate={(editorState) => {
                     setDescription(JSON.stringify(editorState.editor.getJSON()));
                   }}

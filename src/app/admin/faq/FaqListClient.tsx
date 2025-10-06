@@ -6,7 +6,7 @@ import { deleteFaq } from './actions';
 import EditFaqModal from './EditFaqModal';
 import { generateHTML } from '@tiptap/html';
 import { JSONContent } from '@tiptap/react';
-import { getTiptapExtensions } from '@/lib/tiptap';
+import { getTiptapServerExtensions as getTiptapExtensions } from '@/lib/tiptap';
 import { useRouter } from 'next/navigation';
 
 type FaqType = {
@@ -186,4 +186,3 @@ const FaqListClient: FC<FaqListClientProps> = ({ initialFaqs, faqTypes, totalPag
 };
 
 export default FaqListClient;
-

@@ -1,22 +1,18 @@
-"use client";
+'use client';
 
+import { eduNSW } from '@/lib/fonts';
 import AdminHeader from '@/components/AdminHeader';
 import { updateService, addServicePic, deleteServicePic, updateServicePicAttributes } from '../actions';
 import { useState, useEffect, useRef, useActionState } from 'react';
 import { useFormStatus } from 'react-dom';
 import { FaTrash } from 'react-icons/fa';
 import Image from 'next/image';
-import { Edu_NSW_ACT_Cursive } from 'next/font/google';
+
 import ServiceForm from '../ServiceForm';
 import ClientOnly from '@/components/ClientOnly';
 import { JSONContent } from '@tiptap/react';
 
-// Initialize the font for the Hero Section.
-const eduNSW = Edu_NSW_ACT_Cursive({
-  weight: ['400', '700'], // You can specify the weights you need
-  subsets: ['latin'], // Specify the subsets you need
-  fallback: ['cursive'],
-});
+
 
 interface Service {
   id: string;

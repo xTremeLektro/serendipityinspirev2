@@ -4,7 +4,7 @@ import { useState, useEffect, useMemo, FC, Fragment } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import AdminHeader from '@/components/AdminHeader';
 import { getFaqTypes, addFaqType, getFaqs, deleteFaqType, deleteFaq } from './actions';
-import { Edu_NSW_ACT_Cursive } from 'next/font/google';
+import { eduNSW } from '@/lib/fonts';
 import { FaTrash, FaEdit, FaAngleDoubleLeft, FaChevronLeft, FaChevronRight, FaAngleDoubleRight } from 'react-icons/fa';
 import AddFaqForm from './AddFaqForm';
 import ClientOnly from '@/components/ClientOnly';
@@ -12,13 +12,22 @@ import EditFaqModal from './EditFaqModal';
 import { generateHTML } from '@tiptap/core';
 import { JSONContent } from '@tiptap/react';
 import { getTiptapClientExtensions as getTiptapExtensions } from '@/lib/tiptap.client';
-import { Faq, FaqType } from '@/lib/types';
 
-const eduNSW = Edu_NSW_ACT_Cursive({
-  weight: ['400', '700'],
-  subsets: ['latin'],
-  fallback: ['cursive'],
-});
+export interface FaqType {
+  id: string;
+  faq_type: string;
+}
+
+export interface Faq {
+  id: string;
+  question: string;
+  answer: JSONContent;
+  type: string;
+  ord: number | null;
+  faq_type_list: {
+    faq_type: string;
+  };
+}
 
 const FAQS_PER_PAGE = 10;
 

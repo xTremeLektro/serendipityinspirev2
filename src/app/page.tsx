@@ -1,19 +1,15 @@
 import Image from "next/image";
 import Link from "next/link";
 import ExpandingCards from "@/components/ExpandingCards";
-import { Edu_NSW_ACT_Cursive, Inter } from 'next/font/google';
+import { eduNSW } from '@/lib/fonts';
+import { Inter } from 'next/font/google';
 import { getHomeProjects } from "@/lib/projects";
 import { getLatestBlogPosts } from "@/lib/blog";
 import BlogPostCard from "@/components/BlogPostCard";
 import { ArrowRight } from 'lucide-react'; // Using lucide-react for icons, you may need to install it: npm install lucide-react
 
 // Initialize the fonts
-const eduNSW = Edu_NSW_ACT_Cursive({
-  weight: ['700'],
-  subsets: ['latin'],
-  fallback: ['cursive'],
-  variable: '--font-edu-nsw',
-});
+
 
 const inter = Inter({
   subsets: ['latin'],
@@ -25,7 +21,7 @@ export default async function Home() {
   const latestPosts = await getLatestBlogPosts(3);
 
   return (
-    <main className={`${inter.variable} ${eduNSW.variable} font-sans bg-slate-50 text-slate-800`}>
+    <main className={`${inter.className} ${eduNSW.className} font-sans bg-slate-50 text-slate-800`}>
       
       {/* --- Hero Section --- */}
       {/* A more immersive hero section that uses the expanding cards as a full-width background. */}
@@ -128,7 +124,7 @@ export default async function Home() {
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <h2 className="text-4xl font-bold">Desde Nuestro Blog</h2>
-            <p className="text-lg text-slate-600 mt-2">Ideas, tendencias e inspiración para tus próximos proyectos. <Link href="/contact" className="text-[#E67E22] hover:underline">Suscríbete aquí</Link> para no perderte ninguna novedad.</p>
+            <p className="text-lg text-slate-600 mt-2">Ideas, tendencias e inspiración para tus próximos proyectos. <Link href="/contact" className="text-[#E6-7E22] hover:underline">Suscríbete aquí</Link> para no perderte ninguna novedad.</p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {latestPosts.map((post) => (

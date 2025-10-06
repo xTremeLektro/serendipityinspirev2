@@ -2,12 +2,16 @@
 
 body {
   --tt-toolbar-height: 44px;
-  --tt-theme-text: var(--tt-gray-light-900);
-  --tt-cursor-color: #000000;
+  --tt-theme-text: var(--foreground);
+  --tt-cursor-color: var(--foreground);
   --tt-selection-color: #ACCEF7;
+  --tt-bg-color: var(--background);
 
   .dark & {
-    --tt-theme-text: var(--tt-gray-dark-900);
+    --tt-theme-text: var(--foreground);
+    --tt-bg-color: var(--background);
+    --tt-cursor-color: var(--foreground);
+    --tt-selection-color: #528BFF;
   }
 }
 

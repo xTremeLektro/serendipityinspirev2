@@ -246,11 +246,11 @@ const ContactPage = () => {
                   <label htmlFor="project-type" className="block text-lg font-semibold text-slate-700 mb-2">Tipo de Proyecto</label>
                   <select id="project-type" name="tipoDeProyecto" className="w-full p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#E67E22] focus:border-transparent transition">
                     <option value="">Seleccione un tipo</option>
-                    <option value="residencial">Residencial</option>
-                    <option value="comercial">Comercial</option>
-                    <option value="remodelacion">Remodelación</option>
-                    <option value="obra-nueva">Obra Nueva</option>
-                    <option value="otro">Otro</option>
+                    <option value="Residencial">Residencial</option>
+                    <option value="Comercial">Comercial</option>
+                    <option value="Remodelación">Remodelación</option>
+                    <option value="Obra Nueva">Obra Nueva</option>
+                    <option value="Otro">Otro</option>
                   </select>
                 </div>
                 <div>

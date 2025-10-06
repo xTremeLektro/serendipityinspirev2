@@ -36,7 +36,8 @@ export const getTiptapServerExtensions = () => [
     },
     // Asegúrese de que cualquier nodo que deshabilitó en el cliente, 
     // pero que necesita para renderizar, esté configurado aquí o importado por separado.
-  }),
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } as any),
 
   // 2. Marcas y Nodos con funcionalidad de renderizado
   TextAlign.configure({ types: ["heading", "paragraph"] }),

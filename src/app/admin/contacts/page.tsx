@@ -13,6 +13,7 @@ interface ContactInquiry {
   email: string
   message: string
   is_reviewed: boolean
+  subscribed: boolean
 }
 
 export default function AdminContactsPage() {
@@ -36,7 +37,7 @@ export default function AdminContactsPage() {
         isReviewed: isReviewedFilter,
         searchName,
       })
-      setInquiries(data || [])
+      setInquiries(data as ContactInquiry[] || [])
       setTotalInquiries(count || 0);
       if (count !== null) {
         setTotalPages(Math.ceil(count / limit))
@@ -122,13 +123,14 @@ export default function AdminContactsPage() {
                       <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-1/6">Nombre</th>
                       <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-1/6">Correo Electrónico</th>
                       <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-2/6">Mensaje</th>
-                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-1/12">Revisado</th>
+                      <th scope="col" className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider w-1/12">Revisado</th>
+                      <th scope="col" className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider w-1/12">Suscrito</th>
                     </tr>
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-200">
                     {inquiries.length === 0 ? (
                       <tr>
-                        <td colSpan={5} className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">No hay contactos para mostrar.</td>
+                        <td colSpan={6} className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">No hay contactos para mostrar.</td>
                       </tr>
                     ) : (
                       inquiries.map((inquiry) => (
@@ -137,12 +139,20 @@ export default function AdminContactsPage() {
                           <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{inquiry.name}</td>
                           <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{inquiry.email}</td>
                           <td className="px-6 py-4 text-sm text-gray-900 whitespace-normal break-words">{inquiry.message}</td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-center">
                             <input
                               type="checkbox"
                               checked={inquiry.is_reviewed}
                               onChange={() => handleCheckboxChange(inquiry.id, inquiry.is_reviewed)}
                               className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
+                            />
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-center">
+                            <input
+                              type="checkbox"
+                              checked={inquiry.subscribed}
+                              disabled
+                              className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded bg-gray-200 disabled:cursor-not-allowed"
                             />
                           </td>
                         </tr>

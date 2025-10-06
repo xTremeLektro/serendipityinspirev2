@@ -1,19 +1,11 @@
 "use client";
 
-import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { updateQuoteRequestStatus } from './actions';
 import { QuoteRequest } from '@/lib/types';
-import { Edu_NSW_ACT_Cursive } from 'next/font/google';
+import { eduNSW } from '@/lib/fonts';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { FaAngleDoubleLeft, FaChevronLeft, FaChevronRight, FaAngleDoubleRight } from 'react-icons/fa';
-
-const eduNSW = Edu_NSW_ACT_Cursive({
-  weight: ['400', '700'],
-  fallback: ['cursive'],
-  subsets: ['latin', 'latin-ext'],
-});
 
 const QUOTES_PER_PAGE = 15;
 
@@ -25,27 +17,12 @@ interface QuoteRequestsClientProps {
 }
 
 export default function QuoteRequestsClient({ 
-  quoteRequests: initialQuoteRequests, 
+  quoteRequests,
   totalPages,
   currentPage,
   totalQuoteRequests
 }: QuoteRequestsClientProps) {
-  const [quoteRequests, setQuoteRequests] = useState<QuoteRequest[]>(initialQuoteRequests);
   const router = useRouter();
-
-  const handleStatusChange = async (id: string, newStatus: string) => {
-    const formData = new FormData();
-    formData.append('id', id);
-    formData.append('status', newStatus);
-    const result = await updateQuoteRequestStatus(formData);
-    if (result?.error) {
-      alert(`Error updating status: ${result.error}`);
-    } else {
-      setQuoteRequests(prev => 
-        prev.map(req => req.id === Number(id) ? { ...req, status: newStatus as QuoteRequest['status'] } : req)
-      );
-    }
-  };
 
   const handlePageChange = (page: number) => {
     router.push(`/admin/budget?page=${page}`);
@@ -64,10 +41,8 @@ export default function QuoteRequestsClient({
                 <tr>
                   <th className="py-3 px-4 text-left">Fecha</th>
                   <th className="py-3 px-4 text-left">Nombre</th>
-                  <th className="py-3 px-4 text-left">Email</th>
-                  <th className="py-3 px-4 text-left">Teléfono</th>
-                  <th className="py-3 px-4 text-left">Servicio</th>
-                  <th className="py-3 px-4 text-left">Mensaje</th>
+                  <th className="py-3 px-4 text-left">Tipo de Projecto</th>
+                  <th className="py-3 px-4 text-left">Ubicacion</th>
                   <th className="py-3 px-4 text-left">Estado</th>
                   <th className="py-3 px-4 text-left">Acciones</th>
                 </tr>
@@ -77,10 +52,8 @@ export default function QuoteRequestsClient({
                   <tr key={request.id} className="border-b border-gray-200 hover:bg-gray-100">
                     <td className="py-3 px-4">{format(new Date(request.created_at), 'dd/MM/yyyy HH:mm', { locale: es })}</td>
                     <td className="py-3 px-4">{request.full_name}</td>
-                    <td className="py-3 px-4">{request.email}</td>
-                    <td className="py-3 px-4">{request.phone}</td>
-                    <td className="py-3 px-4">{request.service_type}</td>
-                    <td className="py-3 px-4">{request.message}</td>
+                    <td className="py-3 px-4">{request.project_type}</td>
+                    <td className="py-3 px-4">{request.city}</td>
                     <td className="py-3 px-4">
                       <span className={`px-2 py-1 rounded-full text-xs font-semibold
                         ${request.status === 'pending' ? 'bg-yellow-200 text-yellow-800' :
@@ -92,19 +65,9 @@ export default function QuoteRequestsClient({
                       </span>
                     </td>
                     <td className="py-3 px-4">
-                      <select
-                        value={request.status}
-                        onChange={(e) => handleStatusChange(request.id.toString(), e.target.value)}
-                        className="block w-full mt-1 rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                      >
-                        <option value="pending">Pendiente</option>
-                        <option value="contacted">Contactado</option>
-                        <option value="completed">Completado</option>
-                        <option value="cancelled">Cancelado</option>
-                      </select>
                       <a 
                         href={`/admin/budget/${request.id}`}
-                        className="mt-2 inline-flex items-center px-3 py-1 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                        className="inline-flex items-center px-3 py-1 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                       >
                         Ver Detalles
                       </a>
@@ -175,5 +138,3 @@ export default function QuoteRequestsClient({
     </div>
   );
 }
-
-

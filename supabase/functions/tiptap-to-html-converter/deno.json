@@ -1,8 +1,15 @@
 {
   "imports": {
-    "@tiptap/html": "https://esm.sh/@tiptap/html@2.0.0",
-    "@tiptap/extension-document": "https://esm.sh/@tiptap/extension-document@2.0.0",
-    "@tiptap/extension-paragraph": "https://esm.sh/@tiptap/extension-paragraph@2.0.0",
-    "@tiptap/extension-text": "https://esm.sh/@tiptap/extension-text@2.0.0"
+    "https://deno.land/std@0.177.0/http/server.ts": "https://deno.land/std@0.177.0/http/server.ts",
+    "https://esm.sh/@tiptap/html@2.2.4": "https://esm.sh/@tiptap/html@2.2.4",
+    "https://esm.sh/@tiptap/extension-document@2.2.4": "https://esm.sh/@tiptap/extension-document@2.2.4",
+    "https://esm.sh/@tiptap/extension-paragraph@2.2.4": "https://esm.sh/@tiptap/extension-paragraph@2.2.4",
+    "https://esm.sh/@tiptap/extension-text@2.2.4": "https://esm.sh/@tiptap/extension-text@2.2.4",
+    "https://esm.sh/@tiptap/extension-heading@2.2.4": "https://esm.sh/@tiptap/extension-heading@2.2.4",
+    "https://esm.sh/@tiptap/extension-bold@2.2.4": "https://esm.sh/@tiptap/extension-bold@2.2.4",
+    "https://esm.sh/@tiptap/extension-italic@2.2.4": "https://esm.sh/@tiptap/extension-italic@2.2.4",
+    "https://esm.sh/@tiptap/extension-list-item@2.2.4": "https://esm.sh/@tiptap/extension-list-item@2.2.4",
+    "https://esm.sh/@tiptap/extension-ordered-list@2.2.4": "https://esm.sh/@tiptap/extension-ordered-list@2.2.4",
+    "https://esm.sh/@tiptap/extension-bullet-list@2.2.4": "https://esm.sh/@tiptap/extension-bullet-list@2.2.4"
   }
 }

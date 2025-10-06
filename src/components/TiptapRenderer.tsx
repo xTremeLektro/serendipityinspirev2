@@ -14,13 +14,14 @@ const TiptapRenderer: FC<{ content: JSONContent | string | null }> = ({ content 
       return;
     }
 
-    let tiptapContent = content;
+    let tiptapContent: JSONContent | string = content;
 
     if (typeof tiptapContent === 'string') {
+      const contentString = tiptapContent;
       try {
-        tiptapContent = JSON.parse(tiptapContent);
+        tiptapContent = JSON.parse(contentString);
       } catch {
-        setRenderedHtml(tiptapContent);
+        setRenderedHtml(contentString);
         return;
       }
     }

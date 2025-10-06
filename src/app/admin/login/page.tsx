@@ -3,14 +3,9 @@
 import { useState } from 'react';
 import { createClient } from '@/lib/supabase';
 import { useRouter } from 'next/navigation';
-import { Edu_NSW_ACT_Cursive } from 'next/font/google';
+import { eduNSW } from '@/lib/fonts';
 
-// Initialize the font for the Hero Section.
-const eduNSW = Edu_NSW_ACT_Cursive({
-  weight: ['400', '700'], // You can specify the weights you need
-  subsets: ['latin'],
-  fallback: ['cursive'],
-});
+
 
 export default function AdminLoginPage() {
   const [email, setEmail] = useState('');

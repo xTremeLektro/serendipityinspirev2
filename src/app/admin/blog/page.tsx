@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import AdminHeader from '@/components/AdminHeader';
 import { getBlogPosts, deleteBlogPost, updateBlogPost } from './actions';
 import { FaEdit, FaTrash, FaEye, FaEyeSlash, FaAngleDoubleLeft, FaChevronLeft, FaChevronRight, FaAngleDoubleRight } from 'react-icons/fa';
@@ -27,17 +27,17 @@ export default function AdminBlogPage() {
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const fetchBlogPosts = async () => {
+  const fetchBlogPosts = useCallback(async () => {
     setLoading(true);
     const { posts, count } = await getBlogPosts(searchTerm, statusFilter, currentPage, POSTS_PER_PAGE);
     setBlogPosts(posts as BlogPost[]);
     setTotalPosts(count);
     setLoading(false);
-  };
+  }, [searchTerm, statusFilter, currentPage]);
 
   useEffect(() => {
     fetchBlogPosts();
-  }, [searchTerm, statusFilter, currentPage]);
+  }, [fetchBlogPosts]);
 
   const handlePublishToggle = async (post: BlogPost) => {
     const formData = new FormData();

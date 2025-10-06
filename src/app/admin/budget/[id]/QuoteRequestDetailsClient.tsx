@@ -3,24 +3,27 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import { FaDownload, FaEye, FaFileAlt } from 'react-icons/fa';
-import { Edu_NSW_ACT_Cursive } from 'next/font/google';
-
-// Initialize the font for the Hero Section.
-const eduNSW = Edu_NSW_ACT_Cursive({
-  weight: ['400', '700'], // You can specify the weights you need
-  fallback: ['cursive'],
-  subsets: ['latin', 'latin-ext'],
-});
-
+import { eduNSW } from '@/lib/fonts';
+import { updateQuoteRequestStatus } from '../actions';
 import { QuoteRequest } from '@/lib/types';
+
+
 
 interface QuoteRequestDetailsClientProps {
   quoteRequest: QuoteRequest;
 }
 
+const statusOptions = [
+  { value: 'pending', label: 'Nuevo' },
+  { value: 'contacted', label: 'Contactado' },
+  { value: 'completed', label: 'Completado' },
+  { value: 'cancelled', label: 'Cancelado' },
+];
+
 export default function QuoteRequestDetailsClient({ quoteRequest }: QuoteRequestDetailsClientProps) {
   const [showImageModal, setShowImageModal] = useState(false);
   const [modalImageUrl, setModalImageUrl] = useState<string | null>(null);
+  const [status, setStatus] = useState(quoteRequest.status);
 
   const openImageModal = (imageUrl: string) => {
     setModalImageUrl(imageUrl);
@@ -30,6 +33,21 @@ export default function QuoteRequestDetailsClient({ quoteRequest }: QuoteRequest
   const closeImageModal = () => {
     setShowImageModal(false);
     setModalImageUrl(null);
+  };
+
+  const handleStatusChange = async (newStatus: QuoteRequest['status']) => {
+    const formData = new FormData();
+    formData.append('id', quoteRequest.id.toString());
+    formData.append('status', newStatus);
+
+    const result = await updateQuoteRequestStatus(formData);
+
+    if (result?.error) {
+      alert(`Error updating status: ${result.error}`);
+    } else {
+      setStatus(newStatus);
+      alert('Status updated successfully!');
+    }
   };
 
   return (
@@ -54,6 +72,20 @@ export default function QuoteRequestDetailsClient({ quoteRequest }: QuoteRequest
               <div className="mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm sm:text-sm text-gray-900">
                 {quoteRequest.phone || 'N/A'}
               </div>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700">Estado</label>
+              <select
+                value={status}
+                onChange={(e) => handleStatusChange(e.target.value as QuoteRequest['status'])}
+                className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-gray-900"
+              >
+                {statusOptions.map(option => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700">Dirección</label>

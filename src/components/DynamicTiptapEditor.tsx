@@ -1,6 +1,8 @@
 'use client';
 
-import { useEditor, EditorContent, BubbleMenu, FloatingMenu } from '@tiptap/react';
+import { useEditor, EditorContent, JSONContent } from '@tiptap/react';
+import { BubbleMenu } from '@tiptap/extension-bubble-menu';
+import { FloatingMenu } from '@tiptap/extension-floating-menu';
 import StarterKit from '@tiptap/starter-kit';
 import Underline from '@tiptap/extension-underline';
 import TextAlign from '@tiptap/extension-text-align';
@@ -8,7 +10,9 @@ import Highlight from '@tiptap/extension-highlight';
 import { Table, TableRow, TableCell, TableHeader } from '@tiptap/extension-table';
 import { FaBold, FaItalic, FaStrikethrough, FaCode, FaParagraph, FaHeading, FaListUl, FaListOl, FaQuoteLeft, FaUndo, FaRedo, FaMinus } from 'react-icons/fa';
 
-const MenuBar = ({ editor }) => {
+import { Editor } from '@tiptap/react';
+
+const MenuBar = ({ editor }: { editor: Editor | null }) => {
   if (!editor) {
     return null;
   }
@@ -100,7 +104,7 @@ const MenuBar = ({ editor }) => {
   );
 };
 
-const FullFeaturedTiptapEditor = ({ content, onChange }) => {
+const FullFeaturedTiptapEditor = ({ content, onChange }: { content: JSONContent, onChange: (content: JSONContent) => void }) => {
   const editor = useEditor({
     immediatelyRender: false,
     extensions: [
@@ -116,6 +120,12 @@ const FullFeaturedTiptapEditor = ({ content, onChange }) => {
       TableRow,
       TableCell,
       TableHeader,
+      BubbleMenu.configure({
+        element: document.querySelector('.bubble-menu') as HTMLElement,
+      }),
+      FloatingMenu.configure({
+        element: document.querySelector('.floating-menu') as HTMLElement,
+      }),
     ],
     content: content,
     onUpdate: ({ editor }) => {
@@ -126,54 +136,6 @@ const FullFeaturedTiptapEditor = ({ content, onChange }) => {
   return (
     <div>
       <MenuBar editor={editor} />
-      {editor && (
-        <BubbleMenu editor={editor} tippyOptions={{ duration: 100 }}>
-          <div className="bubble-menu flex items-center space-x-2 bg-gray-800 p-2 rounded-md">
-            <button
-              onClick={() => editor.chain().focus().toggleBold().run()}
-              className={editor.isActive('bold') ? 'is-active' : ''}
-            >
-              <FaBold />
-            </button>
-            <button
-              onClick={() => editor.chain().focus().toggleItalic().run()}
-              className={editor.isActive('italic') ? 'is-active' : ''}
-            >
-              <FaItalic />
-            </button>
-            <button
-              onClick={() => editor.chain().focus().toggleStrike().run()}
-              className={editor.isActive('strike') ? 'is-active' : ''}
-            >
-              <FaStrikethrough />
-            </button>
-          </div>
-        </BubbleMenu>
-      )}
-      {editor && (
-        <FloatingMenu editor={editor} tippyOptions={{ duration: 100 }}>
-          <div className="floating-menu flex flex-col bg-gray-800 p-2 rounded-md">
-            <button
-              onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
-              className={editor.isActive('heading', { level: 1 }) ? 'is-active' : ''}
-            >
-              <FaHeading />1
-            </button>
-            <button
-              onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
-              className={editor.isActive('heading', { level: 2 }) ? 'is-active' : ''}
-            >
-              <FaHeading />2
-            </button>
-            <button
-              onClick={() => editor.chain().focus().toggleBulletList().run()}
-              className={editor.isActive('bulletList') ? 'is-active' : ''}
-            >
-              <FaListUl />
-            </button>
-          </div>
-        </FloatingMenu>
-      )}
       <EditorContent editor={editor} />
     </div>
   );

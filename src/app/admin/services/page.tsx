@@ -4,18 +4,12 @@ import { useState, useEffect } from 'react';
 import AdminHeader from '@/components/AdminHeader';
 import { getServices, addService, deleteService, getFaqTypes } from './actions';
 import { FaTrash, FaEdit, FaAngleDoubleLeft, FaChevronLeft, FaChevronRight, FaAngleDoubleRight } from 'react-icons/fa';
-import { Edu_NSW_ACT_Cursive } from 'next/font/google';
+import { eduNSW } from '@/lib/fonts';
 import Link from 'next/link';
 import ServiceForm from './ServiceForm';
 import ClientOnly from '@/components/ClientOnly';
 import TiptapRenderer from '@/components/TiptapRenderer'; // New import
 import { Service, FaqType } from '@/lib/types';
-
-const eduNSW = Edu_NSW_ACT_Cursive({
-  weight: ['400', '700'],
-  subsets: ['latin'],
-  fallback: ['cursive'],
-});
 
 const SERVICES_PER_PAGE = 10;
 

@@ -6,11 +6,7 @@ import Image from 'next/image';
 import { Edu_NSW_ACT_Cursive } from 'next/font/google';
 const logoImage = '/images/serendipity-svg/LOGO-3.svg';
 
-const eduNSW = Edu_NSW_ACT_Cursive({
-  weight: ['400', '700'], // You can specify the weights you need
-  subsets: ['latin'], // Specify the subsets you need
-  fallback: ['cursive'],
-});
+const eduNSW = Edu_NSW_ACT_Cursive({ subsets: ['latin'], weight: ['400', '700'] });
 
 const Footer: React.FC = () => {
   return (
