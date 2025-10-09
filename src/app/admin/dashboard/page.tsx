@@ -55,6 +55,17 @@ export default async function PaginaDashboardAdmin() {
       description: 'Gestiona los servicios ofrecidos.',
     },
     {
+      title: 'Almacenamiento',
+      href: '/admin/storage',
+      icon: (
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-12 h-12 mx-auto mb-4 text-gray-500">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M3.375 5.25h17.25A1.125 1.125 0 0121.75 6.375v11.25a1.125 1.125 0 01-1.125 1.125H3.375A1.125 1.125 0 012.25 17.625V6.375A1.125 1.125 0 013.375 5.25z" />
+          <path strokeLinecap="round" strokeLinejoin="round" d="M7.5 9.75h9M7.5 13.5h6M4.5 5.25l2.364-2.364A1.5 1.5 0 018.928 2.25h6.144a1.5 1.5 0 011.064.636L18.5 5.25" />
+        </svg>
+      ),
+      description: 'Administra los archivos y carpetas en Supabase Storage.',
+    },
+    {
       title: 'Contactos',
       href: '/admin/contacts',
       icon: (
