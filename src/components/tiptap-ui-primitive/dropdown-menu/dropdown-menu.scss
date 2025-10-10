@@ -1,14 +1,15 @@
 .tiptap-dropdown-menu {
-  --tt-popover-bg-color: var(--white);
-  --tt-popover-border-color: var(--tt-gray-light-a-100);
-  --tt-popover-text-color: var(--tt-gray-light-a-600);
-  --tt-popover-label: var(--tt-gray-light-a-400);
+  --tt-popover-bg-color: var(--tt-toolbar-bg-color, rgba(255, 255, 255, 0.96));
+  --tt-popover-border-color: var(--tt-toolbar-border-color, rgba(148, 163, 184, 0.24));
+  --tt-popover-text-color: var(--tt-theme-text, var(--foreground, #0f172a));
+  --tt-popover-label: rgba(100, 116, 139, 0.7);
 
+  html.dark &,
   .dark & {
-    --tt-popover-border-color: var(--tt-gray-dark-a-50);
-    --tt-popover-bg-color: var(--tt-gray-dark-50);
-    --tt-popover-text-color: var(--tt-gray-dark-a-600);
-    --tt-popover-label: var(--tt-gray-dark-a-400);
+    --tt-popover-bg-color: var(--tt-toolbar-bg-color, rgba(15, 23, 42, 0.92));
+    --tt-popover-border-color: var(--tt-toolbar-border-color, rgba(148, 163, 184, 0.36));
+    --tt-popover-text-color: var(--tt-theme-text, var(--foreground, #f8fafc));
+    --tt-popover-label: rgba(203, 213, 225, 0.65);
   }
 }
 

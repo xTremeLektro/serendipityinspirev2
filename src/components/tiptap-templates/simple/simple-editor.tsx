@@ -28,7 +28,6 @@ import {
 } from "@/components/tiptap-ui-primitive/toolbar"
 
 // --- Tiptap Node ---
-import { ImageUploadNode } from "@/components/tiptap-node/image-upload-node/image-upload-node-extension"
 import "@/components/tiptap-node/code-block-node/code-block-node.scss"
 import "@/components/tiptap-node/list-node/list-node.scss"
 import "@/components/tiptap-node/image-node/image-node.scss"
@@ -66,9 +65,7 @@ import { useCursorVisibility } from "@/hooks/use-cursor-visibility"
 
 // --- Components ---
 import { ThemeToggle } from "@/components/tiptap-templates/simple/theme-toggle"
-
-// --- Lib ---
-import { handleImageUpload, MAX_FILE_SIZE } from "@/lib/tiptap-utils"
+import { StorageImagePicker, type StorageImageSelection } from "@/components/tiptap-templates/simple/storage-image-picker"
 
 // --- Styles ---
 import "@/components/tiptap-templates/simple/simple-editor.scss"
@@ -76,10 +73,12 @@ import "@/components/tiptap-templates/simple/simple-editor.scss"
 const MainToolbarContent = ({
   onHighlighterClick,
   onLinkClick,
+  onImagePickerClick,
   isMobile,
 }: {
   onHighlighterClick: () => void
   onLinkClick: () => void
+  onImagePickerClick: () => void
   isMobile: boolean
 }) => {
   return (
@@ -135,7 +134,13 @@ const MainToolbarContent = ({
       <ToolbarSeparator />
 
       <ToolbarGroup>
-        <ImageUploadButton text="Add" />
+        <ImageUploadButton
+          text="Add"
+          onClick={(event) => {
+            event.preventDefault()
+            onImagePickerClick()
+          }}
+        />
       </ToolbarGroup>
 
       <Spacer />
@@ -185,6 +190,7 @@ export function SimpleEditor({ content: initialContent, onUpdate }: { content: J
     "main" | "highlighter" | "link"
   >("main")
   const toolbarRef = React.useRef<HTMLDivElement>(null)
+  const [isImagePickerOpen, setIsImagePickerOpen] = React.useState(false)
 
   const editor = useEditor({
     immediatelyRender: false,
@@ -209,13 +215,6 @@ export function SimpleEditor({ content: initialContent, onUpdate }: { content: J
       Subscript,
 
       Selection,
-      ImageUploadNode.configure({
-        accept: "image/*",
-        maxSize: MAX_FILE_SIZE,
-        limit: 3,
-        upload: handleImageUpload,
-        onError: (error) => console.error("Upload failed:", error),
-      }),
       TrailingNode,
       Link.configure({ openOnClick: false }),
     ],
@@ -234,6 +233,25 @@ export function SimpleEditor({ content: initialContent, onUpdate }: { content: J
     }
   }, [isMobile, mobileView])
 
+  const handleStorageImageSelect = React.useCallback(
+    (selection: StorageImageSelection) => {
+      if (!editor) {
+        return
+      }
+      editor
+        .chain()
+        .focus()
+        .setImage({
+          src: selection.url,
+          alt: selection.name,
+          title: selection.name,
+        })
+        .run()
+      setIsImagePickerOpen(false)
+    },
+    [editor],
+  )
+
   return (
     <EditorContext.Provider value={{ editor }}>
       <Toolbar
@@ -250,6 +268,7 @@ export function SimpleEditor({ content: initialContent, onUpdate }: { content: J
           <MainToolbarContent
             onHighlighterClick={() => setMobileView("highlighter")}
             onLinkClick={() => setMobileView("link")}
+            onImagePickerClick={() => setIsImagePickerOpen(true)}
             isMobile={isMobile}
           />
         ) : (
@@ -267,6 +286,11 @@ export function SimpleEditor({ content: initialContent, onUpdate }: { content: J
           className="simple-editor-content"
         />
       </div>
+      <StorageImagePicker
+        isOpen={isImagePickerOpen}
+        onClose={() => setIsImagePickerOpen(false)}
+        onSelect={handleStorageImageSelect}
+      />
     </EditorContext.Provider>
   )
 }
