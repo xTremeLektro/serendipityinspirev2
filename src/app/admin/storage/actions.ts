@@ -260,3 +260,39 @@ export async function getObjectPreviewUrl(
 
   return { data: { url: data.signedUrl }, error: null }
 }
+
+export async function getObjectPublicUrl(
+  bucketName: string,
+  targetPath: string,
+): Promise<MaybeError<{ url: string }>> {
+  const { client, error: configError } = getAdminClient()
+  if (!client) {
+    return { data: { url: '' }, error: configError }
+  }
+
+  const normalizedPath = targetPath.replace(/^\/+/, '')
+  if (!normalizedPath) {
+    return { data: { url: '' }, error: 'La ruta del archivo no es valida.' }
+  }
+
+  const { data } = client.storage.from(bucketName).getPublicUrl(normalizedPath)
+
+  if (data?.publicUrl) {
+    return { data: { url: data.publicUrl }, error: null }
+  }
+
+  const { data: signed, error } = await client.storage
+    .from(bucketName)
+    .createSignedUrl(normalizedPath, 60 * 60)
+
+  if (error) {
+    console.error(`Error generating public URL for ${bucketName}/${normalizedPath}:`, error)
+    return { data: { url: '' }, error: error.message }
+  }
+
+  if (!signed?.signedUrl) {
+    return { data: { url: '' }, error: 'No se pudo generar un enlace publico para la imagen seleccionada.' }
+  }
+
+  return { data: { url: signed.signedUrl }, error: null }
+}

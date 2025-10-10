@@ -31,6 +31,33 @@ export function insertImage(
 ): boolean {
   if (!editor) return false
 
+  if (isImageActive(editor, extensionName)) {
+    const removed = editor.chain().focus().deleteNode(extensionName).run()
+    if (removed) {
+      return true
+    }
+    return editor
+      .chain()
+      .focus()
+      .command(({ state, dispatch }) => {
+        const { selection } = state
+        const { from, to } = selection
+        let handled = false
+
+        state.doc.nodesBetween(from, to, (node, pos) => {
+          if (!handled && node.type.name === extensionName) {
+            if (dispatch) {
+              dispatch(state.tr.deleteRange(pos, pos + node.nodeSize))
+            }
+            handled = true
+          }
+        })
+
+        return handled
+      })
+      .run()
+  }
+
   return editor
     .chain()
     .focus()

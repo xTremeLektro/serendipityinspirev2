@@ -36,7 +36,7 @@ html.dark {
 
 body {
   font-family: "Inter", sans-serif;
-  color: var(--tt-theme-text);
+  color: var(--tt-theme-text, var(--foreground, #0f172a));
   font-optical-sizing: auto;
   font-weight: 400;
   font-style: normal;
@@ -48,7 +48,7 @@ body,
 #root,
 #app {
   height: 100%;
-  background-color: var(--tt-bg-color);
+  background-color: var(--tt-bg-color, var(--background, #ffffff));
 }
 
 .form-select:not([multiple]) {
@@ -188,15 +188,21 @@ nav#nav ul a {
   outline: none;
   min-height: 150px; /* Ensure it has some height */
   padding: 10px;
-  border: 1px solid #ccc;
+  border: 1px solid var(--tt-editor-border-color, rgba(148, 163, 184, 0.24));
   border-radius: 0.375rem; /* Matches Tailwind's rounded-md */
-  background-color: white;
-  color: black; /* Ensure text is visible */
-  caret-color: black;
+  background-color: var(
+    --tt-editor-surface,
+    var(--tt-bg-color, #ffffff)
+  );
+  color: var(--tt-theme-text, var(--foreground, #0f172a));
+  caret-color: var(
+    --tt-cursor-color,
+    var(--tt-theme-text, currentColor)
+  );
 }
 
 .ProseMirror ::selection {
-  background-color: #ACCEF7;
+  background-color: var(--tt-selection-color, #ACCEF7);
 }
 
 .ProseMirror p {
@@ -204,8 +210,8 @@ nav#nav ul a {
 }
 
 .ProseMirror:focus {
-  border-color: #6366f1; /* Example: Indigo-500 for focus */
-  box-shadow: 0 0 0 1px #6366f1; /* Example: Indigo-500 for focus ring */
+  border-color: var(--tt-selection-color, #6366f1); /* Focus outline adapts to theme */
+  box-shadow: 0 0 0 1px var(--tt-selection-color, #6366f1); /* Focus ring adapts to theme */
 }
 
 /* Tiptap List Styles */
@@ -276,7 +282,7 @@ html.loading-cursor * {
 
 body {
   font-family: "Inter", sans-serif;
-  color: var(--tt-theme-text);
+  color: var(--tt-theme-text, var(--foreground, #0f172a));
   font-optical-sizing: auto;
   font-weight: 400;
   font-style: normal;
@@ -288,7 +294,7 @@ body,
 #root,
 #app {
   height: 100%;
-  background-color: var(--tt-bg-color);
+  background-color: var(--tt-bg-color, var(--background, #ffffff));
 }
 
 .form-select:not([multiple]) {
@@ -428,15 +434,21 @@ nav#nav ul a {
   outline: none;
   min-height: 150px; /* Ensure it has some height */
   padding: 10px;
-  border: 1px solid #ccc;
+  border: 1px solid var(--tt-editor-border-color, rgba(148, 163, 184, 0.24));
   border-radius: 0.375rem; /* Matches Tailwind's rounded-md */
-  background-color: white;
-  color: black; /* Ensure text is visible */
-  caret-color: black;
+  background-color: var(
+    --tt-editor-surface,
+    var(--tt-bg-color, #ffffff)
+  );
+  color: var(--tt-theme-text, var(--foreground, #0f172a));
+  caret-color: var(
+    --tt-cursor-color,
+    var(--tt-theme-text, currentColor)
+  );
 }
 
 .ProseMirror ::selection {
-  background-color: #ACCEF7;
+  background-color: var(--tt-selection-color, #ACCEF7);
 }
 
 .ProseMirror p {
@@ -444,8 +456,8 @@ nav#nav ul a {
 }
 
 .ProseMirror:focus {
-  border-color: #6366f1; /* Example: Indigo-500 for focus */
-  box-shadow: 0 0 0 1px #6366f1; /* Example: Indigo-500 for focus ring */
+  border-color: var(--tt-selection-color, #6366f1); /* Focus outline adapts to theme */
+  box-shadow: 0 0 0 1px var(--tt-selection-color, #6366f1); /* Focus ring adapts to theme */
 }
 
 /* Tiptap List Styles */
