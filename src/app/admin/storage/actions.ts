@@ -105,7 +105,9 @@ export async function listObjects(bucketName: string, path: string): Promise<May
       created_at: item.created_at ?? null,
       updated_at: item.updated_at ?? null,
       last_accessed_at: item.last_accessed_at ?? null,
-      size: item.metadata?.size ?? item.size ?? null,
+      size: typeof (item.metadata as { size?: unknown } | null)?.size === 'number'
+        ? ((item.metadata as { size?: number }).size ?? null)
+        : null,
       metadata: item.metadata ?? null,
       isFolder,
       path: itemPath,
@@ -136,9 +138,13 @@ export async function createFolder(bucketName: string, path: string, folderName:
   const normalizedPath = path ? path.replace(/^\/+|\/+$/g, '') : ''
   const targetPath = [normalizedPath, trimmedName].filter(Boolean).join('/')
 
-  const { error } = await client.storage.from(bucketName).createFolder(targetPath)
+  const placeholderPath = `${targetPath}/.keep`
+  const { error } = await client.storage.from(bucketName).upload(placeholderPath, new Uint8Array(), {
+    upsert: false,
+    contentType: 'application/octet-stream',
+  })
 
-  if (error) {
+  if (error && error.message !== 'The resource already exists') {
     console.error(`Error creating folder ${targetPath} in bucket ${bucketName}:`, error)
     return { data: { path: targetPath }, error: error.message }
   }

@@ -1,36 +1,43 @@
 import AdminHeader from '@/components/AdminHeader'
 import StorageManager from './StorageManager'
 import { listBuckets, listObjects } from './actions'
+import type { StorageItemSummary } from './actions'
 
-interface PageSearchParams {
-  bucket?: string
-  path?: string
+type PageSearchParams = Record<string, string | string[] | undefined> & {
+  bucket?: string | string[]
+  path?: string | string[]
 }
 
 export default async function AdminStoragePage({
   searchParams,
 }: {
-  searchParams?: PageSearchParams
+  searchParams?: Promise<PageSearchParams>
 }) {
+  const resolvedSearchParams = searchParams ? await searchParams : {}
+
+  const getFirstValue = (value: string | string[] | undefined) =>
+    Array.isArray(value) ? value[0] : value
+
   const { data: buckets, error: bucketError } = await listBuckets()
 
   const availableBucketNames = new Set(buckets.map((bucket) => bucket.name))
-  const requestedBucket = searchParams?.bucket
+  const requestedBucket = getFirstValue(resolvedSearchParams.bucket)
   const selectedBucket =
     requestedBucket && availableBucketNames.has(requestedBucket)
       ? requestedBucket
       : buckets[0]?.name ?? null
 
   let initialPath = ''
-  if (searchParams?.path) {
+  const requestedPath = getFirstValue(resolvedSearchParams.path)
+  if (requestedPath) {
     try {
-      initialPath = decodeURIComponent(searchParams.path)
+      initialPath = decodeURIComponent(requestedPath)
     } catch {
-      initialPath = searchParams.path
+      initialPath = requestedPath
     }
   }
 
-  let initialItems = []
+  let initialItems: StorageItemSummary[] = []
   let itemsError: string | null = null
 
   if (selectedBucket) {
